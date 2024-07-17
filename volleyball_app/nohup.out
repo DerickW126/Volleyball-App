@@ -1,0 +1,860 @@
+Watching for file changes with StatReloader
+[16/Jul/2024 05:22:54] "GET / HTTP/1.1" 200 2399
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 16, 2024 - 05:22:42
+Django version 5.0.7, using settings 'volleyball_app.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+[16/Jul/2024 05:23:07] "GET / HTTP/1.1" 200 2399
+[16/Jul/2024 05:23:48] code 400, message Bad request version ('úú\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06ÓÊÊ\x00\x00\x00+\x00\x07\x06JJ\x03\x04\x03\x03\x00')
+[16/Jul/2024 05:23:48] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 05:23:48] code 400, message Bad request version ('B-æ\\¶3o\x96,-ò·Ñ')
+[16/Jul/2024 05:23:48] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 05:23:49] "GET /api/events/ HTTP/1.1" 200 6139
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+[16/Jul/2024 05:23:49] "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+Not Found: /favicon.ico
+[16/Jul/2024 05:23:49] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 05:35:26] "GET /api/events/ HTTP/1.1" 200 6139
+Not Found: /favicon.ico
+[16/Jul/2024 05:35:26] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+[16/Jul/2024 05:35:26] "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+[16/Jul/2024 05:38:14] "GET /api/events/ HTTP/1.1" 200 6139
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:14] "GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+Not Found: /favicon.ico
+[16/Jul/2024 05:38:14] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 05:38:27] "GET /api/events/ HTTP/1.1" 200 6139
+Not Found: /favicon.ico
+[16/Jul/2024 05:38:27] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+[16/Jul/2024 05:38:27] "GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /api/events/ HTTP/1.1" 200 6139
+Not Found: /favicon.ico
+[16/Jul/2024 05:44:36] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+[16/Jul/2024 05:44:36] "GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+[16/Jul/2024 05:45:31] "GET /api/events/ HTTP/1.1" 200 6139
+Not Found: /favicon.ico
+[16/Jul/2024 05:45:31] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 05:47:01] "GET /api/events/ HTTP/1.1" 200 6139
+Not Found: /favicon.ico
+[16/Jul/2024 05:47:01] "GET /favicon.ico HTTP/1.1" 404 3397
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /.env
+[16/Jul/2024 06:09:35] "GET /.env HTTP/1.1" 400 67508
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 06:14:16] "GET / HTTP/1.1" 400 68164
+Invalid HTTP_HOST header: '127.0.0.1'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 08:02:03] "GET / HTTP/1.0" 400 67713
+Invalid HTTP_HOST header: '127.0.0.1'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '127.0.0.1'. You may need to add '127.0.0.1' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 08:02:05] "GET / HTTP/1.0" 400 67713
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 11:26:02] "GET / HTTP/1.1" 400 68010
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 12:04:44] "GET / HTTP/1.1" 400 67543
+[16/Jul/2024 13:30:25] code 400, message Bad request syntax ('MGLNDD_18.181.213.105_8000')
+[16/Jul/2024 13:30:25] "MGLNDD_18.181.213.105_8000" 400 -
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /favicon.ico
+[16/Jul/2024 13:44:37] "GET /favicon.ico HTTP/1.1" 400 68046
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /api/channels
+[16/Jul/2024 15:27:36] "GET /api/channels HTTP/1.1" 400 67890
+Bad Request: /
+[16/Jul/2024 15:27:36] "GET / HTTP/1.1" 400 67842
+Bad Request: /
+[16/Jul/2024 15:27:36] "GET / HTTP/1.1" 400 67842
+Bad Request: /
+[16/Jul/2024 15:27:36] "GET / HTTP/1.1" 400 67842
+[16/Jul/2024 15:27:37] code 400, message Bad request version ("o^âù°ÃÇ°^\x82Ñz-µf²ÌÁü$\x97\x87\x13Ft$;&éîd¶\x00V\x13\x02\x13\x03\x13\x01À,À0À+À/Ì©Ì¨\x00\x9f\x00\x9eÌªÀ¯À\xadÀ®À¬À$À(À#À'À")
+[16/Jul/2024 15:27:37] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:27:37] code 400, message Bad request version ("Ñ\x82\x17º]\x15N\x96\x89\x8f\x1b\x83Ý\x9eÖ\x94vÒ¬¸x(\x96ºw\x02Î\x91%~b5\x00V\x13\x02\x13\x03\x13\x01À,À0À+À/Ì©Ì¨\x00\x9f\x00\x9eÌªÀ¯À\xadÀ®À¬À$À(À#À'À")
+[16/Jul/2024 15:27:37] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:27:37] code 400, message Bad request version ("Ø\x9f|ï>D\x8eÍ\x9d©\x00V\x13\x02\x13\x03\x13\x01À,À0À+À/Ì©Ì¨\x00\x9f\x00\x9eÌªÀ¯À\xadÀ®À¬À$À(À#À'À")
+[16/Jul/2024 15:27:37] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:27:37] code 400, message Bad request syntax ('\x16\x03\x01\x02\x00\x01\x00\x01ü\x03\x03¥é¸,Û©(l@\x13cØ\x97\x05æç8ùÞ\x16º')
+[16/Jul/2024 15:27:37] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:27:39] code 400, message Bad request syntax ('BD\x00\x00Crea\x00\x00\x00\x00T\x00u\x00n\x00n\x00e\x00l\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
+[16/Jul/2024 15:27:39] "BD  Crea    T u n n e l                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     " 400 -
+[16/Jul/2024 15:27:39] code 400, message Bad request syntax ('\x00\x01\x00\x01\x02\x02:net.tcp://27.94.179.4:48083/Lapis.Spinel/ServerInformation\x03\x08\x0c')
+[16/Jul/2024 15:27:39] "  :net.tcp://27.94.179.4:48083/Lapis.Spinel/ServerInformation" 400 -
+[16/Jul/2024 15:27:39] code 400, message Bad request syntax ('ÿ\x00\x00\x00\x00\x00\x00\x00')
+[16/Jul/2024 15:27:39] "ÿ       " 400 -
+[16/Jul/2024 15:53:29] code 400, message Bad HTTP/0.9 request type ('\x16\x03\x01\x07@\x01\x00\x07<\x03\x03\x97l|B\x82\x03}©}ÿCwÄ\x7f+ÜÃ\x8f\x98UjÏ\x06l\x83\x99=TÔîi.')
+[16/Jul/2024 15:53:29] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:53:29] code 400, message Bad request version ('JJ\x13\x01\x13\x02\x13\x03À+À/À,À0Ì©Ì¨À\x13À\x14\x00\x9c\x00\x9d\x00/\x005\x01\x00\x06Ó\x8a\x8a\x00\x00\x00')
+[16/Jul/2024 15:53:29] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:53:29] "GET /api/events/ HTTP/1.1" 200 6139
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+[16/Jul/2024 15:53:29] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+[16/Jul/2024 15:53:30] "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+Not Found: /favicon.ico
+[16/Jul/2024 15:53:30] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 15:53:44] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 15:53:44] code 400, message Bad request version ('t¯\x16q*Ä\x08X÷[½')
+[16/Jul/2024 15:53:44] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 15:53:44] "GET /api/events/ HTTP/1.1" 200 6139
+[16/Jul/2024 15:53:44] code 400, message Bad request version ('\x96©5')
+[16/Jul/2024 15:53:44] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 16:01:47] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:01:47] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:03:02] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:03:03] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:03:04] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:03:04] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:03:05] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:03:05] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:03:18] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:03:18] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:03:32] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:03:32] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:07:15] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:07:15] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:07:29,686] - Broken pipe from ('115.165.192.185', 25769)
+[16/Jul/2024 16:08:06] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:08:06] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:08:20,671] - Broken pipe from ('115.165.192.185', 31070)
+[16/Jul/2024 16:10:09] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:10:09] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:11:20] "GET /api/events HTTP/1.1" 301 0
+[16/Jul/2024 16:11:20] "GET /api/events/ HTTP/1.1" 200 374
+[16/Jul/2024 16:14:36] "GET /api/events/ HTTP/1.1" 200 6139
+Not Found: /favicon.ico
+[16/Jul/2024 16:14:36] "GET /favicon.ico HTTP/1.1" 404 3397
+[16/Jul/2024 16:54:02,832] - Broken pipe from ('167.94.138.127', 57426)
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 16:54:06] "GET / HTTP/1.1" 400 67264
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 16:54:14] "GET / HTTP/1.1" 400 67795
+[16/Jul/2024 16:54:15] code 505, message Invalid HTTP version (2.0)
+[16/Jul/2024 16:54:15] "PRI * HTTP/2.0" 505 -
+[16/Jul/2024 16:57:09,335] - Broken pipe from ('167.94.146.53', 39460)
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 16:57:12] "GET / HTTP/1.1" 400 67263
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 16:57:16] "GET / HTTP/1.1" 400 67794
+[16/Jul/2024 16:57:17] code 505, message Invalid HTTP version (2.0)
+[16/Jul/2024 16:57:17] "PRI * HTTP/2.0" 505 -
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 18:20:38] "GET / HTTP/1.1" 400 67697
+[16/Jul/2024 19:14:12,709] - Broken pipe from ('199.45.154.125', 36482)
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 19:14:17] "GET / HTTP/1.1" 400 67264
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 19:14:21] "GET / HTTP/1.1" 400 67795
+[16/Jul/2024 19:14:21] code 505, message Invalid HTTP version (2.0)
+[16/Jul/2024 19:14:21] "PRI * HTTP/2.0" 505 -
+[16/Jul/2024 22:18:08] code 400, message Bad request version ('À\x13À')
+[16/Jul/2024 22:18:08] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 22:18:09] code 400, message Bad request version ('À(À$À\x14À')
+[16/Jul/2024 22:18:09] You're accessing the development server over HTTPS, but it only supports HTTP.
+Invalid HTTP_HOST header: '18.181.213.105'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[16/Jul/2024 22:34:52] "GET / HTTP/1.1" 400 67494
+[16/Jul/2024 22:34:53] code 400, message Bad request version ('Õ\x13Dà')
+[16/Jul/2024 22:34:53] You're accessing the development server over HTTPS, but it only supports HTTP.
+[16/Jul/2024 22:34:53] code 400, message Bad HTTP/0.9 request type ('t3')
+[16/Jul/2024 22:34:53] "t3 12.1.2" 400 -
+[16/Jul/2024 23:42:13] code 400, message Bad request version ('À\x14À')
+[16/Jul/2024 23:42:13] You're accessing the development server over HTTPS, but it only supports HTTP.
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[17/Jul/2024 00:24:51] "GET / HTTP/1.1" 400 68165
+[17/Jul/2024 03:42:52] "GET / HTTP/1.1" 200 614
+Not Found: /favicon.ico
+[17/Jul/2024 03:42:52] "GET /favicon.ico HTTP/1.1" 404 3397
+[17/Jul/2024 03:42:58] "GET /accounts/login/ HTTP/1.1" 200 2547
+[17/Jul/2024 03:43:00] "GET /accounts/google/login/?process=login HTTP/1.1" 200 1415
+[17/Jul/2024 03:43:01] "POST /accounts/google/login/?process=login HTTP/1.1" 302 0
+[17/Jul/2024 03:43:03] "GET /accounts/google/login/callback/?state=qqscRQgEEXWy9pNH&code=4%2F0AcvDMrCVwW7ItcFk4FI1FRSC1wOLyekwvUvObzRuUVsjGTkXYx1Kd_nyJ_eCglYnlhmukg&scope=email+profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email+openid&authuser=0&prompt=none HTTP/1.1" 302 0
+[17/Jul/2024 03:43:04] "GET / HTTP/1.1" 200 1911
+[17/Jul/2024 03:43:06] "GET /events/add/ HTTP/1.1" 200 1653
+[17/Jul/2024 03:43:47] "POST /events/add/ HTTP/1.1" 302 0
+[17/Jul/2024 03:43:47] "GET /events/ HTTP/1.1" 200 3019
+[17/Jul/2024 03:43:52] "POST /events/register/3/ HTTP/1.1" 200 717
+[17/Jul/2024 03:43:55] "POST /events/register/3/ HTTP/1.1" 302 0
+[17/Jul/2024 03:43:55] "GET /events/ HTTP/1.1" 200 3011
+/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 16, 2024 - 05:23:04
+Django version 5.0.7, using settings 'volleyball_app.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 17, 2024 - 03:46:47
+Django version 5.0.7, using settings 'volleyball_app.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 17, 2024 - 03:47:13
+Django version 5.0.7, using settings 'volleyball_app.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/commands/runserver.py", line 125, in inner_run
+    autoreload.raise_last_exception()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 87, in raise_last_exception
+    raise _exception[1]
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/__init__.py", line 394, in execute
+    autoreload.check_errors(django.setup)()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/apps/registry.py", line 93, in populate
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Application labels aren't unique, duplicates: rest_framework
+/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/commands/runserver.py", line 125, in inner_run
+    autoreload.raise_last_exception()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 87, in raise_last_exception
+    raise _exception[1]
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/__init__.py", line 394, in execute
+    autoreload.check_errors(django.setup)()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/apps/registry.py", line 93, in populate
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Application labels aren't unique, duplicates: rest_framework
+/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py changed, reloading.
+Watching for file changes with StatReloader
+Exception in thread django-main-thread:
+Traceback (most recent call last):
+  File "/usr/lib/python3.12/threading.py", line 1073, in _bootstrap_inner
+    self.run()
+  File "/usr/lib/python3.12/threading.py", line 1010, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/commands/runserver.py", line 125, in inner_run
+    autoreload.raise_last_exception()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 87, in raise_last_exception
+    raise _exception[1]
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/__init__.py", line 394, in execute
+    autoreload.check_errors(django.setup)()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/autoreload.py", line 64, in wrapper
+    fn(*args, **kwargs)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/__init__.py", line 24, in setup
+    apps.populate(settings.INSTALLED_APPS)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/apps/registry.py", line 93, in populate
+    raise ImproperlyConfigured(
+django.core.exceptions.ImproperlyConfigured: Application labels aren't unique, duplicates: rest_framework
+/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py changed, reloading.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/volleyball_app/manage.py", line 22, in <module>
+    main()
+  File "/home/ubuntu/volleyball_app/volleyball_app/manage.py", line 18, in main
+    execute_from_command_line(sys.argv)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/__init__.py", line 442, in execute_from_command_line
+    utility.execute()
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/management/__init__.py", line 382, in execute
+    settings.INSTALLED_APPS
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/conf/__init__.py", line 89, in __getattr__
+    self._setup(name)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/conf/__init__.py", line 76, in _setup
+    self._wrapped = Settings(settings_module)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/conf/__init__.py", line 190, in __init__
+    mod = importlib.import_module(self.SETTINGS_MODULE)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/importlib/__init__.py", line 90, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 991, in exec_module
+  File "<frozen importlib._bootstrap_external>", line 1129, in get_code
+  File "<frozen importlib._bootstrap_external>", line 1059, in source_to_code
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/settings.py", line 63
+    ...
+      ^
+SyntaxError: ':' expected after dictionary key
+Watching for file changes with StatReloader
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 17, 2024 - 03:58:24
+Django version 5.0.7, using settings 'volleyball_app.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+[17/Jul/2024 03:58:42] "GET /events/ HTTP/1.1" 200 3011
+[17/Jul/2024 03:58:43] "GET /events/ HTTP/1.1" 200 3011
+[17/Jul/2024 04:00:45] "GET /users/google-login HTTP/1.1" 301 0
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:00:45] "GET /users/google-login/ HTTP/1.1" 405 7763
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 200 3426
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 200 817
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/css/default.css HTTP/1.1" 200 1152
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 200 87533
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 200 121457
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 200 3796
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 200 1793
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 200 39680
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 200 13632
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/default.js HTTP/1.1" 200 1268
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 200 59
+[17/Jul/2024 04:00:45] "GET /static/rest_framework/img/grid.png HTTP/1.1" 200 1458
+[17/Jul/2024 04:04:29] "GET /api/events HTTP/1.1" 301 0
+[17/Jul/2024 04:04:29] "GET /api/events/ HTTP/1.1" 200 631
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:04:43] "GET /users/google-login/ HTTP/1.1" 405 7763
+Not Found: /favicon.ico
+[17/Jul/2024 04:04:43] "GET /favicon.ico HTTP/1.1" 404 3506
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/css/default.css HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/ajax-form.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/css/prettify.css HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/css/bootstrap-tweaks.css HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/css/bootstrap.min.css HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/prettify-min.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/default.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/jquery-3.7.1.min.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/load-ajax-form.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/csrf.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/js/bootstrap.min.js HTTP/1.1" 304 0
+[17/Jul/2024 04:04:43] "GET /static/rest_framework/img/grid.png HTTP/1.1" 304 0
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:04:59] "GET /users/google-login/ HTTP/1.1" 405 7763
+Not Found: /favicon.ico
+[17/Jul/2024 04:04:59] "GET /favicon.ico HTTP/1.1" 404 3506
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:05:03] "GET /users/google-login/ HTTP/1.1" 405 7763
+Not Found: /favicon.ico
+[17/Jul/2024 04:05:03] "GET /favicon.ico HTTP/1.1" 404 3506
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:05:48] "GET /users/google-login/ HTTP/1.1" 405 7763
+Not Found: /favicon.ico
+[17/Jul/2024 04:05:48] "GET /favicon.ico HTTP/1.1" 404 3506
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:11:24] "GET /users/google-login/ HTTP/1.1" 405 7763
+Not Found: /favicon.ico
+[17/Jul/2024 04:11:25] "GET /favicon.ico HTTP/1.1" 404 3506
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:12:19] "GET /users/google-login/ HTTP/1.1" 405 7763
+Not Found: /favicon.ico
+[17/Jul/2024 04:12:19] "GET /favicon.ico HTTP/1.1" 404 3506
+Not Found: /favicon.ico
+[17/Jul/2024 04:12:32] "GET /favicon.ico HTTP/1.1" 404 3506
+Method Not Allowed: /users/google-login/
+[17/Jul/2024 04:12:35] "GET /users/google-login/ HTTP/1.1" 405 7763
+[17/Jul/2024 04:15:01] "GET /api/events HTTP/1.1" 301 0
+[17/Jul/2024 04:15:01] "GET /api/events/ HTTP/1.1" 200 631
+[17/Jul/2024 04:15:52] "OPTIONS /users/google-login/ HTTP/1.1" 200 8862
+Internal Server Error: /users/google-login/
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/jwt/api_jws.py", line 180, in _load
+    signing_input, crypto_segment = jwt.rsplit(b'.', 1)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: not enough values to unpack (expected 2, got 1)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/allauth/socialaccount/internal/jwtkit.py", line 66, in verify_and_decode
+    alg, key = fetch_key(credential, keys_url, lookup_kid)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/allauth/socialaccount/internal/jwtkit.py", line 48, in fetch_key
+    header = jwt.get_unverified_header(credential)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/jwt/api_jws.py", line 166, in get_unverified_header
+    headers = self._load(jwt)[2]
+              ^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/jwt/api_jws.py", line 183, in _load
+    raise DecodeError('Not enough segments')
+jwt.exceptions.DecodeError: Not enough segments
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/views/decorators/csrf.py", line 65, in _view_wrapper
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/views/generic/base.py", line 104, in view
+    return self.dispatch(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/decorators.py", line 48, in _wrapper
+    return bound_method(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/views/decorators/debug.py", line 143, in sensitive_post_parameters_wrapper
+    return view(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/dj_rest_auth/views.py", line 48, in dispatch
+    return super().dispatch(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/rest_framework/views.py", line 509, in dispatch
+    response = self.handle_exception(exc)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/rest_framework/views.py", line 469, in handle_exception
+    self.raise_uncaught_exception(exc)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/rest_framework/views.py", line 480, in raise_uncaught_exception
+    raise exc
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/rest_framework/views.py", line 506, in dispatch
+    response = handler(request, *args, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/volleyball_app/users/views.py", line 18, in post
+    self.serializer.is_valid(raise_exception=True)
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/rest_framework/serializers.py", line 223, in is_valid
+    self._validated_data = self.run_validation(self.initial_data)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/rest_framework/serializers.py", line 445, in run_validation
+    value = self.validate(value)
+            ^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/dj_rest_auth/registration/serializers.py", line 158, in validate
+    login = self.get_social_login(adapter, app, social_token, response={'id_token': id_token})
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/dj_rest_auth/registration/serializers.py", line 62, in get_social_login
+    social_login = adapter.complete_login(request, app, token, response=response)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/allauth/socialaccount/providers/google/views.py", line 82, in complete_login
+    data = self._decode_id_token(app, id_token)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/allauth/socialaccount/providers/google/views.py", line 102, in _decode_id_token
+    return _verify_and_decode(app, id_token, verify_signature=verify_signature)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/allauth/socialaccount/providers/google/views.py", line 60, in _verify_and_decode
+    return jwtkit.verify_and_decode(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/allauth/socialaccount/internal/jwtkit.py", line 86, in verify_and_decode
+    raise OAuth2Error("Invalid id_token") from e
+allauth.socialaccount.providers.oauth2.client.OAuth2Error: Invalid id_token
+[17/Jul/2024 04:16:35] "POST /users/google-login/ HTTP/1.1" 500 170625
+[17/Jul/2024 04:22:26] "GET / HTTP/1.1" 200 3263
+Not Found: /events/unregister/3/
+[17/Jul/2024 04:22:47] "POST /events/unregister/3/ HTTP/1.1" 404 4253
+[17/Jul/2024 04:22:53] "POST /events/register/3/ HTTP/1.1" 200 717
+[17/Jul/2024 04:22:55] "GET / HTTP/1.1" 200 3263
+Not Found: /events/unregister/3/
+[17/Jul/2024 04:24:21] "POST /events/unregister/3/ HTTP/1.1" 404 4253
+/home/ubuntu/volleyball_app/volleyball_app/events/views.py changed, reloading.
+Performing system checks...
+
+System check identified no issues (0 silenced).
+July 17, 2024 - 03:58:40
+Django version 5.0.7, using settings 'volleyball_app.settings'
+Starting development server at http://0.0.0.0:8000/
+Quit the server with CONTROL-C.
+
+Watching for file changes with StatReloader
+[17/Jul/2024 04:25:45] "GET / HTTP/1.1" 200 3263
+Not Found: /events/unregister/3/
+[17/Jul/2024 04:25:46] "POST /events/unregister/3/ HTTP/1.1" 404 30
+Not Found: /events/unregister/1/
+[17/Jul/2024 04:25:50] "POST /events/unregister/1/ HTTP/1.1" 404 30
+[17/Jul/2024 04:25:52] "POST /events/register/1/ HTTP/1.1" 200 700
+[17/Jul/2024 04:25:55] "POST /events/register/1/ HTTP/1.1" 302 0
+[17/Jul/2024 04:25:55] "GET /events/ HTTP/1.1" 200 3254
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[17/Jul/2024 04:53:09] "GET / HTTP/1.1" 400 68787
+Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Traceback (most recent call last):
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/utils/deprecation.py", line 133, in __call__
+    response = self.process_request(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/middleware/common.py", line 48, in process_request
+    host = request.get_host()
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/ubuntu/volleyball_app/env/lib/python3.12/site-packages/django/http/request.py", line 151, in get_host
+    raise DisallowedHost(msg)
+django.core.exceptions.DisallowedHost: Invalid HTTP_HOST header: '18.181.213.105:8000'. You may need to add '18.181.213.105' to ALLOWED_HOSTS.
+Bad Request: /
+[17/Jul/2024 05:48:58] "GET / HTTP/1.1" 400 68965
+[17/Jul/2024 06:32:06] "GET / HTTP/1.1" 200 3254

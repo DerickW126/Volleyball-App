@@ -1,0 +1,16 @@
+<!-- templates/events/register_event.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register for Event</title>
+</head>
+<body>
+    <h1>Register for {{ event.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Register</button>
+    </form>
+    <a href="{% url 'index' %}">Back to Events</a>
+</body>
+</html>

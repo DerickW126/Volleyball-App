@@ -1,0 +1,16 @@
+<!-- templates/events/unregister_event.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Unregister from Event</title>
+</head>
+<body>
+    <h1>Unregister from {{ event.name }}</h1>
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Unregister</button>
+    </form>
+    <a href="{% url 'index' %}">Back to Events</a>
+</body>
+</html>
+

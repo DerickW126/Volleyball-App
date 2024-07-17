@@ -1,0 +1,17 @@
+<!-- templates/events/add_event.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Volleyball Event</title>
+</head>
+<body>
+    <h1>Add Volleyball Event</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Add Event</button>
+    </form>
+    <a href="{% url 'index' %}">Back to Events</a>
+</body>
+</html>
+
