@@ -32,4 +32,11 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def profile(request):
-    return render(request, 'users/profile.html')
+    user = request.user
+    hosted_events = user.hosted_events.all()  # 获取用户主持的事件
+    registered_events = user.registered_events.all()
+    return render(request, 'users/profile.html', {
+        'user': user,
+        'hosted_events': hosted_events,
+        'registered_events': registered_events
+    })

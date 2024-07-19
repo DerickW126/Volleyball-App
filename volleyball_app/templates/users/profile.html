@@ -9,7 +9,23 @@
     <p>Email: {{ user.email }}</p>
     <p>First name: {{ user.first_name }}</p>
     <p>Last name: {{ user.last_name }}</p>
-    <!-- Add more user information as needed -->
+
+    <h2>Hosted Events</h2>
+    <ul>
+        {% for event in hosted_events %}
+            <li>{{ event.name }} - {{ event.location }} - {{ event.date }} - {{ event.start_time }} to {{ event.end_time }}</li>
+        {% empty %}
+            <li>No hosted events.</li>
+        {% endfor %}
+    </ul>
+
+    <h2>Registered Events</h2>
+    <ul>
+        {% for event in registered_events %}
+            <li>{{ event.name }} - {{ event.location }} - {{ event.date }} - {{ event.start_time }} to {{ event.end_time }}</li>
+        {% empty %}
+            <li>No registered events.</li>
+        {% endfor %}
+    </ul>
 </body>
 </html>
-

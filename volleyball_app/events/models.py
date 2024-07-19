@@ -11,8 +11,8 @@ class Event(models.Model):
     cost = models.DecimalField(max_digits=6, decimal_places=2)
     additional_comments = models.TextField(blank=True, null=True)
     spots_left = models.IntegerField(default=0)
-    created_by = models.ForeignKey(User, related_name='events_created', on_delete=models.CASCADE)
-    attendees = models.ManyToManyField(User, through='Registration', related_name='events_attending', blank=True)
+    created_by = models.ForeignKey(User, related_name='hosted_events', on_delete=models.CASCADE)
+    attendees = models.ManyToManyField(User, through='Registration', related_name='registered_events', blank=True)
 
     def __str__(self):
         return self.name
