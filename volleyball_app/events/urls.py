@@ -8,5 +8,7 @@ urlpatterns = [
 	path('register/<int:event_id>/', views.register_event, name='register_event'),
 	path('unregister/<int:event_id>/', views.unregister_event, name='unregister_event'),
     path('api/events/', views.EventListAPIView.as_view(), name='api-events'),
+    path('api/register/<int:event_id>/', views.RegisterEventAPIView.as_view(), name='api-register-event'),
+    path('api/unregister/<int:event_id>/', views.UnregisterEventAPIView.as_view(), name='api-unregister-event'),
 ]
 
