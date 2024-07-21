@@ -23,23 +23,34 @@ class RegisterEventAPIView(APIView):
 
         event = get_object_or_404(Event, id=event_id)
         user = request.user
+        
         registration, created = Registration.objects.get_or_create(event=event, user=user)
         
         previous_number = registration.number_of_people if not created else 0
 
         serializer = RegistrationSerializer(data=request.data, instance=registration)
         if serializer.is_valid():
-            registration = serializer.save()  # 不使用 commit 参数
+            registration = serializer.save()  # 保存注册对象
             total_people = registration.number_of_people - previous_number
 
             if event.spots_left - total_people < 0:
                 return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
 
-            event.spots_left += previous_number
-            event.spots_left -= registration.number_of_people
+            event.spots_left += previous_number  # 释放之前的注册名额
+            event.spots_left -= registration.number_of_people  # 减少新的注册名额
             registration.save()
             event.save()
+
+            # 创建新的通知
+            if created:
+                message = f"New registration: {user.username} has registered for your event {event.name}."
+            else:
+                message = f"Updated registration: {user.username} has updated their registration for your event {event.name}."
+
+            Notification.objects.create(user=event.created_by, message=message)
+
             return Response(serializer.data, status=status.HTTP_200_OK)
+        
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class UnregisterEventAPIView(APIView):
@@ -58,6 +69,22 @@ class UnregisterEventAPIView(APIView):
         event.save()
         return Response({"success": "Unregistered successfully."}, status=status.HTTP_200_OK)
 
+class CheckRegistrationAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, event_id):
+        event = get_object_or_404(Event, id=event_id)
+        user = request.user
+        registration = Registration.objects.filter(event=event, user=user).first()
+
+        if registration:
+            data = {
+                'registered': True,
+                'number_of_people': registration.number_of_people
+            }
+        else:
+            data = {'registered': False}
+        return Response(data, status=status.HTTP_200_OK)
 
 @login_required
 def index(request):

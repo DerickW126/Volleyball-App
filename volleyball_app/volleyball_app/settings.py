@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'events',
+    'notifications',
 	'users',
     'django.contrib.sites',  # 必须的
     'allauth',
