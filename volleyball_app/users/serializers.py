@@ -3,6 +3,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from allauth.socialaccount.models import SocialAccount
 from django.db import transaction, IntegrityError
+from events.serializers import EventSerializer
 import requests
 
 class GoogleLoginSerializer(serializers.Serializer):
@@ -48,3 +49,11 @@ class GoogleLoginSerializer(serializers.Serializer):
                 user = social_account.user
 
         return user
+
+class UserSerializer(serializers.ModelSerializer):
+    hosted_events = EventSerializer(many=True, read_only=True)
+    registered_events = EventSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'hosted_events', 'registered_events']

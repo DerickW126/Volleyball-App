@@ -9,6 +9,7 @@ from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from notifications.models import Notification
 
 class EventListAPIView(generics.ListAPIView):
     queryset = Event.objects.all()
@@ -49,6 +50,9 @@ class RegisterEventAPIView(APIView):
 
             Notification.objects.create(user=event.created_by, message=message)
 
+            user_message = f"You have successfully registered for the event {event.name}."
+            Notification.objects.create(user=user, message=user_message)
+
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -67,6 +71,15 @@ class UnregisterEventAPIView(APIView):
         event.spots_left += registration.number_of_people
         registration.delete()
         event.save()
+
+        # 为取消注册的用户创建通知
+        user_message = f"You have successfully unregistered from the event {event.name}."
+        Notification.objects.create(user=user, message=user_message)
+
+        # 为活动主办方创建通知
+        host_message = f"{user.username} has unregistered from your event {event.name}."
+        Notification.objects.create(user=event.created_by, message=host_message)
+
         return Response({"success": "Unregistered successfully."}, status=status.HTTP_200_OK)
 
 class CheckRegistrationAPIView(APIView):

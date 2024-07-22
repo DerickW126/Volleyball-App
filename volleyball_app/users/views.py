@@ -6,7 +6,8 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import GoogleLoginSerializer
+from .serializers import GoogleLoginSerializer, UserSerializer
+from rest_framework import generics, permissions
 
 # users/views.py
 from rest_framework import status
@@ -39,6 +40,12 @@ class GoogleLogin(SocialLoginView):
         refresh = RefreshToken.for_user(user)
         return refresh
 
+class UserProfileView(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        return self.request.user
 
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
