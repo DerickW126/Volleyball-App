@@ -10,7 +10,7 @@ class Event(models.Model):
     end_time = models.TimeField()
     cost = models.DecimalField(max_digits=6, decimal_places=2)
     additional_comments = models.TextField(blank=True, null=True)
-    spots_left = models.IntegerField(default=0)
+    spots_left = models.IntegerField()
     created_by = models.ForeignKey(User, related_name='hosted_events', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, through='Registration', related_name='registered_events', blank=True)
 
@@ -21,6 +21,7 @@ class Registration(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     number_of_people = models.IntegerField(default=0)
+    is_approved = models.BooleanField(default=False)
 
     class Meta:
         unique_together = ('event', 'user')

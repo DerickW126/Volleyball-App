@@ -7,9 +7,70 @@ from .forms import EventForm, RegistrationForm
 from .serializers import EventSerializer, RegistrationSerializer
 from rest_framework import generics, status
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from notifications.models import Notification
+from .serializers import RegistrationSerializer
+
+class UserRegistrationsAPIView(generics.ListAPIView):
+    serializer_class = RegistrationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Registration.objects.filter(user=user)
+
+class PendingRegistrationsAPIView(generics.ListAPIView):
+    serializer_class = RegistrationSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Registration.objects.filter(event__created_by=user, is_approved=False)
+
+class ApproveRegistrationAPIView(APIView):
+    permission_classes = [IsAuthenticated]  # 确保用户登录
+
+    def post(self, request, registration_id):
+        registration = get_object_or_404(Registration, id=registration_id)
+        event = registration.event
+
+        if event.created_by != request.user:
+            return Response({"error": "You are not authorized to approve this registration."}, status=status.HTTP_403_FORBIDDEN)
+
+        if event.spots_left < registration.number_of_people:
+            return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
+
+        registration.is_approved = True
+        event.spots_left -= registration.number_of_people
+        registration.save()
+        event.save()
+
+        # 创建通知
+        message = f"Your registration for the event {event.name} has been approved."
+        Notification.objects.create(user=registration.user, message=message)
+
+        return Response({"success": "Registration approved successfully."}, status=status.HTTP_200_OK)
+
+class EventDetailAPIView(generics.RetrieveAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]  # 允许任何人查看，但只有认证用户才能进行其他操作
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
+        
+class AddEventAPIView(APIView):
+    permission_classes = [IsAuthenticated]  # 确保用户登录
+
+    def post(self, request):
+        serializer = EventSerializer(data=request.data)
+        if serializer.is_valid():
+            event = serializer.save(created_by=request.user)
+            return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EventListAPIView(generics.ListAPIView):
     queryset = Event.objects.all()
@@ -27,30 +88,30 @@ class RegisterEventAPIView(APIView):
         
         registration, created = Registration.objects.get_or_create(event=event, user=user)
         
-        previous_number = registration.number_of_people if not created else 0
+        #previous_number = registration.number_of_people if not created else 0
 
         serializer = RegistrationSerializer(data=request.data, instance=registration)
         if serializer.is_valid():
             registration = serializer.save()  # 保存注册对象
-            total_people = registration.number_of_people - previous_number
+            #total_people = registration.number_of_people - previous_number
 
             if event.spots_left - total_people < 0:
                 return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
 
-            event.spots_left += previous_number  # 释放之前的注册名额
-            event.spots_left -= registration.number_of_people  # 减少新的注册名额
+            #event.spots_left += previous_number  # 释放之前的注册名额
+            #event.spots_left -= registration.number_of_people  # 减少新的注册名额
             registration.save()
             event.save()
 
             # 创建新的通知
             if created:
-                message = f"New registration: {user.username} has registered for your event {event.name}."
+                message = f"New registration: {user.username} has requested to register for your event {event.name}."
             else:
-                message = f"Updated registration: {user.username} has updated their registration for your event {event.name}."
+                message = f"Updated registration: {user.username} has updated their request for your event {event.name}."
 
             Notification.objects.create(user=event.created_by, message=message)
 
-            user_message = f"You have successfully registered for the event {event.name}."
+            user_message = f"You have requested to register for the event {event.name}."
             Notification.objects.create(user=user, message=user_message)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
