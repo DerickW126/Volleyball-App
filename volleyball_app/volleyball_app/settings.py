@@ -31,6 +31,9 @@ ALLOWED_HOSTS = ['ec2-18-181-213-105.ap-northeast-1.compute.amazonaws.com','loca
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
+    'daphne',
+    'push_notifications',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -50,13 +53,35 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
 ]
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+    'APNS_AUTH_KEY_PATH': '/volleyball_app/APN_KEY.p8',  # Path to your .p8 file
+    'APNS_AUTH_KEY_ID': 'KN37N434TH',  # The Key ID obtained from the Apple Developer portal
+    'APNS_TEAM_ID': 'UUNQ4YYJ6A',  # Your Apple Developer Team ID
+    'APNS_TOPIC': 'com.bros.volleyballproject',  # Usually your app's bundle identifier
+}
+
+ASGI_APPLICATION = 'volleyball_app.asgi.application'
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
+
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
+        #'rest_framework.authentication.SessionAuthentication',
+        #'rest_framework.authentication.BasicAuthentication',
     ),
 }
 
 from datetime import timedelta
+import datetime
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=30),
@@ -66,6 +91,8 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 }
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
@@ -189,3 +216,6 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# settings.py
+

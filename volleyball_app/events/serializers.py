@@ -8,18 +8,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Registration
-        fields = ['id', 'user', 'number_of_people', 'is_approved']
-        read_only_fields = ['is_approved']
+        fields = ['id', 'user', 'number_of_people', 'is_approved', 'previously_approved']
+        #read_only_fields = ['is_approved', 'previously_approved']
 
 class EventSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)
     pending_registrations = serializers.SerializerMethodField()
     approved_registrations = serializers.SerializerMethodField()
     is_creator = serializers.SerializerMethodField()
+    pending_registration_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Event
-        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'spots_left', 'created_by', 'pending_registrations', 'approved_registrations', 'is_creator']
+        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'spots_left', 'created_by', 'pending_registrations', 'approved_registrations', 'is_creator', 'pending_registration_count', 'net_type']
 
     def get_pending_registrations(self, obj):
         pending_registrations = Registration.objects.filter(event=obj, is_approved=False)
@@ -34,3 +35,6 @@ class EventSerializer(serializers.ModelSerializer):
         if request is None:
             return False
         return obj.created_by == request.user
+    
+    def get_pending_registration_count(self, obj):
+        return obj.get_pending_registration_count()

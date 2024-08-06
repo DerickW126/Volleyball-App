@@ -3,6 +3,15 @@ from django.db import models
 from django.contrib.auth.models import User
 
 class Event(models.Model):
+    NET_TYPE_CHOICES = [
+        ('beach_volleyball', '沙灘排球'),
+        ('women_net_mixed', '女網混排'),
+        ('women_net_women', '女網女排'),
+        ('men_net_men', '男網男排'),
+        ('men_net_mixed', '男網混排'),
+        ('mixed_net', '人妖網'),
+    ]
+
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     date = models.DateField()
@@ -13,16 +22,27 @@ class Event(models.Model):
     spots_left = models.IntegerField()
     created_by = models.ForeignKey(User, related_name='hosted_events', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, through='Registration', related_name='registered_events', blank=True)
-
+    net_type = models.CharField(max_length=50, choices=NET_TYPE_CHOICES, default=NET_TYPE_CHOICES[0])
+        
     def __str__(self):
         return self.name
 
+    def get_pending_registration_count(self):
+        pending_registrations = self.registrations.filter(is_approved=False)
+        return sum(registration.number_of_people for registration in pending_registrations)
+
 class Registration(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, related_name='registrations', on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     number_of_people = models.IntegerField(default=0)
     is_approved = models.BooleanField(default=False)
+    previously_approved = models.BooleanField(default=False)  # 新增字段
 
+    def save(self, *args, **kwargs):
+        if not self.previously_approved and self.is_approved:
+            self.previously_approved = True
+        super().save(*args, **kwargs)
+        
     class Meta:
         unique_together = ('event', 'user')
 
