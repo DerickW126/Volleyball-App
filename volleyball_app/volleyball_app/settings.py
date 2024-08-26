@@ -11,6 +11,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 import os
 from pathlib import Path
+import firebase_admin
+from firebase_admin import credentials
+from firebase_admin import initialize_app
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -24,13 +27,15 @@ SECRET_KEY = 'django-insecure--&dqabxypygvf@9)lo=ya9nw383g*nuht%c-i@4(0pcqe$2u9q
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['ec2-18-181-213-105.ap-northeast-1.compute.amazonaws.com','localhost', '18.181.213.105']
+ALLOWED_HOSTS = ['*']
+#ALLOWED_HOSTS = ['ec2-18-183-213-23.ap-northeast-1.compute.amazonaws.com','localhost', '18.183.213.23', '43.207.235.105', '172.31.35.113']
 
 
 # Application definition
 
 INSTALLED_APPS = [
+    'django_celery_beat',
+    'fcm_django',
     'channels',
     'daphne',
     'push_notifications',
@@ -55,10 +60,11 @@ INSTALLED_APPS = [
 ]
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-    'APNS_AUTH_KEY_PATH': '/volleyball_app/APN_KEY.p8',  # Path to your .p8 file
+    'APNS_AUTH_KEY_PATH': '/home/ubuntu/volleyball_app/APN_KEY.p8',  # Path to your .p8 file
     'APNS_AUTH_KEY_ID': 'KN37N434TH',  # The Key ID obtained from the Apple Developer portal
     'APNS_TEAM_ID': 'UUNQ4YYJ6A',  # Your Apple Developer Team ID
     'APNS_TOPIC': 'com.bros.volleyballproject',  # Usually your app's bundle identifier
+    "FCM_API_KEY": "AIzaSyCIowXkDxD9F5-KoS9ONGUXc87dRDeeT4A",
 }
 
 ASGI_APPLICATION = 'volleyball_app.asgi.application'
@@ -93,6 +99,7 @@ SIMPLE_JWT = {
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_TIMEZONE = 'UTC'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
@@ -136,7 +143,7 @@ MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
 ]
-
+CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React app running on port 3000
     "http://localhost:8000",  # Django server
@@ -199,11 +206,8 @@ AUTH_PASSWORD_VALIDATORS = [
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Asia/Taipei'
 USE_I18N = True
-
 USE_TZ = True
 
 
@@ -218,4 +222,22 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
+cred = credentials.Certificate('/home/ubuntu/volleyball_app/volleyball_app/volleyball_app/cred.json')
+FIREBASE_APP = initialize_app(cred)
+# To learn more, visit the docs here:
+# https://cloud.google.com/docs/authentication/getting-started>
 
+FCM_DJANGO_SETTINGS = {
+     # an instance of firebase_admin.App to be used as default for all fcm-django requests
+     # default: None (the default Firebase app)
+    "DEFAULT_FIREBASE_APP": None,
+     # default: _('FCM Django')
+    "APP_VERBOSE_NAME": "[string for AppConfig's verbose_name]",
+     # true if you want to have only one active device per registered user at a time
+     # default: False
+    "ONE_DEVICE_PER_USER": False,
+     # devices to which notifications cannot be sent,
+     # are deleted upon receiving error response from FCM
+     # default: False
+    "DELETE_INACTIVE_DEVICES": True,
+}

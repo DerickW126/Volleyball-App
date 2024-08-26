@@ -3,9 +3,9 @@
 from django.db import models
 from django.contrib.auth.models import User
 from events.models import Event
-from push_notifications.models import APNSDevice
+from push_notifications.models import APNSDevice, GCMDevice
 
-class CustomAPNSDevice(APNSDevice):
+class CustomFCMDevice(GCMDevice):
     custom_user = models.OneToOneField('auth.User', on_delete=models.CASCADE)
 
 class Notification(models.Model):

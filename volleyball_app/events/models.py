@@ -1,6 +1,33 @@
 # events/models.py
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+import pytz
+import datetime
+from notifications.tasks import schedule_notifications
+
+def convert_to_utc(local_time, local_tz):
+    local_tz = pytz.timezone(local_tz)
+    local_time = local_tz.localize(local_time, is_dst=None)
+    return local_time.astimezone(pytz.utc)
+
+class EventManager(models.Manager):
+    def get(self, *args, **kwargs):
+        event = super().get(*args, **kwargs)
+        event.update_status()  # Update the status before returning the event
+        return event
+
+    def filter(self, *args, **kwargs):
+        events = super().filter(*args, **kwargs)
+        for event in events:
+            event.update_status()
+        return events
+
+    def all(self):
+        events = super().all()
+        for event in events:
+            event.update_status()
+        return events
 
 class Event(models.Model):
     NET_TYPE_CHOICES = [
@@ -10,6 +37,13 @@ class Event(models.Model):
         ('men_net_men', '男網男排'),
         ('men_net_mixed', '男網混排'),
         ('mixed_net', '人妖網'),
+    ]
+    STATUS_CHOICES = [
+        ('open', '開放報名'),
+        ('waitlist', '開放候補'),
+        ('playing', '進行中'),
+        ('past', '已結束'),
+        ('canceled', '取消')
     ]
 
     name = models.CharField(max_length=100)
@@ -23,13 +57,46 @@ class Event(models.Model):
     created_by = models.ForeignKey(User, related_name='hosted_events', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, through='Registration', related_name='registered_events', blank=True)
     net_type = models.CharField(max_length=50, choices=NET_TYPE_CHOICES, default=NET_TYPE_CHOICES[0])
-        
+    status = models.CharField(max_length=20,choices=STATUS_CHOICES,default=STATUS_CHOICES[0])
+    
+    objects = EventManager()
+
     def __str__(self):
         return self.name
 
     def get_pending_registration_count(self):
         pending_registrations = self.registrations.filter(is_approved=False)
         return sum(registration.number_of_people for registration in pending_registrations)
+    
+    def update_status(self):
+        now = timezone.now()  # Current datetime in UTC
+
+        # Combine date and time fields into datetime objects
+        event_start_datetime = timezone.make_aware(
+            datetime.datetime.combine(self.date, self.start_time)
+        )
+        event_end_datetime = timezone.make_aware(
+            datetime.datetime.combine(self.date, self.end_time)
+        )
+
+        # Update status based on the current time
+        if now > event_end_datetime:
+            self.status = ('past', '已結束'),
+        elif event_start_datetime <= now <= event_end_datetime:
+            self.status = ('playing', '進行中'),
+        elif self.spots_left == 0:
+            self.status = ('waitlist', '開放候補'),
+        else:
+            self.status = ('open', '開放報名'),
+        
+        self.save()
+    
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        
+        # Schedule notifications after saving the event
+        if self.pk:  # Check if the event already exists
+            schedule_notifications.delay(self.id)   
 
 class Registration(models.Model):
     event = models.ForeignKey(Event, related_name='registrations', on_delete=models.CASCADE)

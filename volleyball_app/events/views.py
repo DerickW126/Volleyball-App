@@ -5,15 +5,43 @@ from django.contrib.auth.decorators import login_required
 from .models import Event, Registration
 from .forms import EventForm, RegistrationForm
 from .serializers import EventSerializer, RegistrationSerializer
-from rest_framework import generics, status
+from rest_framework import generics, status, permissions
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from notifications.models import Notification
 from .serializers import RegistrationSerializer
-from notifications.utils import notify_user_about_event
-from notifications.models import Notification
-from notifications.views import trigger_notification, send_notification_direct
+from notifications.utils import send_notification, send_bulk_notification
+
+def notify_user_about_event(user, event_id, message):
+    # Create the notification
+    notification = Notification.objects.create(
+        user=user,
+        message=message,
+        event_id=event_id
+    )
+    send_notification(user, "新的通知", message)
+
+class UpdateEventView(generics.UpdateAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        event = super().get_object()
+        if event.created_by != self.request.user:
+            raise permissions.PermissionDenied("You do not have permission to edit this event.")
+        #send_notification(event)
+        return event
+    
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        event = self.get_object()
+        self.notify_users(event)
+
+    def notify_users(self, event):
+        registrations = event.registrations.all()  # Fetch all registrations
+        send_bulk_notification(registrations, event)
 
 class VerifyUserRegistrationAPIView(APIView):
     permission_classes = [IsAuthenticated]  # Ensure the user is authenticated
@@ -63,8 +91,6 @@ class ApproveRegistrationAPIView(APIView):
 
         # 创建通知
         message = f"Your registration for the event {event.name} has been approved."
-        #notificaiton = Notification.objects.create(user=registration.user, message=message, event_id=event.id)
-        #send_notification_to_user(notification.id)
         notify_user_about_event(event.created_by, event.id, message)
 
         return Response({"success": "Registration approved successfully."}, status=status.HTTP_200_OK)
@@ -88,7 +114,7 @@ class AddEventAPIView(APIView):
             event = serializer.save(created_by=request.user)
             message = f"{request.user.username}, You have successfully created {event.name}."
             #Notification.objects.create(user=event.created_by, message=message, event_id=event.id)
-            notify_user_about_event(event.created_by, event_id, message)
+            notify_user_about_event(event.created_by, event.id, message)
             #send_notification_to_user(notification.id)
             return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -140,10 +166,7 @@ class RegisterEventAPIView(APIView):
         user = request.user
         
         registration, created = Registration.objects.get_or_create(event=event, user=user)
-        
-        #previous_number = registration.number_of_people if not created else 0
-        send_notification_direct(user.id,'TEST 123456')
-        #trigger_notification(user, 'You have tried to register')
+        send_notification(user, "註冊成功！", f"您已經成功申請註冊 {event.name}")
         serializer = RegistrationSerializer(data=request.data, instance=registration)
         if serializer.is_valid():
             registration = serializer.save()  
@@ -221,7 +244,6 @@ class CheckRegistrationAPIView(APIView):
             data = {'registered': False}
         return Response(data, status=status.HTTP_200_OK)
 
-@login_required
 def index(request):
     events = Event.objects.all()
     return render(request, 'events/index.html', {'events': events})

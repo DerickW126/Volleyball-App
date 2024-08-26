@@ -20,7 +20,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'spots_left', 'created_by', 'pending_registrations', 'approved_registrations', 'is_creator', 'pending_registration_count', 'net_type']
+        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'spots_left', 'created_by', 'pending_registrations', 'approved_registrations', 'is_creator', 'pending_registration_count', 'net_type', 'status']
 
     def get_pending_registrations(self, obj):
         pending_registrations = Registration.objects.filter(event=obj, is_approved=False)

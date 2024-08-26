@@ -1,25 +1,27 @@
 # notifications/utils.py
-from channels.layers import get_channel_layer
-from asgiref.sync import async_to_sync
-from .models import Notification
-from .serializers import NotificationSerializer
+from fcm_django.models import FCMDevice
+from firebase_admin.messaging import Message, Notification
+from celery import shared_task
+from django.utils import timezone
+from datetime import timedelta
 
-def notify_user_about_event(user, event_id, message):
-    # Create the notification
-    notification = Notification.objects.create(
-        user=user,
-        message=message,
-        event_id=event_id
-    )
+def send_notification(user, title_msg, body_msg):
+    # Retrieve the FCMDevice for the user
+    device = FCMDevice.objects.filter(user=user).first()
 
-    # Send the notification via WebSocket
-    serialized_notification = NotificationSerializer(notification).data
-    channel_layer = get_channel_layer()
-    print(user, message, event_id)
-    async_to_sync(channel_layer.group_send)(
-        f'notifications_{user.id}',
-        {
-            'type': 'send_notification',
-            'notification': serialized_notification,
-        }
-    )
+    if device:
+        result = device.send_message(
+            Message(notification=Notification(title=title_msg, body=body_msg))
+        )
+        print(result)
+    else:
+        print(f"No device found for user {user.username}")
+        
+
+def send_bulk_notification(registrations, event):
+    devices = FCMDevice.objects.filter(user__in=[reg.user for reg in registrations])
+    for device in devices:
+        body_msg = f"Event {event.name} details have been updated."
+        device.send_message(Message(notification=Notification(title="主辦方更改了活動資訊", body=body_msg)))
+
+
