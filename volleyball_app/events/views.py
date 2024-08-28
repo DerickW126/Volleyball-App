@@ -22,6 +22,37 @@ def notify_user_about_event(user, event_id, message):
     )
     send_notification(user, "新的通知", message)
 
+class CancelEventView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, event_id, *args, **kwargs):
+        cancellation_message = request.data.get('cancellation_message')
+
+        if not cancellation_message:
+            return Response({"error": "Cancellation message is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            event = Event.objects.get(id=event_id)
+            
+            # Check if the user making the request is the creator of the event
+            if event.created_by != request.user:
+                return Response({"error": "You are not authorized to cancel this event"}, status=status.HTTP_403_FORBIDDEN)
+            
+            event.status = ('canceled', '取消')
+            event.cancellation_message = cancellation_message
+            event.save()
+
+            # Notify all users associated with the event
+            users = event.attendees.all()
+            for user in users:
+                notify_user_about_event(user, event_id, cancellation_message)
+
+            return Response({"message": "Event canceled and notifications sent"}, status=status.HTTP_200_OK)
+
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
 class UpdateEventView(generics.UpdateAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer

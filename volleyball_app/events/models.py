@@ -58,7 +58,8 @@ class Event(models.Model):
     attendees = models.ManyToManyField(User, through='Registration', related_name='registered_events', blank=True)
     net_type = models.CharField(max_length=50, choices=NET_TYPE_CHOICES, default=NET_TYPE_CHOICES[0])
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default=STATUS_CHOICES[0])
-    
+    cancellation_message = models.TextField(blank=True, null=True)  # Add this field
+
     objects = EventManager()
 
     def __str__(self):
