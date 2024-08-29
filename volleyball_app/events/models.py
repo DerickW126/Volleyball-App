@@ -14,7 +14,7 @@ def convert_to_utc(local_time, local_tz):
 class EventManager(models.Manager):
     def get(self, *args, **kwargs):
         event = super().get(*args, **kwargs)
-        event.update_status()  # Update the status before returning the event
+        event.update_status()  
         return event
 
     def filter(self, *args, **kwargs):
