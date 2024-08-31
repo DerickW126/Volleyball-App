@@ -13,6 +13,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from fcm_django.models import FCMDevice
 from .serializers import FCMDeviceSerializer
+from rest_framework.exceptions import ValidationError
 
 class RegisterDeviceTokenView(generics.CreateAPIView):
     queryset = FCMDevice.objects.all()
@@ -21,12 +22,30 @@ class RegisterDeviceTokenView(generics.CreateAPIView):
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer.is_valid(raise_exception=True)
+            registration_id = serializer.validated_data.get('registration_id')
+            user = request.user
 
-        # Set the user associated with this device
-        serializer.save(user=request.user)
-        
-        return Response({"message": "Device registered successfully"}, status=status.HTTP_201_CREATED)
+            # Check if the device already exists
+            existing_device = FCMDevice.objects.filter(registration_id=registration_id).first()
+            if existing_device:
+                # Update the existing device's user
+                existing_device.user = user
+                existing_device.save()
+                message = "Device already registered and updated successfully."
+                status_code = status.HTTP_200_OK
+            else:
+                # Create a new device
+                serializer.save(user=user)
+                message = "Device registered successfully."
+                status_code = status.HTTP_201_CREATED
+
+        except ValidationError as e:
+            # Handle validation errors
+            return Response({"errors": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response({"message": message}, status=status_code)
 
 class MarkNotificationAsReadAPIView(generics.UpdateAPIView):
     serializer_class = NotificationSerializer

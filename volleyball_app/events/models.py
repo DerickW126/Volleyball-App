@@ -79,16 +79,17 @@ class Event(models.Model):
         event_end_datetime = timezone.make_aware(
             datetime.datetime.combine(self.date, self.end_time)
         )
-
-        # Update status based on the current time
-        if now > event_end_datetime:
-            self.status = ('past', '已結束'),
+        print(self.status)
+        if self.status == 'canceled':
+            self.status = 'canceled'
+        elif now > event_end_datetime:
+            self.status = 'past'
         elif event_start_datetime <= now <= event_end_datetime:
-            self.status = ('playing', '進行中'),
+            self.status = 'playing'
         elif self.spots_left == 0:
-            self.status = ('waitlist', '開放候補'),
+            self.status = 'waitlist'
         else:
-            self.status = ('open', '開放報名'),
+            self.status = 'open'
         
         self.save()
     

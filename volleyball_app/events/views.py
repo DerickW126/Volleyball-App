@@ -38,14 +38,16 @@ class CancelEventView(APIView):
             if event.created_by != request.user:
                 return Response({"error": "You are not authorized to cancel this event"}, status=status.HTTP_403_FORBIDDEN)
             
-            event.status = ('canceled', '取消')
+            event.status = 'canceled'
             event.cancellation_message = cancellation_message
             event.save()
-
+            print(event.status)
+            notify_user_about_event(request.user, event_id, f'你已取消這個活動 原因: {cancellation_message}')
             # Notify all users associated with the event
             users = event.attendees.all()
             for user in users:
-                notify_user_about_event(user, event_id, cancellation_message)
+                if user != request.user:
+                    notify_user_about_event(user, event_id, cancellation_message)
 
             return Response({"message": "Event canceled and notifications sent"}, status=status.HTTP_200_OK)
 
