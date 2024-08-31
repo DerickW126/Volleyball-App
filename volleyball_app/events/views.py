@@ -22,6 +22,44 @@ def notify_user_about_event(user, event_id, message):
     )
     send_notification(user, "新的通知", message)
 
+class RemoveUserFromApprovedListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, event_id, user_id, *args, **kwargs):
+        cancellation_message = request.data.get('message', '')
+
+        if not cancellation_message:
+            return Response({"error": "Message is required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            # Fetch the event
+            event = Event.objects.get(id=event_id)
+            
+            # Check if the user making the request is the creator of the event
+            if event.created_by != request.user:
+                return Response({"error": "You are not authorized to remove users from this event"}, status=status.HTTP_403_FORBIDDEN)
+            
+            # Fetch the registration for the user
+            registration = Registration.objects.get(event=event, user_id=user_id)
+            
+            # Check if the user is approved
+            if registration.is_approved:
+                # Remove user from the approved list by updating the registration status
+                registration.is_approved = False
+                registration.save()
+                
+                # Notify the user about the change
+                notify_user_about_event(registration.user, event_id, f"You have been removed from the approved list for the event. Reason: {cancellation_message}")
+                
+                return Response({"message": "User removed from the approved list successfully"}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "User is not approved for this event"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+        except Registration.DoesNotExist:
+            return Response({"error": "Registration not found"}, status=status.HTTP_404_NOT_FOUND)
+
 class CancelEventView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -124,7 +162,7 @@ class ApproveRegistrationAPIView(APIView):
 
         # 创建通知
         message = f"Your registration for the event {event.name} has been approved."
-        notify_user_about_event(event.created_by, event.id, message)
+        notify_user_about_event(registration.user.id, event.id, message)
 
         return Response({"success": "Registration approved successfully."}, status=status.HTTP_200_OK)
 
@@ -199,7 +237,7 @@ class RegisterEventAPIView(APIView):
         user = request.user
         
         registration, created = Registration.objects.get_or_create(event=event, user=user)
-        send_notification(user, "註冊成功！", f"您已經成功申請註冊 {event.name}")
+        #send_notification(user, "註冊成功！", f"您已經成功申請註冊 {event.name}")
         serializer = RegistrationSerializer(data=request.data, instance=registration)
         if serializer.is_valid():
             registration = serializer.save()  

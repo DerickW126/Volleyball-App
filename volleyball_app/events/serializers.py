@@ -4,12 +4,15 @@ from rest_framework import generics
 from .models import Event, Registration
 
 class RegistrationSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField(read_only=True)  # 显示用户名而不是ID
+    user_id = serializers.SerializerMethodField()  # Add this field
+    user = serializers.StringRelatedField(read_only=True)  # Shows username instead of ID
 
     class Meta:
         model = Registration
-        fields = ['id', 'user', 'number_of_people', 'is_approved', 'previously_approved']
-        #read_only_fields = ['is_approved', 'previously_approved']
+        fields = ['id', 'user', 'user_id', 'number_of_people', 'is_approved', 'previously_approved']
+
+    def get_user_id(self, obj):
+        return obj.user.id
 
 class EventSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)

@@ -1,6 +1,6 @@
 # events/urls.py
 from django.urls import path
-from .views import EventListAPIView, EventDetailAPIView, AddEventAPIView, RegisterEventAPIView, UnregisterEventAPIView, EditRegistrationAPIView, CheckRegistrationAPIView, PendingRegistrationsAPIView, ApproveRegistrationAPIView, UserRegistrationsAPIView, VerifyUserRegistrationAPIView, UpdateEventView, CancelEventView
+from .views import EventListAPIView, EventDetailAPIView, AddEventAPIView, RegisterEventAPIView, UnregisterEventAPIView, EditRegistrationAPIView, CheckRegistrationAPIView, PendingRegistrationsAPIView, ApproveRegistrationAPIView, UserRegistrationsAPIView, VerifyUserRegistrationAPIView, UpdateEventView, CancelEventView, RemoveUserFromApprovedListView
 
 urlpatterns = [
     #path('', views.index, name='index'),  # 根 URL 對應 index 視圖
@@ -21,5 +21,6 @@ urlpatterns = [
     path('verify_registration/<int:registration_id>/', VerifyUserRegistrationAPIView.as_view(), name='verify-registration'),  #Check if user is owner of registration
     path('events/update/<int:pk>/', UpdateEventView.as_view(), name='update-event'),
     path('events/cancel/<int:event_id>/', CancelEventView.as_view(), name='cancel-event'),
+    path('events/<int:event_id>/remove_user/<int:user_id>/', RemoveUserFromApprovedListView.as_view(), name='remove_user_from_approved_list'),
 ]
 
