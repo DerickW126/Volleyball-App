@@ -115,3 +115,11 @@ class Registration(models.Model):
     class Meta:
         unique_together = ('event', 'user')
 
+class ChatMessage(models.Model):
+    event = models.ForeignKey(Event, related_name='messages', on_delete=models.CASCADE)
+    user = models.ForeignKey(User, related_name='chat_messages', on_delete=models.CASCADE)
+    message = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['timestamp']

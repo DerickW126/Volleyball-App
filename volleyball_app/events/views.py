@@ -2,7 +2,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
-from .models import Event, Registration
+from .models import Event, Registration, ChatMessage
 from .forms import EventForm, RegistrationForm
 from .serializers import EventSerializer, RegistrationSerializer
 from rest_framework import generics, status, permissions
@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from notifications.models import Notification
-from .serializers import RegistrationSerializer
+from .serializers import RegistrationSerializer, ChatMessageSerializer
 from notifications.utils import send_notification, send_bulk_notification
 
 def notify_user_about_event(user, event_id, message):
@@ -21,6 +21,32 @@ def notify_user_about_event(user, event_id, message):
         event_id=event_id
     )
     send_notification(user, "新的通知", message)
+
+class ChatMessageListView(APIView):
+    def get(self, request, event_id):
+        try:
+            event = Event.objects.get(id=event_id)
+            messages = ChatMessage.objects.filter(event=event)
+            serializer = ChatMessageSerializer(messages, many=True)
+            return Response(serializer.data)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
+
+class SendMessageView(APIView):
+    def post(self, request, event_id):
+        try:
+            event = Event.objects.get(id=event_id)
+            user = request.user
+            message = request.data.get('message')
+            
+            if not message:
+                return Response({"error": "Message cannot be empty"}, status=status.HTTP_400_BAD_REQUEST)
+            
+            chat_message = ChatMessage.objects.create(event=event, user=user, message=message)
+            serializer = ChatMessageSerializer(chat_message)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        except Event.DoesNotExist:
+            return Response({"error": "Event not found"}, status=status.HTTP_404_NOT_FOUND)
 
 class RemoveUserFromApprovedListView(APIView):
     permission_classes = [IsAuthenticated]

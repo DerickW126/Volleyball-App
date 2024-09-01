@@ -1,7 +1,7 @@
 # events/serializers.py
 from rest_framework import serializers
 from rest_framework import generics
-from .models import Event, Registration
+from .models import Event, Registration, ChatMessage
 
 class RegistrationSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()  # Add this field
@@ -41,3 +41,10 @@ class EventSerializer(serializers.ModelSerializer):
     
     def get_pending_registration_count(self, obj):
         return obj.get_pending_registration_count()
+
+class ChatMessageSerializer(serializers.ModelSerializer):
+    user = serializers.StringRelatedField()
+    
+    class Meta:
+        model = ChatMessage
+        fields = ['id', 'user', 'message', 'timestamp']
