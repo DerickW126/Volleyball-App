@@ -44,7 +44,15 @@ class EventSerializer(serializers.ModelSerializer):
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
-    
+    user_first_name = serializers.SerializerMethodField()
+    user_last_name = serializers.SerializerMethodField()
+
     class Meta:
         model = ChatMessage
-        fields = ['id', 'user', 'message', 'timestamp']
+        fields = ['id', 'user_first_name', 'user_last_name', 'user', 'message', 'timestamp']
+
+    def get_user_first_name(self, obj):
+        return obj.user.first_name
+
+    def get_user_last_name(self, obj):
+        return obj.user.last_name
