@@ -14,15 +14,19 @@ from channels.routing import ProtocolTypeRouter, URLRouter
 from channels.auth import AuthMiddlewareStack
 from channels.layers import get_channel_layer
 from django.urls import path
-from notifications.consumers import NotificationConsumer
+from channels.security.websocket import AllowedHostsOriginValidator
+from volleyball_app import routing
+#from notifications.consumers import NotificationConsumer
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'volleyball_app.settings')
 
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
-    "websocket": AuthMiddlewareStack(
-        URLRouter([
-            path('ws/notifications/<int:user_id>/', NotificationConsumer.as_asgi()),
-        ])
+    "websocket": AllowedHostsOriginValidator(
+        AuthMiddlewareStack(
+            URLRouter(
+                routing.websocket_urlpatterns
+            )
+        )
     ),
 })

@@ -1,3 +1,4 @@
+'''
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 import logging
@@ -60,3 +61,4 @@ class NotificationConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({'message': message}))
         logger.debug(f"Sent notification to User ID: {self.user_id}: {message}")
 
+'''
