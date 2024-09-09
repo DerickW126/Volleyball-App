@@ -16,6 +16,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
 
 class EventSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)
+    created_by_id = serializers.IntegerField(source='created_by.id', read_only=True)
     pending_registrations = serializers.SerializerMethodField()
     approved_registrations = serializers.SerializerMethodField()
     is_creator = serializers.SerializerMethodField()
@@ -23,7 +24,7 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'spots_left', 'created_by', 'pending_registrations', 'approved_registrations', 'is_creator', 'pending_registration_count', 'net_type', 'status', 'cancellation_message']
+        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'spots_left', 'created_by', 'created_by_id', 'pending_registrations', 'approved_registrations', 'is_creator', 'pending_registration_count', 'net_type', 'status', 'cancellation_message']
 
     def get_pending_registrations(self, obj):
         pending_registrations = Registration.objects.filter(event=obj, is_approved=False)
@@ -44,12 +45,13 @@ class EventSerializer(serializers.ModelSerializer):
 
 class ChatMessageSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
     user_first_name = serializers.SerializerMethodField()
     user_last_name = serializers.SerializerMethodField()
 
     class Meta:
         model = ChatMessage
-        fields = ['id', 'user_first_name', 'user_last_name', 'user', 'message', 'timestamp']
+        fields = ['id', 'user_first_name', 'user_last_name', 'user', 'user_id', 'message', 'timestamp']
 
     def get_user_first_name(self, obj):
         return obj.user.first_name
