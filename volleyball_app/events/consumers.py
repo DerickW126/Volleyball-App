@@ -2,8 +2,9 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
 from asgiref.sync import sync_to_async
-from .models import ChatMessage
+from .models import ChatMessage, Event, Registration
 from .serializers import ChatMessageSerializer
+from .views import notify_user_about_event
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -38,8 +39,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             
             print(f'Received message: {message} from user {user_id}')
             
+            if not message:
+                raise ValueError("Message content is empty or not provided")
+            
             # Save the message to the database
             await self.save_message(user_id, message)
+            await self.notify_users_about_event(user_id, message)
             
             # Broadcast message to the chat room group
             await self.channel_layer.group_send(
@@ -53,11 +58,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'timestamp': timezone.now().isoformat()
                 }
             )
+            
             print(f'Sent message: {message} by user {user_id} to group {self.event_id}')
         except json.JSONDecodeError as e:
             print(f'JSON decode error: {e}')
         except Exception as e:
             print(f'Error in receive method: {e}')
+        
 
     async def chat_message(self, event):
         message = event.get('message')
@@ -91,3 +98,23 @@ class ChatConsumer(AsyncWebsocketConsumer):
             message=message,
             timestamp=timezone.now()
         )
+
+    @sync_to_async
+    def notify_users_about_event(self, sender_id, message):
+        # Fetch all users from the event
+        registrations = Registration.objects.filter(event_id=self.event_id)
+        users = [registration.user for registration in registrations]
+        
+        # Fetch the creator of the event
+        event = Event.objects.get(id=self.event_id)
+        creator = event.created_by
+        
+        # Add the creator to the list if not already included
+        if creator not in users:
+            users.append(creator)
+        
+        # Notify each user except the sender
+        for user in users:
+            #if user.id != sender_id:
+                # Call the notification function synchronously
+            notify_user_about_event(user, self.event_id, message)

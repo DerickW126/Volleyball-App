@@ -79,7 +79,7 @@ class Event(models.Model):
         event_end_datetime = timezone.make_aware(
             datetime.datetime.combine(self.date, self.end_time)
         )
-        print(self.status)
+        #print(self.status)
         if self.status == 'canceled':
             self.status = 'canceled'
         elif now > event_end_datetime:
