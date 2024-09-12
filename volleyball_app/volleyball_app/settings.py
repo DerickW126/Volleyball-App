@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
+    'rest_framework_simplejwt.token_blacklist',
 ]
 
 PUSH_NOTIFICATIONS_SETTINGS = {
@@ -66,7 +67,7 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     'APNS_TOPIC': 'com.bros.volleyballproject',  # Usually your app's bundle identifier
     "FCM_API_KEY": "AIzaSyCIowXkDxD9F5-KoS9ONGUXc87dRDeeT4A",
 }
-
+#AUTH_USER_MODEL = 'users.CustomUser'
 ASGI_APPLICATION = 'volleyball_app.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -99,7 +100,10 @@ SIMPLE_JWT = {
 
 CELERY_BROKER_URL = 'redis://localhost:6379/0'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_TIMEZONE = 'UTC'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = 'Asia/Taipei'
 SITE_ID = 1
 
 AUTHENTICATION_BACKENDS = [
@@ -241,3 +245,4 @@ FCM_DJANGO_SETTINGS = {
      # default: False
     "DELETE_INACTIVE_DEVICES": True,
 }
+

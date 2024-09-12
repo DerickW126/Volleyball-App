@@ -115,6 +115,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         # Notify each user except the sender
         for user in users:
-            #if user.id != sender_id:
+            if user.id != sender_id:
+                if user.is_active:
                 # Call the notification function synchronously
-            notify_user_about_event(user, self.event_id, message)
+                    notify_user_about_event(user, self.event_id, message)

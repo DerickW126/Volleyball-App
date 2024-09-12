@@ -8,16 +8,8 @@ from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import GoogleLoginSerializer, UserSerializer
 from rest_framework import generics, permissions
-
-# users/views.py
-from rest_framework import status
-from rest_framework.response import Response
-from dj_rest_auth.registration.views import SocialLoginView
-from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import GoogleLoginSerializer
-
+from django.contrib.auth import logout
+from django.contrib.auth.models import User
 class GoogleLogin(SocialLoginView):
     serializer_class = GoogleLoginSerializer
     adapter_class = GoogleOAuth2Adapter
@@ -40,23 +32,31 @@ class GoogleLogin(SocialLoginView):
         refresh = RefreshToken.for_user(user)
         return refresh
 
+class LogoutView(APIView):
+    def post(self, request, *args, **kwargs):
+        # Invalidate JWT tokens
+        try:
+            refresh_token = request.data.get('refresh')
+            if refresh_token:
+                token = RefreshToken(refresh_token)
+                token.blacklist()  # Assuming you have configured token blacklist
+                # Optionally, you can log out the user from the session
+                logout(request)
+                return Response({"detail": "Successfully logged out."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"detail": "Refresh token is missing."}, status=status.HTTP_400_BAD_REQUEST)
+        except Exception as e:
+            return Response({"detail": f"Error logging out: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
-        return self.request.user
+        user_id = self.kwargs.get('user_id')
+        try:
+            user = User.objects.get(id=user_id)
+            return user
+        except User.DoesNotExist:
+            raise Http404
 
-from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
-
-@login_required
-def profile(request):
-    user = request.user
-    hosted_events = user.hosted_events.all()  # 获取用户主持的事件
-    registered_events = user.registered_events.all()
-    return render(request, 'users/profile.html', {
-        'user': user,
-        'hosted_events': hosted_events,
-        'registered_events': registered_events
-    })

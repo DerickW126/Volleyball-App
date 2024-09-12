@@ -19,15 +19,20 @@ class RegisterDeviceTokenView(generics.CreateAPIView):
     queryset = FCMDevice.objects.all()
     serializer_class = FCMDeviceSerializer
     permission_classes = [permissions.IsAuthenticated]
-
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        data = request.data
+        registration_id = data.get('registration_id')
 
-        # Set the user associated with this device
-        serializer.save(user=request.user)
+        # Check if the device with the given registration_id already exists
+        device, created = FCMDevice.objects.update_or_create(
+            registration_id=registration_id,
+            defaults={'device_type': data.get('device_type'), 'user': request.user}
+        )
         
-        return Response({"message": "Device registered successfully"}, status=status.HTTP_201_CREATED)
+        if created:
+            return Response({"message": "Device registered successfully"}, status=status.HTTP_201_CREATED)
+        else:
+            return Response({"message": "Device updated successfully"}, status=status.HTTP_200_OK)
 
 class MarkNotificationAsReadAPIView(generics.UpdateAPIView):
     serializer_class = NotificationSerializer

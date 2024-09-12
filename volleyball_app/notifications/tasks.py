@@ -1,39 +1,27 @@
 from celery import shared_task
-from django.utils import timezone
-from datetime import timedelta
-from notifications.utils import send_notification
-import events.models
-
-@shared_task
-def notify_event_users(event_id, time_before):
-    try:
-        event = events.models.Event.objects.get(id=event_id)
-        start_time = timezone.make_aware(
-            timezone.datetime.combine(event.date, event.start_time) - timedelta(minutes=time_before)
-        )
-        now = timezone.now()
-        
-        if now >= start_time:
-            users = User.objects.filter(event_registrations__event=event)
-            for user in users:
-                send_notification(user, event)
-    except Event.DoesNotExist:
-        pass
-
-@shared_task
-def schedule_notifications(event_id):
-    # Fetch events starting within the next 24 hours, 1 hour, and 10 minutes
-    upcoming_events = Event.objects.filter(start_time__gte=now, start_time__lte=now + timedelta(days=1))
+from django.apps import apps
+from .utils import send_notification
+def notify_user_about_event(user, event_id, message):
+    # Create the notification
+    notification = Notification.objects.create(
+        user=user,
+        message=message,
+        event_id=event_id
+    )
+    send_notification(user, "新的通知", message)
     
-    for event in upcoming_events:
-        event_time = timezone.make_aware(
-            timezone.datetime.combine(event.date, event.start_time)
-        )
-        
-        # Schedule notification tasks
-        if event_time - timedelta(hours=24) > now:
-            notify_event_users.apply_async(args=[event.id, 1440], eta=event_time - timedelta(hours=24))
-        if event_time - timedelta(hours=1) > now:
-            notify_event_users.apply_async(args=[event.id, 60], eta=event_time - timedelta(hours=1))
-        if event_time - timedelta(minutes=10) > now:
-            notify_event_users.apply_async(args=[event.id, 10], eta=event_time - timedelta(minutes=10))
+@shared_task
+def remind_users_before_event(event_id):
+    Event = apps.get_model('events', 'Event')
+    Registration = apps.get_model('events', 'Registration')
+    
+    # Fetch event and registrations
+    event = Event.objects.get(id=event_id)
+    registrations = Registration.objects.filter(event=event, is_approved=True)
+    
+    # Notify users
+    for registration in registrations:
+        user = registration.user
+        # Your notification logic here
+        notify_user_about_event(user, event_id, '快開打了')
+        print(f'Notifying user {user.id} about event {event_id}')

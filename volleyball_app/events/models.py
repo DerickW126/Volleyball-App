@@ -4,7 +4,8 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 import pytz
 import datetime
-from notifications.tasks import schedule_notifications
+#from notifications.tasks import schedule_notifications
+from django.contrib.auth.models import AbstractUser, Group, Permission
 
 def convert_to_utc(local_time, local_tz):
     local_tz = pytz.timezone(local_tz)
@@ -92,13 +93,6 @@ class Event(models.Model):
             self.status = 'open'
         
         self.save()
-    
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        
-        # Schedule notifications after saving the event
-        if self.pk:  # Check if the event already exists
-            schedule_notifications.delay(self.id)   
 
 class Registration(models.Model):
     event = models.ForeignKey(Event, related_name='registrations', on_delete=models.CASCADE)
@@ -124,3 +118,4 @@ class ChatMessage(models.Model):
 
     class Meta:
         ordering = ['timestamp']
+
