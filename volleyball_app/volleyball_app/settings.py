@@ -53,11 +53,14 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
+    'allauth.socialaccount.providers.facebook',
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
     'rest_framework.authtoken',
     'rest_framework_simplejwt.token_blacklist',
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 ]
 
 PUSH_NOTIFICATIONS_SETTINGS = {
@@ -118,6 +121,9 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 
+SOCIAL_AUTH_FACEBOOK_KEY = 'your-facebook-app-id'
+SOCIAL_AUTH_FACEBOOK_SECRET = 'your-facebook-app-secret'
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
@@ -132,6 +138,19 @@ SOCIALACCOUNT_PROVIDERS = {
         'AUTH_PARAMS': {
             'access_type': 'online',
         }
+    }, 
+    'facebook': {
+        'METHOD': 'oauth2',
+        'SCOPE': ['user_gender'],
+        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
+        'FIELDS': [
+            'id',
+            'gender',
+        ],
+        'EXCHANGE_TOKEN': True,
+        'LOCALE_FUNC': lambda request: 'en_US',
+        'VERIFIED_EMAIL': False,
+        'VERSION': 'v12.0',  # Use the version of Facebook's API that you are using
     }
 }
 
