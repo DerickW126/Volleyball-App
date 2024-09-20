@@ -21,7 +21,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'volleyball_app.volleyball_app.settings')
 django.setup()
 
-from volleyball_app import routing
+from . import routing
 application = ProtocolTypeRouter({
     "http": get_asgi_application(),
     "websocket": AllowedHostsOriginValidator(
