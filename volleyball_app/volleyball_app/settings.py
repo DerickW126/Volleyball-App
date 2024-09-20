@@ -14,6 +14,7 @@ from pathlib import Path
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import initialize_app
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,11 +24,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
+'''
 SECRET_KEY = 'django-insecure--&dqabxypygvf@9)lo=ya9nw383g*nuht%c-i@4(0pcqe$2u9q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 ALLOWED_HOSTS = ['*']
+'''
+SECRET_KEY = os.environ.get('SECRET_KEY')
+
+# Debug mode, set to False in production
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+
+# Allowed hosts
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 #ALLOWED_HOSTS = ['ec2-18-183-213-23.ap-northeast-1.compute.amazonaws.com','localhost', '18.183.213.23', '43.207.235.105', '172.31.35.113']
 
 
@@ -165,7 +175,14 @@ MIDDLEWARE = [
 	'allauth.account.middleware.AccountMiddleware', 
     'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_URL = '/static/'
+
+# Simplified static file serving using Whitenoise
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # React app running on port 3000
@@ -206,6 +223,10 @@ DATABASES = {
 }
 '''
 DATABASES = {
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
+}
+'''
+DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'volleyball_app_db',       # The name of the database you created
@@ -215,7 +236,7 @@ DATABASES = {
         'PORT': '5432',               # The default PostgreSQL port
     }
 }
-
+'''
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -276,3 +297,10 @@ FCM_DJANGO_SETTINGS = {
     "DELETE_INACTIVE_DEVICES": True,
 }
 
+
+SECURE_SSL_REDIRECT = os.environ.get('SECURE_SSL_REDIRECT', 'True') == 'True'
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+SECURE_HSTS_SECONDS = 3600
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True

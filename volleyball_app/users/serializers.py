@@ -61,15 +61,3 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()  # Use the custom user model
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'nickname', 'position', 'hosted_events', 'registered_events', 'intro']
-    '''
-    def update(self, instance, validated_data):
-        # Update the fields you want to allow updating
-        instance.nickname = validated_data.get('nickname', instance.nickname)
-        instance.position = validated_data.get('position', instance.position)
-        instance.intro = validated_data.get('intro', instance.intro)
-        
-        # You can add more fields here if you want to allow updating other attributes like first_name, etc.
-        instance.save()
-        return instance
-    
-    '''

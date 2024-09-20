@@ -79,7 +79,7 @@ def set_event_status(event_id, status):
         print(f'Event with id {event_id} does not exist.')
 
 @shared_task
-def remind_users_before_event(event_id, timedelta_before_event=None):
+def remind_users_before_event(event_id, timedelta_before_event):
 
     Event = apps.get_model('events', 'Event')
     Registration = apps.get_model('events', 'Registration')
@@ -97,6 +97,7 @@ def remind_users_before_event(event_id, timedelta_before_event=None):
         notify_user_about_event(event.created_by, event_id, f'{event.name} 再 {timedelta_before_event} 就要開始了!')
         notification = Notification.objects.create(
             user=event.created_by,
+            title='活動提醒',
             message=f'{event.name} 再 {timedelta_before_event} 就要開始了!',
             event_id=event_id
         )
