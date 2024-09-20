@@ -14,6 +14,7 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+        '''
         migrations.CreateModel(
             name='CustomAPNSDevice',
             fields=[
@@ -25,4 +26,5 @@ class Migration(migrations.Migration):
             },
             bases=('push_notifications.apnsdevice',),
         ),
+        '''
     ]

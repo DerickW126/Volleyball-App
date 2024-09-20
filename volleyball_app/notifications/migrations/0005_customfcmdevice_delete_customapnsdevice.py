@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
             },
             bases=('push_notifications.gcmdevice',),
         ),
+        '''
         migrations.DeleteModel(
             name='CustomAPNSDevice',
         ),
+        '''
     ]
