@@ -19,8 +19,8 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-APN_KEY_PATH = os.path.join(BASE_DIR, 'APN_Key.p8')
-CRED_PATH = os.path.join(BASE_DIR, 'cred.json')
+APN_KEY_PATH = os.path.join(BASE_DIR, 'volleyball_app', 'APN_Key.p8')
+CRED_PATH = os.path.join(BASE_DIR, 'volleyball_app','cred.json')
 
 # Recreate the APN_Key.p8 from the environment variable
 if os.environ.get('APN_KEY'):
