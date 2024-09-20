@@ -3,7 +3,6 @@ from rest_framework import serializers
 from .models import Notification
 from events.models import Event
 from push_notifications.models import APNSDevice
-from .models import CustomFCMDevice
 from rest_framework import serializers
 from fcm_django.models import FCMDevice
 

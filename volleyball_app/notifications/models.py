@@ -3,7 +3,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from events.models import Event
-from push_notifications.models import APNSDevice, GCMDevice
+#from push_notifications.models import APNSDevice, GCMDevice
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 from django.utils import timezone
@@ -25,8 +25,8 @@ class ScheduledReminder(models.Model):
         return f"Notification for event {self.event.id} scheduled at {self.scheduled_time}"
 
 
-class CustomFCMDevice(GCMDevice):
-    custom_user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+#class CustomFCMDevice(GCMDevice):
+#    custom_user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 class Notification(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
