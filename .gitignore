@@ -1,6 +1,8 @@
 # My own 
 nohup.out
 derick_git_key
+APN_KEY.p8
+cred.json
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
