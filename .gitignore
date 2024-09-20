@@ -3,6 +3,7 @@ nohup.out
 derick_git_key
 APN_KEY.p8
 cred.json
+local.py
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
