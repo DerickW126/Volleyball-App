@@ -18,7 +18,7 @@ from channels.security.websocket import AllowedHostsOriginValidator
 
 #from notifications.consumers import NotificationConsumer
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'volleyball_app.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'volleyball_app.volleyball_app.settings')
 django.setup()
 
 from volleyball_app import routing
