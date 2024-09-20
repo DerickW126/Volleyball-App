@@ -14,17 +14,15 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        '''
         migrations.CreateModel(
             name='CustomAPNSDevice',
             fields=[
                 ('apnsdevice_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='push_notifications.apnsdevice')),
-                ('custom_user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                #('custom_user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
             },
             bases=('push_notifications.apnsdevice',),
         ),
-        '''
     ]
