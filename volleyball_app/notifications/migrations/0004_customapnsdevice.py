@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-       # ('push_notifications', '0011_alter_apnsdevice_id_alter_gcmdevice_id_and_more'),
+        ('push_notifications', '0011_alter_apnsdevice_id_alter_gcmdevice_id_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('notifications', '0003_remove_notification_event_notification_event_id'),
     ]
@@ -18,11 +18,11 @@ class Migration(migrations.Migration):
             name='CustomAPNSDevice',
             fields=[
                 ('apnsdevice_ptr', models.OneToOneField(auto_created=True, on_delete=django.db.models.deletion.CASCADE, parent_link=True, primary_key=True, serialize=False, to='push_notifications.apnsdevice')),
-                #('custom_user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('custom_user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
             ],
             options={
                 'abstract': False,
             },
-            bases=('push_notifications.apnsdevice',),
+            #bases=('push_notifications.apnsdevice',),
         ),
     ]
