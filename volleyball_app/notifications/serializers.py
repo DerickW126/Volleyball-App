@@ -26,7 +26,7 @@ class EventSerializer(serializers.ModelSerializer):
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Notification
-        fields = ['id', 'message', 'is_read', 'event_id']
+        fields = ['id', 'message', 'is_read', 'event_id', 'timestamp']
         read_only_fields = ['id', 'message']
 '''
 class CustomAPNSDeviceSerializer(serializers.ModelSerializer):

@@ -12,15 +12,19 @@ from rest_framework.response import Response
 from notifications.models import Notification
 from .serializers import RegistrationSerializer, ChatMessageSerializer
 from notifications.utils import send_notification, send_bulk_notification
+from notifications.tasks import cancel_old_notifications, schedule_reminders, schedule_event_status_updates
+from django.utils import timezone
+import datetime
 
-def notify_user_about_event(user, event_id, message):
+def notify_user_about_event(user, event_id, title, message):
     # Create the notification
     notification = Notification.objects.create(
         user=user,
+        title=title,
         message=message,
         event_id=event_id
     )
-    send_notification(user, "新的通知", message)
+    send_notification(user, title, message)
 
 class ChatMessageListView(APIView):
     def get(self, request, event_id):
@@ -77,7 +81,7 @@ class RemoveUserFromApprovedListView(APIView):
                 registration.save()
                 
                 # Notify the user about the change
-                notify_user_about_event(registration.user, event_id, f"You have been removed from the approved list for the event. Reason: {cancellation_message}")
+                notify_user_about_event(registration.user, event_id, "報名更改通知", f"{event.name} 的活動發起人已將您移出參加名單。原因: {cancellation_message}")
                 
                 return Response({"message": "User removed from the approved list successfully"}, status=status.HTTP_200_OK)
             else:
@@ -108,12 +112,13 @@ class CancelEventView(APIView):
             event.cancellation_message = cancellation_message
             event.save()
             print(event.status)
-            notify_user_about_event(request.user, event_id, f'你已取消這個活動 原因: {cancellation_message}')
+            cancel_old_notifications(event)
+            notify_user_about_event(request.user, event_id, "活動取消通知", f'您已成功取消這個活動 原因: {cancellation_message}')
             # Notify all users associated with the event
             users = event.attendees.all()
             for user in users:
                 if user != request.user:
-                    notify_user_about_event(user, event_id, cancellation_message)
+                    notify_user_about_event(user, event_id, "活動取消通知", f'您報名的活動 {event.name} 已被取消，原因: {cancellation_message}')
 
             return Response({"message": "Event canceled and notifications sent"}, status=status.HTTP_200_OK)
 
@@ -130,13 +135,32 @@ class UpdateEventView(generics.UpdateAPIView):
         event = super().get_object()
         if event.created_by != self.request.user:
             raise permissions.PermissionDenied("You do not have permission to edit this event.")
-        #send_notification(event)
         return event
     
     def perform_update(self, serializer):
-        super().perform_update(serializer)
         event = self.get_object()
-        self.notify_users(event)
+
+        old_event_start_datetime = timezone.make_aware(
+            datetime.datetime.combine(event.date, event.start_time)
+        )
+
+        # Perform the actual update
+        super().perform_update(serializer)
+
+        # Fetch the updated event object
+        updated_event = self.get_object()
+
+        # Get the new event start time after the update
+        new_event_start_datetime = timezone.make_aware(
+            datetime.datetime.combine(updated_event.date, updated_event.start_time)
+        )
+
+        # Compare old and new event start times, and update reminders only if they differ
+        if old_event_start_datetime != new_event_start_datetime:
+            cancel_old_notifications(event)  # Cancel old reminders
+            schedule_reminders(updated_event)  # Schedule new reminders
+
+        self.notify_users(updated_event)
 
     def notify_users(self, event):
         registrations = event.registrations.all()  # Fetch all registrations
@@ -189,8 +213,8 @@ class ApproveRegistrationAPIView(APIView):
         event.save()
 
         # 创建通知 
-        message = f"Your registration for the event {event.name} has been approved."
-        notify_user_about_event(registration.user, event.id, message)
+        message = f"你的在 {event.name} 已被審核通過，請準時抵達活動地點"
+        notify_user_about_event(registration.user, event.id, '報名審核通過', message)
 
         return Response({"success": "Registration approved successfully."}, status=status.HTTP_200_OK)
 
@@ -209,12 +233,13 @@ class AddEventAPIView(APIView):
 
     def post(self, request):
         serializer = EventSerializer(data=request.data)
+        
         if serializer.is_valid():
             event = serializer.save(created_by=request.user)
-            message = f"{request.user.username}, You have successfully created {event.name}."
-            #Notification.objects.create(user=event.created_by, message=message, event_id=event.id)
-            notify_user_about_event(event.created_by, event.id, message)
-            #send_notification_to_user(notification.id)
+            schedule_event_status_updates(event)
+            message = f"您已成功建立 {event.name}."
+            notify_user_about_event(event.created_by, event.id, f'活動 {event.name} 創建成功', message)
+            schedule_reminders(event)
             return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -277,18 +302,18 @@ class RegisterEventAPIView(APIView):
             # 创建新的通知
             message = ""
             if created:
-                message = f"New registration: {user.username} has requested to register for your event {event.name}."
+                message = f"新的報名： {user.username} 已申請報名您的活動 {event.name}，請儘速審核"
             else:
-                message = f"Updated registration: {user.username} has updated their request for your event {event.name}."
+                message = f"更改的報名: {user.username} 已更改他在 {event.name} 的報名資訊，請儘速審核"
 
             #notification = Notification.objects.create(user=event.created_by, message=message, event_id=event_id)
             #send_notification_to_user(notification.id)
-            notify_user_about_event(event.created_by, event_id, message)
+            notify_user_about_event(event.created_by, event_id, '報名通知', message)
 
-            user_message = f"You have requested to register for the event {event.name}."
+            user_message = f"您已成功報名 {event.name}."
             #user_notification = Notification.objects.create(user=user, message=user_message, event_id=event_id)
             #send_notification_to_user(user_notification.id)
-            notify_user_about_event(user, event_id, user_message)
+            notify_user_about_event(user, event_id, '報名通知', user_message)
 
             return Response(serializer.data, status=status.HTTP_200_OK)
         
@@ -312,18 +337,11 @@ class UnregisterEventAPIView(APIView):
 
         registration.delete()
 
-        # 为取消注册的用户创建通知
-        #print(f'EVENT_ID: {event.id}')
-        user_message = f"You have successfully unregistered from the event {event.name}."
-        #user_notification = Notification.objects.create(user=user, message=user_message, event_id=event.id)
-        #send_notification_to_user(user_notification.id)
-        notify_user_about_event(user, event_id, user_message)
+        user_message = f"您已成功取消 {event.name} 的報名"
+        notify_user_about_event(user, event_id,'報名通知', user_message)
 
-        # 为活动主办方创建通知
-        host_message = f"{user.username} has unregistered from your event {event.name}."
-       # host_notification = Notification.objects.create(user=event.created_by, message=host_message, event_id=event.id)
-        #send_notification_to_user(host_notification.id)
-        notify_user_about_event(event.created_by, event_id, host_message)
+        host_message = f"{user.username} 取消了他在 {event.name} 的報名"
+        notify_user_about_event(event.created_by, event_id, '報名通知', host_message)
         return Response({"success": "Unregistered successfully."}, status=status.HTTP_200_OK)
 
 class CheckRegistrationAPIView(APIView):

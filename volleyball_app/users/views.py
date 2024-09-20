@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
+#from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -11,26 +11,53 @@ from .serializers import GoogleLoginSerializer, UserSerializer
 from rest_framework import generics, permissions
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 
-class FacebookLogin(SocialLoginView):
-    adapter_class = FacebookOAuth2Adapter
+CustomUser = get_user_model()
+class UpdateUserProfileView(generics.UpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]  # Ensure the user is authenticated
 
-    def post(self, request, *args, **kwargs):
-        self.serializer = self.get_serializer(data=request.data)
-        self.serializer.is_valid(raise_exception=True)
-        self.user = self.serializer.validated_data['user']
-        self.login()
-        token = self.get_token(self.user)
-        data = {
-            'refresh': str(token),
-            'access': str(token.access_token),
-        }
-        return Response(data, status=status.HTTP_200_OK)
+    def get_object(self):
+        # The object we want to update is the currently logged-in user
+        print(self.request.user)
+        return self.request.user
+    
+    def update(self, request, *args, **kwargs):
+        print("update method called")  # Debug: Check if `update` is called
 
-    def get_token(self, user):
-        refresh = RefreshToken.for_user(user)
-        return refresh
+        # Get the user object
+        user = self.get_object()
 
+        # Instantiate the serializer with the current user and incoming data
+        serializer = self.get_serializer(user, data=request.data, partial=True)
+
+        # Validate the data
+        if not serializer.is_valid():
+            # Print validation errors to see what is going wrong
+            print(f"Validation errors: {serializer.errors}")
+            return Response({'detail': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        # If valid, call perform_update
+        self.perform_update(serializer)
+
+        return Response({'detail': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+
+    def perform_update(self, serializer):
+        print('perform update called!!!!!!!!')
+        # Check if the data is valid before saving
+        if not serializer.is_valid():
+            print(f"Validation failed: {serializer.errors}")  # Print any validation errors
+            return Response({'detail': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+        # If valid, save and return success response
+        try:
+            instance = serializer.save()
+            return Response({'detail': 'Profile updated successfully'}, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Error occurred while saving: {e}")  # Catch and print any errors during saving
+            return Response({'detail': 'An error occurred', 'error': str(e)}, status=status.HTTP_400_BAD_REQUEST)
+    
 class GoogleLogin(SocialLoginView):
     serializer_class = GoogleLoginSerializer
     adapter_class = GoogleOAuth2Adapter
@@ -76,7 +103,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         user_id = self.kwargs.get('user_id')
         try:
-            user = User.objects.get(id=user_id)
+            user = CustomUser.objects.get(id=user_id)
             return user
         except User.DoesNotExist:
             raise Http404

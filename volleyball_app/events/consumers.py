@@ -2,7 +2,7 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils import timezone
 from asgiref.sync import sync_to_async
-from .models import ChatMessage, Event, Registration
+#from .models import ChatMessage, Event, Registration
 from .serializers import ChatMessageSerializer
 from .views import notify_user_about_event
 
@@ -81,7 +81,45 @@ class ChatConsumer(AsyncWebsocketConsumer):
             'user_last_name': user_last_name,
             'timestamp': timestamp
         }))
+    @sync_to_async
+    def get_old_messages(self):
+        from .models import ChatMessage  # Import model inside the method
+        # Serialize messages using ChatMessageSerializer
+        queryset = ChatMessage.objects.filter(event_id=self.event_id).order_by('timestamp')
+        serializer = ChatMessageSerializer(queryset, many=True)
+        return serializer.data
 
+    @sync_to_async
+    def save_message(self, user_id, message):
+        from .models import ChatMessage  # Import model inside the method
+        # Create a new chat message entry
+        ChatMessage.objects.create(
+            event_id=self.event_id,
+            user_id=user_id,
+            message=message,
+            timestamp=timezone.now()
+        )
+
+    @sync_to_async
+    def notify_users_about_event(self, sender_id, message):
+        from .models import Event, Registration  # Import models inside the method
+        # Fetch all users from the event
+        registrations = Registration.objects.filter(event_id=self.event_id)
+        users = [registration.user for registration in registrations]
+        
+        # Fetch the creator of the event
+        event = Event.objects.get(id=self.event_id)
+        creator = event.created_by
+        
+        # Add the creator to the list if not already included
+        if creator not in users:
+            users.append(creator)
+        
+        # Notify each user except the sender
+        for user in users:
+            if user.id != sender_id and user.is_active:
+                notify_user_about_event(user, self.event_id, message)
+    '''
     @sync_to_async
     def get_old_messages(self):
         # Serialize messages using ChatMessageSerializer
@@ -119,3 +157,4 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 if user.is_active:
                 # Call the notification function synchronously
                     notify_user_about_event(user, self.event_id, message)
+    '''

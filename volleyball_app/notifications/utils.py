@@ -17,11 +17,11 @@ def send_notification(user, title_msg, body_msg):
     else:
         print(f"No device found for user {user.username}")
         
-
 def send_bulk_notification(registrations, event):
     devices = FCMDevice.objects.filter(user__in=[reg.user for reg in registrations])
     for device in devices:
-        body_msg = f"Event {event.name} details have been updated."
-        device.send_message(Message(notification=Notification(title="主辦方更改了活動資訊", body=body_msg)))
+        body_msg = f"活動 {event.name} 的內容已被更改，請重新確認活動時間，地點，要求等"
+        device.send_message(Message(notification=Notification(title="活動資訊更改", body=body_msg)))
+
 
 

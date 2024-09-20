@@ -26,7 +26,8 @@ class RegisterDeviceTokenView(generics.CreateAPIView):
         # Check if the device with the given registration_id already exists
         device, created = FCMDevice.objects.update_or_create(
             registration_id=registration_id,
-            defaults={'device_type': data.get('device_type'), 'user': request.user}
+            defaults={'user': request.user}
+            #'device_type': data.get('device_type'), 
         )
         
         if created:

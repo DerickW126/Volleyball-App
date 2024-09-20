@@ -70,7 +70,7 @@ PUSH_NOTIFICATIONS_SETTINGS = {
     'APNS_TOPIC': 'com.bros.volleyballproject',  # Usually your app's bundle identifier
     "FCM_API_KEY": "AIzaSyCIowXkDxD9F5-KoS9ONGUXc87dRDeeT4A",
 }
-#AUTH_USER_MODEL = 'users.CustomUser'
+AUTH_USER_MODEL = 'users.CustomUser'
 ASGI_APPLICATION = 'volleyball_app.asgi.application'
 
 CHANNEL_LAYERS = {
@@ -197,11 +197,22 @@ WSGI_APPLICATION = 'volleyball_app.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
+'''
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
+'''
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'volleyball_app_db',       # The name of the database you created
+        'USER': 'derick',            # The username you created
+        'PASSWORD': 'derick2005',    # The password you set for the user
+        'HOST': 'localhost',          # The host (use 'localhost' if running locally)
+        'PORT': '5432',               # The default PostgreSQL port
     }
 }
 

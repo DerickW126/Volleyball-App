@@ -2,6 +2,9 @@
 from rest_framework import serializers
 from rest_framework import generics
 from .models import Event, Registration, ChatMessage
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model()
 
 class RegistrationSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()  # Add this field

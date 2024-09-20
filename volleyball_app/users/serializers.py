@@ -5,7 +5,10 @@ from allauth.socialaccount.models import SocialAccount
 from django.db import transaction, IntegrityError
 from events.serializers import EventSerializer
 import requests
-#from .models import CustomUser
+from django.conf import settings
+from django.contrib.auth import get_user_model
+
+CustomUser = get_user_model()
 
 class GoogleLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
@@ -28,7 +31,7 @@ class GoogleLoginSerializer(serializers.Serializer):
     def _get_or_create_user(self, user_data):
         with transaction.atomic():
             try:
-                user, created = User.objects.get_or_create(
+                user, created = CustomUser.objects.get_or_create(
                     username=user_data['email'],
                     defaults={'email': user_data['email'], 'first_name': user_data.get('given_name', ''), 'last_name': user_data.get('family_name', '')}
                 )
@@ -56,5 +59,17 @@ class UserSerializer(serializers.ModelSerializer):
     registered_events = EventSerializer(many=True, read_only=True)
     
     class Meta:
-        model = User
-        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'hosted_events', 'registered_events']
+        model = get_user_model()  # Use the custom user model
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'nickname', 'position', 'hosted_events', 'registered_events', 'intro']
+    '''
+    def update(self, instance, validated_data):
+        # Update the fields you want to allow updating
+        instance.nickname = validated_data.get('nickname', instance.nickname)
+        instance.position = validated_data.get('position', instance.position)
+        instance.intro = validated_data.get('intro', instance.intro)
+        
+        # You can add more fields here if you want to allow updating other attributes like first_name, etc.
+        instance.save()
+        return instance
+    
+    '''
