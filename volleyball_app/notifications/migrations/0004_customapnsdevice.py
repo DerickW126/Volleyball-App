@@ -8,7 +8,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('push_notifications', '0011_alter_apnsdevice_id_alter_gcmdevice_id_and_more'),
+        #('push_notifications', '0011_alter_apnsdevice_id_alter_gcmdevice_id_and_more'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
         ('notifications', '0003_remove_notification_event_notification_event_id'),
     ]

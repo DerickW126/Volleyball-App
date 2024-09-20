@@ -1,11 +1,11 @@
 # Procfile
 
 # Run the standard Django app with Gunicorn for HTTP requests
-web: gunicorn volleyball_app.wsgi --log-file -
+web: gunicorn volleyball_app/volleyball_app.wsgi --log-file -
 
 # Run Daphne for WebSockets and long-lived connections on port 8001
-daphne: daphne -b 0.0.0.0 -p 8001 volleyball_app.asgi:application
+daphne: daphne -b 0.0.0.0 -p 8001 volleyball_app/volleyball_app.asgi:application
 
 # Run Celery worker to handle background tasks
-worker: celery -A volleyball_app worker --loglevel=info
+worker: celery -A volleyball_app/volleyball_app worker --loglevel=info
 
