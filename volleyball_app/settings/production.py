@@ -197,7 +197,7 @@ CORS_ALLOWED_ORIGINS = [
     # You can add more origins if needed
 ]
 
-ROOT_URLCONF = 'volleyball_app.volleyball_app.urls'
+ROOT_URLCONF = 'volleyball_app.urls'
 
 TEMPLATES = [
     {
