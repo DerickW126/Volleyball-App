@@ -279,8 +279,18 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+firebase_cred_content = os.environ.get('FIREBASE_CRED')
+
+# Write the Firebase credentials to a temporary file
+with tempfile.NamedTemporaryFile(delete=False, suffix='.json') as temp_file:
+    temp_file.write(firebase_cred_content.encode())  # Write the key as bytes
+    temp_file_path = temp_file.name
+
+# Use the temp file path with firebase_admin
+cred = credentials.Certificate(temp_file_path)
 # settings.py
-cred = credentials.Certificate(os.environ.get('FIREBASE_CRED'))
+#cred = credentials.Certificate(os.environ.get('FIREBASE_CRED'))
 FIREBASE_APP = initialize_app(cred)
 # To learn more, visit the docs here:
 # https://cloud.google.com/docs/authentication/getting-started>
