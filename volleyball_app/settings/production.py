@@ -280,7 +280,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
-cred = credentials.Certificate(os.environ.get('FIREBASE_CRED')H)
+cred = credentials.Certificate(os.environ.get('FIREBASE_CRED'))
 FIREBASE_APP = initialize_app(cred)
 # To learn more, visit the docs here:
 # https://cloud.google.com/docs/authentication/getting-started>
