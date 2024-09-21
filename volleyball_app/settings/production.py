@@ -19,19 +19,6 @@ import dj_database_url
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-APN_KEY_PATH = os.path.join(BASE_DIR, 'volleyball_app', 'APN_Key.p8')
-CRED_PATH = os.path.join(BASE_DIR, 'volleyball_app','cred.json')
-
-# Recreate the APN_Key.p8 from the environment variable
-if os.environ.get('APN_KEY'):
-    with open(APN_KEY_PATH, 'w') as f:
-        f.write(os.environ.get('APN_KEY'))
-
-# Recreate the cred.json from the environment variable
-if os.environ.get('CREDENTIALS'):
-    with open(CRED_PATH, 'w') as f:
-        f.write(os.environ.get('CREDENTIALS'))
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
@@ -85,8 +72,12 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
 ]
 
+apns_key_content = os.environ.get('APN_KEY')
+with open('/tmp/apns_key.p8', 'w') as key_file:
+    key_file.write(apns_key_content)
+
 PUSH_NOTIFICATIONS_SETTINGS = {
-    'APNS_AUTH_KEY_PATH': APN_KEY_PATH,  # Path to your .p8 file
+    'APNS_AUTH_KEY_PATH': '/tmp/apns_key.p8',  # Path to your .p8 file
     'APNS_AUTH_KEY_ID': 'KN37N434TH',  # The Key ID obtained from the Apple Developer portal
     'APNS_TEAM_ID': 'UUNQ4YYJ6A',  # Your Apple Developer Team ID
     'APNS_TOPIC': 'com.bros.volleyballproject',  # Usually your app's bundle identifier
@@ -289,7 +280,7 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # settings.py
-cred = credentials.Certificate(CRED_PATH)
+cred = credentials.Certificate(os.environ.get('FIREBASE_CRED')H)
 FIREBASE_APP = initialize_app(cred)
 # To learn more, visit the docs here:
 # https://cloud.google.com/docs/authentication/getting-started>
