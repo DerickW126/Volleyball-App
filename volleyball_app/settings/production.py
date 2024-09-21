@@ -12,6 +12,9 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 import os
 from pathlib import Path
 import firebase_admin
+import tempfile
+import base64
+import json
 from firebase_admin import credentials
 from firebase_admin import initialize_app
 import dj_database_url
