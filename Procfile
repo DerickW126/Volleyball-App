@@ -1,3 +1,3 @@
-web: daphne -b 0.0.0.0 -p $PORT volleyball_app.asgi:application
+web: bin/start-nginx
 worker: celery -A volleyball_app.celery worker --loglevel=info
 
