@@ -7,6 +7,6 @@
 gunicorn --workers 3 --bind 0.0.0.0:8000 volleyball_app.wsgi:application &
 
 # Start Daphne for WebSocket traffic
-daphne -b 0.0.0.0 -p 8001 volleyball_app.asgi:application
-echo "Binding to port $PORT"
+daphne -b 0.0.0.0 -p 8001 volleyball_app.asgi:application & 
+echo "Binding to port $PORT" & 
 nginx -c $HOME/nginx.conf
