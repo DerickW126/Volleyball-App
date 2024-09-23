@@ -53,6 +53,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     'type': 'chat_message',
                     'message': message,
                     'user_id': user_id,
+                    'user_nickname': self.scope['user'].nickname,
                     'user_first_name': self.scope['user'].first_name,
                     'user_last_name': self.scope['user'].last_name,
                     'timestamp': timezone.now().isoformat()
@@ -69,6 +70,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event.get('message')
         user_id = event.get('user_id')
+        user_nickname = event.get('user_nickname')  
         user_first_name = event.get('user_first_name')
         user_last_name = event.get('user_last_name')
         timestamp = event.get('timestamp')
@@ -77,6 +79,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(text_data=json.dumps({
             'message': message,
             'user_id': user_id,
+            'user_nickname': user_nickname,
             'user_first_name': user_first_name,
             'user_last_name': user_last_name,
             'timestamp': timestamp
