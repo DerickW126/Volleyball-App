@@ -139,8 +139,8 @@ ACCOUNT_USERNAME_REQUIRED = False
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
-            'client_id': '1045243481718-3drmvdhnr0uaaal04efke7efh9sm0ms9.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': os.environ.get('GOOGLE_CLIENT_ID'),
+            'secret': os.environ.get('GOOGLE_SECRET'),
             'key': ''
         }, 
         'SCOPE': [
