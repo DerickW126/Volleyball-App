@@ -19,11 +19,23 @@ def schedule_event_status_updates(event):
         datetime.datetime.combine(event.date, event.end_time)
     )
     
-    set_event_status.apply_async((event.id, 'playing'), eta=event_start_datetime)
-    set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
+    if now >= event_end_datetime:
+        task = set_event_status.apply_async((event.id, 'past'), eta=now + timedelta(seconds=5))
+        ScheduleReminder.objects.create(event=event, task_id=task.id, status='past')
 
-    if now < event_start_datetime:
-        set_event_status.apply_async((event.id, 'open'), eta=now + timedelta(seconds=5))
+    elif now > event_start_datetime:
+        task = set_event_status.apply_async((event.id, 'playing'), eta=now + timedelta(seconds=5))
+        ScheduleReminder.objects.create(event=event, task_id=task.id, status='playing')
+
+    else:
+        task_open = set_event_status.apply_async((event.id, 'open'), eta=now + timedelta(seconds=5))
+        ScheduleReminder.objects.create(event=event, task_id=task_open.id, status='open')
+
+        task_playing = set_event_status.apply_async((event.id, 'playing'), eta=event_start_datetime)
+        ScheduleReminder.objects.create(event=event, task_id=task_playing.id, status='playing')
+
+        task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
+        ScheduleReminder.objects.create(event=event, task_id=task_past.id, status='past')
 
 def schedule_reminders(event):
     """Schedules reminders for the event."""
