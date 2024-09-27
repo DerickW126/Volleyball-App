@@ -144,7 +144,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'key': ''
         }, 
         'SCOPE': [
-            'profile',
+            #'profile',
             'email',
         ],
         'AUTH_PARAMS': {

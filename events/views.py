@@ -12,9 +12,10 @@ from rest_framework.response import Response
 from notifications.models import Notification
 from .serializers import RegistrationSerializer, ChatMessageSerializer
 from notifications.utils import send_notification, send_bulk_notification
-from notifications.tasks import cancel_old_notifications, schedule_reminders, schedule_event_status_updates
+from notifications.tasks import cancel_old_notifications, schedule_reminders, schedule_event_status_updates, set_event_status
 from django.utils import timezone
 import datetime
+from datetime import timedelta
 
 def notify_user_about_event(user, event_id, title, message):
     # Create the notification
@@ -209,6 +210,10 @@ class ApproveRegistrationAPIView(APIView):
 
         registration.is_approved = True
         event.spots_left -= registration.number_of_people
+        if events.spots_left == 0:
+            now = timezone.now()
+            set_event_status.apply_async((event.id, 'waitlist'), eta=now + timedelta(seconds=5))
+            
         registration.save()
         event.save()
 
