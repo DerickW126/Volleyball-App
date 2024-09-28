@@ -15,13 +15,13 @@ from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
 class IsFirstLoginAPIView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request):
         # Check if the user is logging in for the first time
         is_first_login = request.user.is_first_login
         return Response({"is_first_login": is_first_login})
-        
+
 class UpdateUserProfileView(generics.UpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]  # Ensure the user is authenticated
