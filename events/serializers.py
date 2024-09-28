@@ -13,7 +13,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     user_gender = serializers.SerializerMethodField() 
     class Meta:
         model = Registration
-        fields = ['id', 'user', 'note', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved']
+        fields = ['id', 'user', 'notes', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved']
 
     def get_user_id(self, obj):
         return obj.user.id
