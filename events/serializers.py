@@ -10,15 +10,19 @@ class RegistrationSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()  # Add this field
     user = serializers.StringRelatedField(read_only=True)  # Shows username instead of ID
     user_nickname = serializers.SerializerMethodField()  # Add this line
+    user_nickname = serializers.SerializerMethodField() 
     class Meta:
         model = Registration
-        fields = ['id', 'user', 'user_id', 'user_nickname', 'number_of_people', 'is_approved', 'previously_approved']
+        fields = ['id', 'user', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved']
 
     def get_user_id(self, obj):
         return obj.user.id
 
     def get_user_nickname(self, obj):  # Add this method
         return obj.user.nickname
+    
+    def get_user_gender(self, obj):
+        return obj.user.gender
 
 class EventSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)
