@@ -153,7 +153,8 @@ class Registration(models.Model):
     number_of_people = models.IntegerField(default=0)
     is_approved = models.BooleanField(default=False)
     previously_approved = models.BooleanField(default=False)  # 新增字段
-
+    notes = models.TextField(null=True, blank=True)
+    
     def save(self, *args, **kwargs):
         if not self.previously_approved and self.is_approved:
             self.previously_approved = True
