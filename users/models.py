@@ -1,7 +1,15 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
-# Create your models here.
+from django.contrib.auth.signals import user_logged_in
+from django.dispatch import receiver
 
+@receiver(user_logged_in)
+def check_first_login(sender, user, request, **kwargs):
+    if user.is_first_login:
+        # If it's their first login, set is_first_login to False
+        user.is_first_login = False
+        user.save()
+        
 class CustomUser(AbstractUser):
     GENDER_CHOICES = [
         ('男', 'Male'),
@@ -11,3 +19,4 @@ class CustomUser(AbstractUser):
     position = models.CharField(max_length=225, null=True, blank=True)
     intro = models.TextField(null=True, blank=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    is_first_login = models.BooleanField(default=True)
