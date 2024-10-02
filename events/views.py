@@ -78,6 +78,8 @@ class RemoveUserFromApprovedListView(APIView):
                 # Remove user from the approved list by updating the registration status
                 registration.is_approved = False
                 event.spots_left += registration.number_of_people
+                if event.status == 'waitlist' and event.spots_left > 0:
+                    event.status = 'open'
                 event.save()
                 registration.save()
                 
