@@ -18,22 +18,32 @@ def schedule_event_status_updates(event):
     event_end_datetime = timezone.make_aware(
         datetime.datetime.combine(event.date, event.end_time)
     )
-    
+
+    # If the event has already ended, mark it as 'past'
     if now >= event_end_datetime:
-        task = set_event_status.apply_async((event.id, 'past'), eta=now + timedelta(seconds=5))
-        ScheduleReminder.objects.create(event=event, task_id=task.id, status='past')
+        event.status = 'past'
+        event.save()
+        # No need to schedule 'past' status since it's already set
 
-    elif now > event_start_datetime:
-        task = set_event_status.apply_async((event.id, 'playing'), eta=now + timedelta(seconds=5))
-        ScheduleReminder.objects.create(event=event, task_id=task.id, status='playing')
+    # If the event is ongoing, mark it as 'playing' and schedule 'past' status for when it ends
+    elif now >= event_start_datetime:
+        event.status = 'playing'
+        event.save()
 
+        # Schedule the task to set status to 'past' when the event ends
+        task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
+        ScheduleReminder.objects.create(event=event, task_id=task_past.id, status='past')
+
+    # If the event is scheduled for the future, mark it as 'open'
     else:
-        task_open = set_event_status.apply_async((event.id, 'open'), eta=now + timedelta(seconds=5))
-        ScheduleReminder.objects.create(event=event, task_id=task_open.id, status='open')
+        event.status = 'open'
+        event.save()
 
+        # Schedule the task to set status to 'playing' when the event starts
         task_playing = set_event_status.apply_async((event.id, 'playing'), eta=event_start_datetime)
         ScheduleReminder.objects.create(event=event, task_id=task_playing.id, status='playing')
 
+        # Schedule the task to set status to 'past' when the event ends
         task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
         ScheduleReminder.objects.create(event=event, task_id=task_past.id, status='past')
 
