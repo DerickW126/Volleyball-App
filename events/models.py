@@ -13,25 +13,6 @@ def convert_to_utc(local_time, local_tz):
     local_tz = pytz.timezone(local_tz)
     local_time = local_tz.localize(local_time, is_dst=None)
     return local_time.astimezone(pytz.utc)
-
-class EventManager(models.Manager):
-    def get(self, *args, **kwargs):
-        event = super().get(*args, **kwargs)
-        event.update_status()  
-        return event
-
-    def filter(self, *args, **kwargs):
-        events = super().filter(*args, **kwargs)
-        for event in events:
-            event.update_status()
-        return events
-
-    def all(self):
-        events = super().all()
-        for event in events:
-            event.update_status()
-        return events
-
 class Event(models.Model):
     NET_TYPE_CHOICES = [
         ('beach_volleyball', '沙灘排球'),
@@ -63,7 +44,6 @@ class Event(models.Model):
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default=STATUS_CHOICES[0])
     cancellation_message = models.TextField(blank=True, null=True)  # Add this field
 
-    #objects = EventManager()
 
     def __str__(self):
         return self.name
@@ -71,82 +51,7 @@ class Event(models.Model):
     def get_pending_registration_count(self):
         pending_registrations = self.registrations.filter(is_approved=False)
         return sum(registration.number_of_people for registration in pending_registrations)
-    '''
-    def update_status(self):
-        now = timezone.now()
 
-        # Combine date and time fields into datetime objects
-        event_start_datetime = make_aware(
-            datetime.datetime.combine(self.date, self.start_time),
-            get_current_timezone()
-        )
-        event_end_datetime = make_aware(
-            datetime.datetime.combine(self.date, self.end_time),
-            get_current_timezone()
-        )
-
-        # Track the old status to avoid unnecessary saves
-        old_status = self.status
-
-        # Check if this is a newly created event or an existing one
-        if not self.pk:
-            # New event, save it and schedule reminders
-            super().save()  # Save the new event to generate a primary key
-            schedule_reminders(event_start_datetime)
-
-        else:
-            # Existing event, check if the time has changed
-            if hasattr(self, '_old_start_time') and self._old_start_time and self._old_date:
-                old_event_start_datetime = timezone.make_aware(
-                    datetime.datetime.combine(self._old_date, self._old_start_time)
-                )
-                # Compare old and new start times, and schedule reminders if they differ
-                if old_event_start_datetime != event_start_datetime:
-                    # Call your reminder scheduling logic here
-                    cancel_old_notifications(self)
-                    schedule_reminders(event_start_datetime)
-                    super().save()
-
-        # Status update logic for both new and modified events
-        if self.status == 'canceled':
-            self.status = 'canceled'
-        elif now > event_end_datetime:
-            self.status = 'past'
-        elif event_start_datetime <= now <= event_end_datetime:
-            self.status = 'playing'
-        elif self.spots_left == 0:
-            self.status = 'waitlist'
-        else:
-            self.status = 'open'
-
-        # Only save if the status has changed
-        if self.status != old_status:
-            super().save()
-
-    def update_status(self):
-        now = timezone.now()  # Current datetime in UTC
-
-        # Combine date and time fields into datetime objects
-        event_start_datetime = timezone.make_aware(
-            datetime.datetime.combine(self.date, self.start_time)
-        )
-        event_end_datetime = timezone.make_aware(
-            datetime.datetime.combine(self.date, self.end_time)
-        )
-        #print(self.status)
-        if self.status == 'canceled':
-            self.status = 'canceled'
-        elif now > event_end_datetime:
-            self.status = 'past'
-        elif event_start_datetime <= now <= event_end_datetime:
-            self.status = 'playing'
-        elif self.spots_left == 0:
-            self.status = 'waitlist'
-        else:
-            self.status = 'open'
-        
-        self.save()
-    '''
 class Registration(models.Model):
     event = models.ForeignKey(Event, related_name='registrations', on_delete=models.CASCADE)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

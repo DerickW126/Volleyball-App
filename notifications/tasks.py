@@ -10,6 +10,7 @@ from django.utils import timezone
 from django.db import models
 
 def schedule_event_status_updates(event):
+    ScheduledReminder = apps.get_model('notifications', 'ScheduledReminder')
     now = timezone.now()
     
     event_start_datetime = timezone.make_aware(
@@ -128,6 +129,7 @@ def remind_users_before_event(event_id, timedelta_before_event):
             user = registration.user
             notification = Notification.objects.create(
                 user=user,
+                title='活動提醒',
                 message=f'{event.name} 再 {timedelta_before_event} 就要開始了!',
                 event_id=event_id
             )
@@ -150,4 +152,4 @@ def notify_user_about_event(user, event_id, message):
     )
     '''
     # Send notification (using a utility function)
-    send_notification(user, "新的通知", message)
+    send_notification(user, "活動提醒", message)
