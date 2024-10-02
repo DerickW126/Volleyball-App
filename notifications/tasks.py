@@ -1,7 +1,6 @@
 from celery import shared_task
 from django.apps import apps
 from .utils import send_notification
-#from celery.worker.control import revoke
 import datetime
 from datetime import timedelta
 from volleyball_app.celery import app as celery_app
@@ -33,8 +32,7 @@ def schedule_event_status_updates(event):
 
         # Schedule the task to set status to 'past' when the event ends
         task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
-        ScheduleReminder.objects.create(event=event, task_id=task_past.id, status='past')
-
+        ScheduledReminder.objects.create(event=event, task_id=task_past.id)
     # If the event is scheduled for the future, mark it as 'open'
     else:
         event.status = 'open'
@@ -42,12 +40,12 @@ def schedule_event_status_updates(event):
 
         # Schedule the task to set status to 'playing' when the event starts
         task_playing = set_event_status.apply_async((event.id, 'playing'), eta=event_start_datetime)
-        ScheduleReminder.objects.create(event=event, task_id=task_playing.id, status='playing')
+        ScheduledReminder.objects.create(event=event, task_id=task_playing.id)
 
         # Schedule the task to set status to 'past' when the event ends
         task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
-        ScheduleReminder.objects.create(event=event, task_id=task_past.id, status='past')
-
+        ScheduledReminder.objects.create(event=event, task_id=task_past.id)
+        
 def schedule_reminders(event):
     """Schedules reminders for the event."""
     ScheduledReminder = apps.get_model('notifications', 'ScheduledReminder')
