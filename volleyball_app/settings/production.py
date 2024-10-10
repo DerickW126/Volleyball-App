@@ -122,18 +122,16 @@ import ssl
 from kombu import Connection
 
 # RabbitMQ URL with SSL
-BROKER_URL = os.environ.get('CLOUDAMQP_URL')
+BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost//')
 
-# SSL settings for RabbitMQ
-BROKER_USE_SSL = {
-    'keyfile': None,
-    'certfile': None,
-    'ca_certs': None,
-    'cert_reqs': ssl.CERT_REQUIRED
-}
+# Enable SSL for RabbitMQ (if using amqps)
+if BROKER_URL.startswith('amqps://'):
+    BROKER_USE_SSL = {
+        'ssl_cert_reqs': ssl.CERT_NONE  # or ssl.CERT_REQUIRED if you have proper certificates
+    }
 
 CELERY_BROKER_URL = BROKER_URL
-CELERY_RESULT_BACKEND = os.environ.get('CLOUDAMQP_URL')
+CELERY_RESULT_BACKEND = BROKER_URL
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
