@@ -94,7 +94,7 @@ CHANNEL_LAYERS = {
             "hosts": [{
                 "address": os.environ.get('REDIS_URL'),
                 #"ssl": True,
-                "ssl_cert_reqs": ssl.CERT_NONE,  # Ignore self-signed certificate validation
+                "ssl_cert_reqs": None,  # Ignore self-signed certificate validation
             }],
         },
     },
