@@ -154,9 +154,9 @@ SOCIALACCOUNT_PROVIDERS = {
     }, 
     'apple': {
         'APP': {
-            'client_id': os.environ.get('APPLE_CLIENT_ID'),  # Your app's client ID
-            'team_id': os.environ.get('APPLE_TEAM_ID'),  # Your Apple Developer Team ID
-            'key_id': os.environ.get('APPLE_KEY_ID'), 
+            'APPLE_CLIENT_ID': os.environ.get('APPLE_CLIENT_ID'),  # Your app's client ID
+            'APPLE_TEAM_ID': os.environ.get('APPLE_TEAM_ID'),  # Your Apple Developer Team ID
+            'APPLE_KEY_ID': os.environ.get('APPLE_KEY_ID'), 
             'secret': os.environ.get('APN_KEY')  # The private key you downloaded
         },
         'SCOPE': ['name', 'email'],
