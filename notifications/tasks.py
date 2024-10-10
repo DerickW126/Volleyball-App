@@ -58,22 +58,27 @@ def schedule_reminders(event):
         "30 分鐘": timedelta(minutes=30),
     }
 
+    current_time = timezone.now()
+
     for label, delta in reminder_times.items():
         reminder_time = event_start_datetime - delta
-        result = celery_app.send_task(
-            'notifications.tasks.remind_users_before_event',
-            args=[event.id, label],
-            eta=reminder_time,
-        )
-        
-        ScheduledReminder.objects.create(
-            #user=event.created_by,
-            event_id=event.id,
-            #title='活動時間提醒',
-            #message=f'提醒: {label} before event starts!',
-            #is_celery_task=True,
-            task_id=result.id
-        )
+
+        # Only schedule the reminder if the reminder_time is in the future
+        if reminder_time >= current_time:
+            result = celery_app.send_task(
+                'notifications.tasks.remind_users_before_event',
+                args=[event.id, label],
+                eta=reminder_time,
+            )
+
+            # Create a scheduled reminder entry
+            ScheduledReminder.objects.create(
+                event_id=event.id,
+                task_id=result.id
+            )
+        else:
+            # Optionally, log or track reminders that were skipped because they were in the past
+            print(f"Skipping reminder '{label}' for event {event.id} because it is in the past.")
 
 def cancel_old_notifications(event):
     """
