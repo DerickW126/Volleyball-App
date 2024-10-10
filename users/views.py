@@ -21,11 +21,22 @@ class AppleLoginView(APIView):
         serializer = AppleLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        
-        # You can add additional logic here (e.g., generating a token or logging in the user)
-        
-        return Response({"detail": "Successfully logged in with Apple."}, status=status.HTTP_200_OK)
-        
+        access_token = serializer.validated_data['access_token']
+        refresh_token = serializer.validated_data['refresh_token']
+        id_token = serializer.validated_data['id_token']
+
+        # Return user data and tokens
+        return Response({
+            'user': {
+                'id': user.id,
+                'username': user.username,
+                'email': user.email,
+            },
+            'access_token': access_token,
+            'refresh_token': refresh_token,
+            'id_token': id_token
+        }, status=status.HTTP_200_OK)
+
 class IsFirstLoginAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

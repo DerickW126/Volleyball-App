@@ -32,6 +32,7 @@ class AppleLoginSerializer(serializers.Serializer):
         attrs['user'] = user
         attrs['access_token'] = tokens.get('access_token')
         attrs['refresh_token'] = tokens.get('refresh_token')
+        attrs['id_token'] = id_token
         return attrs
 
     def _generate_apple_jwt(self):
