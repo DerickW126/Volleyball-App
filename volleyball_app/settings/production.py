@@ -83,6 +83,23 @@ PUSH_NOTIFICATIONS_SETTINGS = {
 AUTH_USER_MODEL = 'users.CustomUser'
 ASGI_APPLICATION = 'volleyball_app.asgi.application'
 
+import os
+import ssl
+import redis
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [{
+                "address": os.environ.get('REDIS_URL'),
+                "ssl": True,
+                "ssl_cert_reqs": ssl.CERT_NONE,  # Ignore self-signed certificate validation
+            }],
+        },
+    },
+}
+'''
 CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
@@ -91,7 +108,7 @@ CHANNEL_LAYERS = {
         },
     },
 }
-
+'''
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
