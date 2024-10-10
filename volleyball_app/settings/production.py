@@ -26,13 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-'''
-SECRET_KEY = 'django-insecure--&dqabxypygvf@9)lo=ya9nw383g*nuht%c-i@4(0pcqe$2u9q'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-ALLOWED_HOSTS = ['*']
-'''
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # Debug mode, set to False in production
@@ -160,10 +153,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }, 
     'apple': {
         'APP': {
-            'client_id': 'com.yourapp.bundleid',  # Your app's client ID from Apple Developer
-            'team_id': 'YOUR_TEAM_ID',  # Your Apple Developer Team ID
-            'key_id': 'YOUR_KEY_ID',  # The Key ID of the private key from Apple Developer
-            'secret': '-----BEGIN PRIVATE KEY-----\n...'  # The private key you downloaded
+            'client_id': os.environ.get('APPLE_CLIENT_ID'),  # Your app's client ID
+            'team_id': os.environ.get('APPLE_TEAM_ID'),  # Your Apple Developer Team ID
+            'key_id': os.environ.get('APPLE_KEY_ID'), 
+            'secret': os.environ.get('APN_KEY')  # The private key you downloaded
         },
         'SCOPE': ['name', 'email'],
     }
