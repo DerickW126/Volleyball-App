@@ -118,7 +118,21 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 }
 
-CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
+import ssl
+from kombu import Connection
+
+# RabbitMQ URL with SSL
+BROKER_URL = os.environ.get('CLOUDAMQP_URL')
+
+# SSL settings for RabbitMQ
+BROKER_USE_SSL = {
+    'keyfile': None,
+    'certfile': None,
+    'ca_certs': None,
+    'cert_reqs': ssl.CERT_REQUIRED
+}
+
+CELERY_BROKER_URL = BROKER_URL
 CELERY_RESULT_BACKEND = os.environ.get('CLOUDAMQP_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
