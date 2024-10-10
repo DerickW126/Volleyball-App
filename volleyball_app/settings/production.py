@@ -137,6 +137,9 @@ ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_USERNAME_REQUIRED = False
 APPLE_PRIVATE_KEY = os.environ.get('APN_KEY')
+APPLE_CLIENT_ID = os.environ.get('APPLE_CLIENT_ID')  # Your app's client ID
+APPLE_TEAM_ID = os.environ.get('APPLE_TEAM_ID')  # Your Apple Developer Team ID
+APPLE_KEY_ID = os.environ.get('APPLE_KEY_ID')
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
         'APP': {
@@ -154,10 +157,10 @@ SOCIALACCOUNT_PROVIDERS = {
     }, 
     'apple': {
         'APP': {
-            'APPLE_CLIENT_ID': os.environ.get('APPLE_CLIENT_ID'),  # Your app's client ID
-            'APPLE_TEAM_ID': os.environ.get('APPLE_TEAM_ID'),  # Your Apple Developer Team ID
-            'APPLE_KEY_ID': os.environ.get('APPLE_KEY_ID'), 
-            'secret': os.environ.get('APN_KEY')  # The private key you downloaded
+            'client_id': os.environ.get('APPLE_CLIENT_ID'),  # Your app's client ID
+            'team_id': os.environ.get('APPLE_TEAM_ID'),      # Your Apple Developer Team ID
+            'key_id': os.environ.get('APPLE_KEY_ID'), 
+            'secret': os.environ.get('APN_KEY')     
         },
         'SCOPE': ['name', 'email'],
     }
