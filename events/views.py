@@ -272,6 +272,8 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
         
         # If the registration was approved and is now being set to unapproved,
         # update the event's spots_left
+        if instance.number_of_people > events.spot_left:
+            return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
         if instance.is_approved:
             event = instance.event
             event.spots_left += instance.number_of_people
