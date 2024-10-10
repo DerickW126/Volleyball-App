@@ -125,7 +125,7 @@ from kombu import Connection
 BROKER_URL = os.environ.get('CLOUDAMQP_URL', 'amqp://guest:guest@localhost//').replace('amqps://', 'amqp://')
 
 CELERY_BROKER_URL = BROKER_URL
-CELERY_RESULT_BACKEND = BROKER_URL
+CELERY_RESULT_BACKEND = 'rpc://'
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
