@@ -10,7 +10,6 @@ from django.utils import timezone
 from datetime import datetime, timedelta
 from celery import current_app as celery_app
 from django.utils.timezone import make_aware, get_current_timezone
-from .tasks import remind_users_before_event#, cancel_old_notifications
 from celery.worker.control import revoke
 from django.conf import settings
 

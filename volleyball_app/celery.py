@@ -15,11 +15,4 @@ app.config_from_object('django.conf:settings', namespace='CELERY')
 # Load task modules from all registered Django app configs.
 app.autodiscover_tasks()
 
-
-app.conf.beat_schedule = {
-    'remind-users-before-event': {
-        'task': 'events.tasks.remind_users_before_event',
-        'schedule': crontab(hour=0, minute=0),  # Runs daily at midnight
-        'args': (1,),  # Provide a dummy event_id or adjust to dynamically pass IDs
-    },
-}
+app.conf.broker_url = os.environ.get('CLOUDAMQP_URL')

@@ -150,4 +150,4 @@ def notify_user_about_event(user, event_id, message):
     )
     '''
     # Send notification (using a utility function)
-    send_notification(user, "活動提醒", message)
+    send_notification(user, "活動提醒", message) 

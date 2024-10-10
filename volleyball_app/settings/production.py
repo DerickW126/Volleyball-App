@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.apple',
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
@@ -117,8 +118,8 @@ SIMPLE_JWT = {
     'UPDATE_LAST_LOGIN': False,
 }
 
-CELERY_BROKER_URL = os.environ.get('REDIS_URL')
-CELERY_RESULT_BACKEND = os.environ.get('REDIS_URL')
+CELERY_BROKER_URL = os.environ.get('CLOUDAMQP_URL')
+CELERY_RESULT_BACKEND = os.environ.get('CLOUDAMQP_URL')
 CELERY_ACCEPT_CONTENT = ['json']
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
@@ -144,25 +145,21 @@ SOCIALACCOUNT_PROVIDERS = {
             'key': ''
         }, 
         'SCOPE': [
-            #'profile',
+            'profile',
             'email',
         ],
         'AUTH_PARAMS': {
             'access_type': 'online',
         }
     }, 
-    'facebook': {
-        'METHOD': 'oauth2',
-        'SCOPE': ['user_gender'],
-        'AUTH_PARAMS': {'auth_type': 'reauthenticate'},
-        'FIELDS': [
-            'id',
-            'gender',
-        ],
-        'EXCHANGE_TOKEN': True,
-        'LOCALE_FUNC': lambda request: 'en_US',
-        'VERIFIED_EMAIL': False,
-        'VERSION': 'v12.0',  # Use the version of Facebook's API that you are using
+    'apple': {
+        'APP': {
+            'client_id': 'com.yourapp.bundleid',  # Your app's client ID from Apple Developer
+            'team_id': 'YOUR_TEAM_ID',  # Your Apple Developer Team ID
+            'key_id': 'YOUR_KEY_ID',  # The Key ID of the private key from Apple Developer
+            'secret': '-----BEGIN PRIVATE KEY-----\n...'  # The private key you downloaded
+        },
+        'SCOPE': ['name', 'email'],
     }
 }
 

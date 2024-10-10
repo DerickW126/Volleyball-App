@@ -3,17 +3,29 @@ from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
-#from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import GoogleLoginSerializer, UserSerializer
+from .serializers import GoogleLoginSerializer, UserSerializer, AppleLoginSerializer
 from rest_framework import generics, permissions
 from django.contrib.auth import logout
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
-
+from rest_framework.permissions import AllowAny
 CustomUser = get_user_model()
+
+class AppleLoginView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = AppleLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        
+        # You can add additional logic here (e.g., generating a token or logging in the user)
+        
+        return Response({"detail": "Successfully logged in with Apple."}, status=status.HTTP_200_OK)
+        
 class IsFirstLoginAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
