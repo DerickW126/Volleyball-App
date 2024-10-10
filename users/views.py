@@ -15,28 +15,20 @@ from rest_framework.permissions import AllowAny
 CustomUser = get_user_model()
 
 class AppleLoginView(APIView):
-    permission_classes = [AllowAny]
-
     def post(self, request, *args, **kwargs):
         serializer = AppleLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+
         user = serializer.validated_data['user']
-        access_token = serializer.validated_data['access_token']
-        refresh_token = serializer.validated_data['refresh_token']
-        id_token = serializer.validated_data['id_token']
+        refresh = RefreshToken.for_user(user)
+        
+        data = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
 
-        # Return user data and tokens
-        return Response({
-            'user': {
-                'id': user.id,
-                'username': user.username,
-                'email': user.email,
-            },
-            'access_token': access_token,
-            'refresh_token': refresh_token,
-            'id_token': id_token
-        }, status=status.HTTP_200_OK)
-
+        return Response(data, status=status.HTTP_200_OK)
+        
 class IsFirstLoginAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 

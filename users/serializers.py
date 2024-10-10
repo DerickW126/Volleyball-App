@@ -17,92 +17,84 @@ class AppleLoginSerializer(serializers.Serializer):
 
     def validate(self, attrs):
         authorization_code = attrs.get('authorization_code')
+
+        # Step 1: Generate JWT token to authenticate with Apple
         jwt_token = self._generate_apple_jwt()
 
-        # Exchange the authorization code for tokens
+        # Step 2: Exchange authorization code for identity token
         tokens = self._exchange_apple_code(authorization_code, jwt_token)
 
-        # Extract the user's information (name, email) from the identity token
+        # Step 3: Extract user data from the id_token
         id_token = tokens.get('id_token', None)
+        if not id_token:
+            raise serializers.ValidationError('Unable to retrieve id_token')
+
         user_data = self._get_user_data_from_apple(id_token)
 
-        # Create or get the user in the system
+        # Step 4: Get or create the user in your system
         user = self._get_or_create_user(user_data)
 
+        # Step 5: Generate your own JWT tokens for the user
         attrs['user'] = user
-        attrs['access_token'] = tokens.get('access_token')
-        attrs['refresh_token'] = tokens.get('refresh_token')
-        attrs['id_token'] = id_token
         return attrs
 
     def _generate_apple_jwt(self):
-        private_key = settings.APPLE_PRIVATE_KEY  # Store your .p8 private key in your environment variables
-        team_id = settings.APPLE_TEAM_ID
-        client_id = settings.APPLE_CLIENT_ID  # This is your app's Bundle ID or Service ID
-        key_id = settings.APPLE_KEY_ID  # Found in the Apple Developer portal
-
+        """Generate the JWT token used to authenticate with Apple."""
         headers = {
-            'kid': key_id,  # Key ID from your private key
-            'alg': 'ES256'  # Algorithm
+            'kid': settings.APPLE_KEY_ID,
+            'alg': 'ES256'
         }
 
-        payload = {
-            'iss': team_id,  # Team ID
-            'iat': int(time.time()),  # Issue time
-            'exp': int(time.time()) + 15777000,  # Expiry time (6 months max)
-            'aud': 'https://appleid.apple.com',  # Audience
-            'sub': client_id  # The app's identifier
+        claims = {
+            'iss': settings.APPLE_TEAM_ID,  # Your Apple Developer Team ID
+            'iat': int(time.time()),        # Issue time
+            'exp': int(time.time()) + 3600, # Expiry time
+            'aud': 'https://appleid.apple.com',
+            'sub': settings.APPLE_CLIENT_ID,  # Your app's client ID from Apple Developer
         }
 
-        token = jwt.encode(payload, private_key, algorithm='ES256', headers=headers)
-        return token
+        private_key = settings.APPLE_PRIVATE_KEY
+
+        # Generate the client_secret JWT
+        client_secret = jwt.encode(
+            payload=claims,
+            key=private_key,
+            algorithm='ES256',
+            headers=headers
+        )
+
+        return client_secret
 
     def _exchange_apple_code(self, authorization_code, jwt_token):
-        url = 'https://appleid.apple.com/auth/token'
-
+        """Exchange the authorization code for tokens from Apple."""
         data = {
             'client_id': settings.APPLE_CLIENT_ID,
-            'client_secret': jwt_token,  # The JWT token generated earlier
-            'code': authorization_code,  # The authorization code from Apple
-            'grant_type': 'authorization_code'
+            'client_secret': jwt_token,
+            'code': authorization_code,
+            'grant_type': 'authorization_code',
         }
 
-        response = requests.post(url, data=data)
-        if response.status_code == 200:
-            return response.json()
-        else:
-            raise serializers.ValidationError("Unable to authenticate with Apple")
+        response = requests.post('https://appleid.apple.com/auth/token', data=data)
+        response.raise_for_status()
+        return response.json()
 
     def _get_user_data_from_apple(self, id_token):
-        # Here, you will decode the id_token to extract user data (email, etc.)
-        user_data = jwt.decode(id_token, options={"verify_signature": False})
-        return user_data
+        """Decode the id_token from Apple to get user information."""
+        decoded_token = jwt.decode(id_token, options={"verify_signature": False})
+        return {
+            'email': decoded_token.get('email'),
+            'apple_id': decoded_token.get('sub'),
+        }
 
     def _get_or_create_user(self, user_data):
-        with transaction.atomic():
-            try:
-                user, created = CustomUser.objects.get_or_create(
-                    username=user_data['email'],
-                    defaults={'email': user_data['email'], 'first_name': user_data.get('name', {}).get('firstName', ''),
-                              'last_name': user_data.get('name', {}).get('lastName', '')}
-                )
-                if created:
-                    user.set_unusable_password()
-                    user.save()
+        """Get or create a user based on Apple user data."""
+        email = user_data['email']
+        apple_id = user_data['apple_id']
 
-                social_account, social_created = SocialAccount.objects.get_or_create(
-                    user=user, 
-                    uid=user_data['sub'],  # 'sub' is the user's unique identifier from Apple
-                    provider='apple'
-                )
-
-            except IntegrityError:
-                social_account = SocialAccount.objects.get(
-                    uid=user_data['sub'],
-                    provider='apple'
-                )
-                user = social_account.user
-
+        user, created = CustomUser.objects.get_or_create(
+            username=apple_id,
+            defaults={'email': email},
+        )
         return user
 class GoogleLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
