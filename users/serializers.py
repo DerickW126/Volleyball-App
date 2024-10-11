@@ -34,7 +34,13 @@ class AppleLoginSerializer(serializers.Serializer):
         # Step 4: Get or create the user in your system
         user = self._get_or_create_user(user_data)
 
-        # Step 5: Generate your own JWT tokens for the user
+        # Ensure the user has an id
+        if not user.id:
+            raise serializers.ValidationError("Failed to create user with Apple ID")
+
+        # Step 5: Generate your own JWT tokens for the user (implement your token generation here)
+
+        # Step 6: Return the validated user
         attrs['user'] = user
         return attrs
 
@@ -75,15 +81,24 @@ class AppleLoginSerializer(serializers.Serializer):
         }
 
         response = requests.post('https://appleid.apple.com/auth/token', data=data)
-        response.raise_for_status()
+        response.raise_for_status()  # This will raise an error if the request fails
         return response.json()
 
     def _get_user_data_from_apple(self, id_token):
         """Decode the id_token from Apple to get user information."""
         decoded_token = jwt.decode(id_token, options={"verify_signature": False})
+        email = decoded_token.get('email')
+        apple_id = decoded_token.get('sub')
+
+        # Check if email and apple_id are provided
+        if not email:
+            raise serializers.ValidationError("Apple did not provide an email. Please try logging in with Apple again.")
+        if not apple_id:
+            raise serializers.ValidationError("Apple ID is missing from the token.")
+
         return {
-            'email': decoded_token.get('email'),
-            'apple_id': decoded_token.get('sub'),
+            'email': email,
+            'apple_id': apple_id,
         }
 
     def _get_or_create_user(self, user_data):
@@ -91,10 +106,22 @@ class AppleLoginSerializer(serializers.Serializer):
         email = user_data['email']
         apple_id = user_data['apple_id']
 
+        # Validate that we have all the necessary information
+        if not apple_id:
+            raise serializers.ValidationError("Apple ID is missing")
+        if not email:
+            raise serializers.ValidationError("Email is missing")
+
+        # Try to fetch the user based on the Apple ID or email
         user, created = CustomUser.objects.get_or_create(
             username=apple_id,
-            defaults={'email': email},
+            defaults={'email': email}
         )
+
+        # If the user is newly created, ensure it's saved properly
+        if created and not user.id:
+            user.save()
+
         return user
 class GoogleLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
