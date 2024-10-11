@@ -16,17 +16,26 @@ CustomUser = get_user_model()
 
 class AppleLoginView(APIView):
     def post(self, request, *args, **kwargs):
+        # Validate the input data using the serializer
         serializer = AppleLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
+        # Get the user from the validated data
         user = serializer.validated_data['user']
+        
+        # Log the user in to create a session (optional, but useful for session-based auth)
+        login(request, user)
+
+        # Generate JWT refresh and access tokens
         refresh = RefreshToken.for_user(user)
         
+        # Prepare response with tokens
         data = {
             'refresh': str(refresh),
             'access': str(refresh.access_token),
         }
 
+        # Return the tokens in the response
         return Response(data, status=status.HTTP_200_OK)
         
 class IsFirstLoginAPIView(APIView):

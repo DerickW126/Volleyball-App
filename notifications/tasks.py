@@ -144,15 +144,4 @@ def remind_users_before_event(event_id, timedelta_before_event):
 
 def notify_user_about_event(user, event_id, message):
     # Create the notification
-    '''
-    Notification = apps.get_model('notifications', 'Notification')
-    
-    # Create the notification record
-    notification = Notification.objects.create(
-        user=user,
-        message=message,
-        event_id=event_id
-    )
-    '''
-    # Send notification (using a utility function)
     send_notification(user, "活動提醒", message) 
