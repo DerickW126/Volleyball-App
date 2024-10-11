@@ -296,7 +296,6 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
 
                 data['is_approved'] = False  # Set to unapproved
                 data['previously_approved'] = True  # Mark as previously approved
-                event.spots_left -= new_number_of_people  # Decrease spots for new request
                 event.save()
 
         # Apply the new data to the serializer and perform the update
@@ -305,7 +304,7 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
         self.perform_update(serializer)
 
         return Response(serializer.data)
-        
+
 class RegisterEventAPIView(APIView):
     permission_classes = [IsAuthenticated]  # 确保用户登录
 
