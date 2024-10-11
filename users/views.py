@@ -15,28 +15,38 @@ from rest_framework.permissions import AllowAny
 CustomUser = get_user_model()
 
 class AppleLoginView(APIView):
+    serializer_class = AppleLoginSerializer
+
     def post(self, request, *args, **kwargs):
-        # Validate the input data using the serializer
-        serializer = AppleLoginSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        # Validate the incoming data using AppleLoginSerializer
+        self.serializer = self.get_serializer(data=request.data)
+        self.serializer.is_valid(raise_exception=True)
 
         # Get the user from the validated data
-        user = serializer.validated_data['user']
+        self.user = self.serializer.validated_data['user']
         
-        # Log the user in to create a session (optional, but useful for session-based auth)
-        login(request, user)
-
-        # Generate JWT refresh and access tokens
-        refresh = RefreshToken.for_user(user)
+        # Call the login method to authenticate the user
+        self.login()
         
-        # Prepare response with tokens
+        # Generate the refresh and access tokens for the user
+        token = self.get_token(self.user)
+        
+        # Return the token in the response
         data = {
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
+            'refresh': str(token),
+            'access': str(token.access_token),
         }
-
-        # Return the tokens in the response
         return Response(data, status=status.HTTP_200_OK)
+
+    def login(self):
+        # Specify the authentication backend (similar to SocialLoginView behavior)
+        self.user.backend = 'django.contrib.auth.backends.ModelBackend'
+        login(self.request, self.user)
+
+    def get_token(self, user):
+        # Generate JWT tokens using SimpleJWT
+        refresh = RefreshToken.for_user(user)
+        return refresh
         
 class IsFirstLoginAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
