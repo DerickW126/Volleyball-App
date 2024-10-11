@@ -269,25 +269,27 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
             raise PermissionDenied("You do not have permission to edit this registration.")
         
         data = request.data.copy()
-        
-        # If the registration was approved and is now being set to unapproved,
-        # update the event's spots_left
-        if instance.number_of_people > instance.event.spots_left:
+
+        event = instance.event
+
+        # Check if the new number of people exceeds available spots
+        if instance.number_of_people > event.spots_left and not instance.is_approved:
             return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
-        if instance.is_approved:
-            event = instance.event
+        
+        # If the registration was previously approved but is now being set to unapproved
+        if instance.is_approved and not data.get('is_approved', False):
+            # Only update spots_left if the registration is being set to unapproved
             event.spots_left += instance.number_of_people
             event.save()
+
             data['previously_approved'] = True  # Mark as previously approved
 
-        data['is_approved'] = False  # Set to unapproved
-
+        # Apply the new data to the serializer and perform the update
         serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
 
         return Response(serializer.data)
-
 class RegisterEventAPIView(APIView):
     permission_classes = [IsAuthenticated]  # 确保用户登录
 
@@ -311,9 +313,9 @@ class RegisterEventAPIView(APIView):
             # 创建新的通知
             message = ""
             if created:
-                message = f"新的報名： {user.username} 已申請報名您的活動 {event.name}，請儘速審核"
+                message = f"新的報名： {user.nickname} 已申請報名您的活動 {event.name}，請儘速審核"
             else:
-                message = f"更改的報名: {user.username} 已更改他在 {event.name} 的報名資訊，請儘速審核"
+                message = f"更改的報名: {user.nickname} 已更改他在 {event.name} 的報名資訊，請儘速審核"
 
             #notification = Notification.objects.create(user=event.created_by, message=message, event_id=event_id)
             #send_notification_to_user(notification.id)
@@ -349,7 +351,7 @@ class UnregisterEventAPIView(APIView):
         user_message = f"您已成功取消 {event.name} 的報名"
         notify_user_about_event(user, event_id,'報名通知', user_message)
 
-        host_message = f"{user.username} 取消了他在 {event.name} 的報名"
+        host_message = f"{user.nickname} 取消了他在 {event.name} 的報名"
         notify_user_about_event(event.created_by, event_id, '報名通知', host_message)
         return Response({"success": "Unregistered successfully."}, status=status.HTTP_200_OK)
 
