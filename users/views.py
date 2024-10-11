@@ -15,38 +15,28 @@ from rest_framework.permissions import AllowAny
 CustomUser = get_user_model()
 
 class AppleLoginView(APIView):
-    serializer_class = AppleLoginSerializer
-
     def post(self, request, *args, **kwargs):
-        # Validate the incoming data using AppleLoginSerializer
-        self.serializer = self.get_serializer(data=request.data)
-        self.serializer.is_valid(raise_exception=True)
+        serializer = AppleLoginSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-        # Get the user from the validated data
-        self.user = self.serializer.validated_data['user']
+        user = serializer.validated_data['user']
         
-        # Call the login method to authenticate the user
-        self.login()
+        # Specify the backend explicitly (e.g., if you're using 'django.contrib.auth.backends.ModelBackend')
+        user.backend = 'django.contrib.auth.backends.ModelBackend'
         
-        # Generate the refresh and access tokens for the user
-        token = self.get_token(self.user)
-        
-        # Return the token in the response
-        data = {
-            'refresh': str(token),
-            'access': str(token.access_token),
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        # Log the user in
+        login(request, user)
 
-    def login(self):
-        # Specify the authentication backend (similar to SocialLoginView behavior)
-        self.user.backend = 'django.contrib.auth.backends.ModelBackend'
-        login(self.request, self.user)
-
-    def get_token(self, user):
-        # Generate JWT tokens using SimpleJWT
+        # Generate JWT refresh and access tokens
         refresh = RefreshToken.for_user(user)
-        return refresh
+        
+        # Prepare response with tokens
+        data = {
+            'refresh': str(refresh),
+            'access': str(refresh.access_token),
+        }
+
+        return Response(data, status=status.HTTP_200_OK)
         
 class IsFirstLoginAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
