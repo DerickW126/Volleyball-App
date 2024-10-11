@@ -8,7 +8,7 @@ from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
 from .serializers import GoogleLoginSerializer, UserSerializer, AppleLoginSerializer
 from rest_framework import generics, permissions
-from django.contrib.auth import logout
+from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
