@@ -269,20 +269,35 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
             raise PermissionDenied("You do not have permission to edit this registration.")
         
         data = request.data.copy()
-
         event = instance.event
 
-        # Check if the new number of people exceeds available spots
-        if instance.number_of_people > event.spots_left and not instance.is_approved:
-            return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
-        
-        # If the registration was previously approved but is now being set to unapproved
-        if instance.is_approved and not data.get('is_approved', False):
-            # Only update spots_left if the registration is being set to unapproved
-            event.spots_left += instance.number_of_people
-            event.save()
+        # Fetch the new number of people from the request (or default to current number_of_people)
+        new_number_of_people = int(data.get('number_of_people', instance.number_of_people))
 
-            data['previously_approved'] = True  # Mark as previously approved
+        # Case 1: User is trying to lower the number of people
+        if new_number_of_people < instance.number_of_people:
+            if instance.is_approved:
+                # Adjust spots_left only if the registration is approved
+                event.spots_left += (instance.number_of_people - new_number_of_people)
+                event.save()
+            data['is_approved'] = instance.is_approved  # Keep current approval status
+
+        # Case 2: User is trying to increase the number of people
+        elif new_number_of_people > instance.number_of_people:
+            # Check if the new number exceeds the available spots
+            if new_number_of_people - instance.number_of_people > event.spots_left:
+                # Not enough spots available, reject the update
+                return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                # There are enough spots, mark the user as unapproved but previously approved
+                # We also return the spots the user had previously taken since they are now unapproved
+                if instance.is_approved:
+                    event.spots_left += instance.number_of_people  # Return the previously taken spots
+
+                data['is_approved'] = False  # Set to unapproved
+                data['previously_approved'] = True  # Mark as previously approved
+                event.spots_left -= new_number_of_people  # Decrease spots for new request
+                event.save()
 
         # Apply the new data to the serializer and perform the update
         serializer = self.get_serializer(instance, data=data, partial=partial)
@@ -290,6 +305,7 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
         self.perform_update(serializer)
 
         return Response(serializer.data)
+        
 class RegisterEventAPIView(APIView):
     permission_classes = [IsAuthenticated]  # 确保用户登录
 
