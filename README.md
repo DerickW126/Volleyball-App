@@ -1,3 +1,3 @@
 # Volleyball App
 
-Project developed using AWS EC2 instance with Django + React Native
+Project developed using Heroku with Django + React Native
