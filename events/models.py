@@ -35,6 +35,7 @@ class Event(models.Model):
     date = models.DateField()
     start_time = models.TimeField()
     end_time = models.TimeField()
+    is_overnight = models.BooleanField(default=False)
     cost = models.DecimalField(max_digits=6, decimal_places=2)
     additional_comments = models.TextField(blank=True, null=True)
     spots_left = models.IntegerField()
