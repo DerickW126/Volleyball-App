@@ -14,6 +14,18 @@ from django.contrib.auth import get_user_model
 from rest_framework.permissions import AllowAny
 CustomUser = get_user_model()
 
+class DeleteAccountAPIView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def delete(self, request, *args, **kwargs):
+        user = request.user
+        
+        try:
+            user.delete()
+            return Response({"message": "Your account has been deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            
 class AppleLoginView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = AppleLoginSerializer(data=request.data)
