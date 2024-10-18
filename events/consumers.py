@@ -121,7 +121,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
         # Notify each user except the sender
         for user in users:
             if user.id != sender_id and user.is_active:
-                notify_user_about_event(user, self.event_id, "您的聊天室有新的通知", message)
+                notify_user_about_event(user, self.event_id, f"{event.name} - 新的聊天室通知", message)
     '''
     @sync_to_async
     def get_old_messages(self):
