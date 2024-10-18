@@ -8,50 +8,51 @@ from django.apps import apps
 from django.utils import timezone
 from django.db import models
 
-def schedule_event_status_updates(event):
+def schedule_event_status_updates(event, is_overnight=False):
     ScheduledReminder = apps.get_model('notifications', 'ScheduledReminder')
     now = timezone.now()
-    
+
     event_start_datetime = timezone.make_aware(
         datetime.datetime.combine(event.date, event.start_time)
     )
+
+    # Adjust the end date for overnight events
+    end_date = event.date + timedelta(days=1) if is_overnight else event.date
+
     event_end_datetime = timezone.make_aware(
-        datetime.datetime.combine(event.date, event.end_time)
+        datetime.datetime.combine(end_date, event.end_time)
     )
 
-    # If the event has already ended, mark it as 'past'
     if now >= event_end_datetime:
         event.status = 'past'
         event.save()
-        # No need to schedule 'past' status since it's already set
-
-    # If the event is ongoing, mark it as 'playing' and schedule 'past' status for when it ends
     elif now >= event_start_datetime:
         event.status = 'playing'
         event.save()
 
-        # Schedule the task to set status to 'past' when the event ends
         task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
         ScheduledReminder.objects.create(event_id=event.id, task_id=task_past.id)
-    # If the event is scheduled for the future, mark it as 'open'
     else:
         event.status = 'open'
         event.save()
 
-        # Schedule the task to set status to 'playing' when the event starts
         task_playing = set_event_status.apply_async((event.id, 'playing'), eta=event_start_datetime)
-        ScheduledReminder.objects.create(event_id=event.id, task_id=task_playing.id)
-
-        # Schedule the task to set status to 'past' when the event ends
         task_past = set_event_status.apply_async((event.id, 'past'), eta=event_end_datetime)
+
+        ScheduledReminder.objects.create(event_id=event.id, task_id=task_playing.id)
         ScheduledReminder.objects.create(event_id=event.id, task_id=task_past.id)
 
-def schedule_reminders(event):
-    """Schedules reminders for the event."""
+def schedule_reminders(event, is_overnight=False):
     ScheduledReminder = apps.get_model('notifications', 'ScheduledReminder')
+
     event_start_datetime = timezone.make_aware(
         datetime.datetime.combine(event.date, event.start_time)
     )
+
+    # Adjust the reminder times if the event spans multiple days
+    if is_overnight:
+        print(f"Scheduling reminders for overnight event: {event.name}")
+
     reminder_times = {
         "24 小時": timedelta(hours=24),
         "1 小時": timedelta(hours=1),
@@ -63,23 +64,16 @@ def schedule_reminders(event):
     for label, delta in reminder_times.items():
         reminder_time = event_start_datetime - delta
 
-        # Only schedule the reminder if the reminder_time is in the future
         if reminder_time >= current_time:
             result = celery_app.send_task(
                 'notifications.tasks.remind_users_before_event',
                 args=[event.id, label],
                 eta=reminder_time,
             )
-
-            # Create a scheduled reminder entry
-            ScheduledReminder.objects.create(
-                event_id=event.id,
-                task_id=result.id
-            )
+            ScheduledReminder.objects.create(event_id=event.id, task_id=result.id)
         else:
-            # Optionally, log or track reminders that were skipped because they were in the past
             print(f"Skipping reminder '{label}' for event {event.id} because it is in the past.")
-
+            
 def cancel_old_notifications(event):
     """
     Cancels all old scheduled notifications for the given event.

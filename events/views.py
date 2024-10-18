@@ -161,7 +161,7 @@ class UpdateEventView(generics.UpdateAPIView):
         # Compare old and new event start times, and update reminders only if they differ
         if old_event_start_datetime != new_event_start_datetime:
             cancel_old_notifications(event)  # Cancel old reminders
-            schedule_reminders(updated_event)  # Schedule new reminders
+            schedule_reminders(updated_event, updated_event.is_overnight)  # Schedule new reminders
 
         self.notify_users(updated_event)
 
@@ -243,10 +243,10 @@ class AddEventAPIView(APIView):
         
         if serializer.is_valid():
             event = serializer.save(created_by=request.user)
-            schedule_event_status_updates(event)
             message = f"您已成功建立 {event.name}"
             notify_user_about_event(event.created_by, event.id, f'活動 {event.name} 創建成功', message)
-            schedule_reminders(event)
+            schedule_event_status_updates(event, event.is_overnight)
+            schedule_reminders(event, event.is_overnight)
             return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
