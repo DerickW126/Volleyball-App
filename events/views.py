@@ -139,29 +139,38 @@ class UpdateEventView(generics.UpdateAPIView):
         if event.created_by != self.request.user:
             raise permissions.PermissionDenied("You do not have permission to edit this event.")
         return event
-    
+
     def perform_update(self, serializer):
         event = self.get_object()
 
+        # Get old start and end datetime
         old_event_start_datetime = timezone.make_aware(
             datetime.datetime.combine(event.date, event.start_time)
         )
+        old_event_end_datetime = timezone.make_aware(
+            datetime.datetime.combine(event.date, event.end_time)
+        )
 
-        # Perform the actual update
-        super().perform_update(serializer)
+        # Perform the update (including is_overnight)
+        updated_event = serializer.save()
 
-        # Fetch the updated event object
-        updated_event = self.get_object()
-
-        # Get the new event start time after the update
+        # Get new start and end datetime after the update
         new_event_start_datetime = timezone.make_aware(
             datetime.datetime.combine(updated_event.date, updated_event.start_time)
         )
+        new_event_end_datetime = timezone.make_aware(
+            datetime.datetime.combine(updated_event.date, updated_event.end_time)
+        )
 
-        # Compare old and new event start times, and update reminders only if they differ
-        if old_event_start_datetime != new_event_start_datetime:
-            cancel_old_notifications(event)  # Cancel old reminders
-            schedule_reminders(updated_event, updated_event.is_overnight)  # Schedule new reminders
+        # Check if the times or is_overnight have changed
+        if (
+            old_event_start_datetime != new_event_start_datetime 
+            or old_event_end_datetime != new_event_end_datetime 
+            or event.is_overnight != updated_event.is_overnight
+        ):
+            # Cancel old reminders and schedule new ones
+            cancel_old_notifications(event)
+            schedule_reminders(updated_event, updated_event.is_overnight)
 
         self.notify_users(updated_event)
 
