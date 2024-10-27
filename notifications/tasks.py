@@ -54,9 +54,10 @@ def schedule_reminders(event, is_overnight=False):
         print(f"Scheduling reminders for overnight event: {event.name}")
 
     reminder_times = {
-        "24 小時": timedelta(hours=24),
-        "1 小時": timedelta(hours=1),
-        "30 分鐘": timedelta(minutes=30),
+        " 再 24 小時": timedelta(hours=24),
+        " 再 1 小時": timedelta(hours=1),
+        " 再 30 分鐘": timedelta(minutes=30),
+        "": timedelta(seconds=0)
     }
 
     current_time = timezone.now()
@@ -114,11 +115,11 @@ def remind_users_before_event(event_id, timedelta_before_event):
         # Fetch the registrations
         registrations = Registration.objects.filter(event=event, is_approved=True)
         # Notify the event creator
-        notify_user_about_event(event.created_by, event_id, f'{event.name} 再 {timedelta_before_event} 就要開始了!')
+        notify_user_about_event(event.created_by, event_id, f'{event.name} {timedelta_before_event} 就要開始了!')
         notification = Notification.objects.create(
             user=event.created_by,
             title='活動提醒',
-            message=f'{event.name} 再 {timedelta_before_event} 就要開始了!',
+            message=f'{event.name}{timedelta_before_event} 就要開始了!',
             event_id=event_id
         )
         # Notify other users
@@ -127,10 +128,10 @@ def remind_users_before_event(event_id, timedelta_before_event):
             notification = Notification.objects.create(
                 user=user,
                 title='活動提醒',
-                message=f'{event.name} 再 {timedelta_before_event} 就要開始了!',
+                message=f'{event.name}{timedelta_before_event} 就要開始了!',
                 event_id=event_id
             )
-            notify_user_about_event(user, event_id, f'{event.name} 再 {timedelta_before_event} 就要開始了!')
+            notify_user_about_event(user, event_id, f'{event.name}{timedelta_before_event} 就要開始了!')
             print(f'Notifying user {user.id} about event {event_id}')
     
     except Event.DoesNotExist:
