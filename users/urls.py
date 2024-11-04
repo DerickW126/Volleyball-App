@@ -10,5 +10,8 @@ urlpatterns = [
     path('update-profile/', views.UpdateUserProfileView.as_view(), name='update-profile'),
     path('api/is-first-login/', views.IsFirstLoginAPIView.as_view(), name='is-first-login'),
     path('delete-account/', views.DeleteAccountAPIView.as_view(), name='delete-account'),
+    path('block/<int:user_id>/', views.BlockUserView.as_view(), name='block-user'),
+    path('unblock/<int:user_id>/', views.UnblockUserView.as_view(), name='unblock-user'),
+    path('blocked-list/', views.BlockedUsersListView.as_view(), name='blocked-list')
 ]
 

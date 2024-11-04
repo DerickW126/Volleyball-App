@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser, Group, Permission
 from django.contrib.auth.signals import user_logged_in
 from django.dispatch import receiver
+from django.conf import settings
 
 @receiver(user_logged_in)
 def check_first_login(sender, user, request, **kwargs):
