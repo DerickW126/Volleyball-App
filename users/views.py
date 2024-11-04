@@ -6,7 +6,7 @@ from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
 from dj_rest_auth.registration.views import SocialLoginView
 from rest_framework_simplejwt.tokens import RefreshToken
-from .serializers import GoogleLoginSerializer, UserSerializer, AppleLoginSerializer
+from .serializers import GoogleLoginSerializer, UserSerializer, AppleLoginSerializer, ReportSerializer
 from rest_framework import generics, permissions
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
@@ -222,3 +222,18 @@ class BlockedUsersListView(generics.ListAPIView):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+class CreateReportView(generics.CreateAPIView):
+    serializer_class = ReportSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, user_id):
+        reported_user = get_object_or_404(CustomUser, id=user_id)
+        serializer = self.get_serializer(data=request.data)
+        
+        if serializer.is_valid():
+            # Set the reporter and reported_user fields
+            serializer.save(reporter=request.user, reported_user=reported_user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

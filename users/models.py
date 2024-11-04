@@ -30,3 +30,14 @@ class Block(models.Model):
 
     class Meta:
         unique_together = ('blocker', 'blocked')
+    
+
+class Report(models.Model):
+    reporter = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="reports_made", on_delete=models.CASCADE)
+    reported_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="reports_received", on_delete=models.CASCADE)
+    title = models.CharField(max_length=255)
+    content = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Report by {self.reporter} on {self.reported_user} - {self.title}"
