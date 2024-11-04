@@ -11,6 +11,7 @@ from rest_framework import generics, permissions
 from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
+from .models import Block
 from rest_framework.permissions import AllowAny, IsAuthenticated
 CustomUser = get_user_model()
 
@@ -140,15 +141,84 @@ class LogoutView(APIView):
         except Exception as e:
             return Response({"detail": f"Error logging out: {str(e)}"}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class BlockUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        try:
+            blocked_user = CustomUser.objects.get(id=user_id)
+            if blocked_user == request.user:
+                return Response({"error": "You cannot block yourself."}, status=status.HTTP_400_BAD_REQUEST)
+
+            # Create a Block record if not already exists
+            Block.objects.get_or_create(blocker=request.user, blocked=blocked_user)
+            return Response({"message": "User blocked successfully."}, status=status.HTTP_201_CREATED)
+        
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
+class UnblockUserView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, user_id):
+        try:
+            blocked_user = CustomUser.objects.get(id=user_id)
+            # Remove the Block record if it exists
+            block = Block.objects.filter(blocker=request.user, blocked=blocked_user).first()
+            if block:
+                block.delete()
+                return Response({"message": "User unblocked successfully."}, status=status.HTTP_200_OK)
+            else:
+                return Response({"error": "User is not blocked."}, status=status.HTTP_400_BAD_REQUEST)
+        
+        except CustomUser.DoesNotExist:
+            return Response({"error": "User not found."}, status=status.HTTP_404_NOT_FOUND)
+
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    #permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_object(self):
         user_id = self.kwargs.get('user_id')
         try:
             user = CustomUser.objects.get(id=user_id)
-            return user
-        except User.DoesNotExist:
-            raise Http404
+            request_user = self.request.user
+            
+            # Check if the requested user is blocked by the current user
+            if request_user.is_authenticated:
+                if Block.objects.filter(blocker=request_user, blocked=user).exists():
+                    # Return a modified user object with name set as "Blocked"
+                    user.nickname = "用戶已被封鎖"
+                    user.intro = ""
+                    return user
 
+            return user
+        except CustomUser.DoesNotExist:
+            return None  # Handle non-existent users
+
+    def retrieve(self, request, *args, **kwargs):
+        user = self.get_object()
+        
+        if user is None:
+            # User does not exist
+            return Response(
+                {"detail": "User not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
+        
+        serializer = self.get_serializer(user)
+        return Response(serializer.data)
+
+class BlockedUsersListView(generics.ListAPIView):
+    serializer_class = UserSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        # Get the list of users blocked by the requesting user
+        blocked_user_ids = Block.objects.filter(blocker=self.request.user).values_list('blocked_id', flat=True)
+        return CustomUser.objects.filter(id__in=blocked_user_ids)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data)

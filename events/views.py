@@ -3,11 +3,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from .models import Event, Registration, ChatMessage
+from users.models import Block
 from .forms import EventForm, RegistrationForm
 from .serializers import EventSerializer, RegistrationSerializer
 from rest_framework import generics, status, permissions
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnly, AllowAny
 from rest_framework.response import Response
 from notifications.models import Notification
 from .serializers import RegistrationSerializer, ChatMessageSerializer
@@ -237,7 +238,7 @@ class ApproveRegistrationAPIView(APIView):
 class EventDetailAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    #permission_classes = [IsAuthenticatedOrReadOnly]  # 允许任何人查看，但只有认证用户才能进行其他操作
+    permission_classes = [AllowAny]  # 允许任何人查看，但只有认证用户才能进行其他操作
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
@@ -260,8 +261,13 @@ class AddEventAPIView(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class EventListAPIView(generics.ListAPIView):
-    queryset = Event.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = EventSerializer
+
+    def get_queryset(self):
+        blocked_users = Block.objects.filter(blocker=self.request.user).values_list('blocked', flat=True)
+        queryset = Event.objects.exclude(created_by__in=blocked_users)
+        return queryset
 
 class EditRegistrationAPIView(generics.UpdateAPIView):
     serializer_class = RegistrationSerializer
