@@ -174,3 +174,12 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()  # Use the custom user model
         fields = ['id', 'username', 'gender', 'email', 'first_name', 'last_name', 'nickname', 'position', 'hosted_events', 'registered_events', 'intro']
+
+class ReportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Report
+        fields = ['title', 'content', 'reported_user', 'reporter']
+        read_only_fields = ['reporter', 'reported_user']
+    
+    def create(self, validated_data):
+        return Report.objects.create(**validated_data)

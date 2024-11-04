@@ -100,11 +100,3 @@ class ChatMessageSerializer(serializers.ModelSerializer):
     def get_user_nickname(self, obj):  # Add this method
         return obj.user.nickname
 
-class ReportSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Report
-        fields = ['title', 'content', 'reported_user', 'reporter']
-        read_only_fields = ['reporter', 'reported_user']
-    
-    def create(self, validated_data):
-        return Report.objects.create(**validated_data)
