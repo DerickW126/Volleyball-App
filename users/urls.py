@@ -13,6 +13,6 @@ urlpatterns = [
     path('block/<int:user_id>/', views.BlockUserView.as_view(), name='block-user'),
     path('unblock/<int:user_id>/', views.UnblockUserView.as_view(), name='unblock-user'),
     path('blocked-list/', views.BlockedUsersListView.as_view(), name='blocked-list'),
-    path('report/<int:user_id>/', CreateReportView.as_view(), name='create-report'),
+    path('report/<int:user_id>/', views.CreateReportView.as_view(), name='create-report'),
 ]
 

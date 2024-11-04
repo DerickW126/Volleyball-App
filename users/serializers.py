@@ -10,6 +10,7 @@ import jwt
 from django.conf import settings
 import time
 from django.contrib.auth import get_user_model
+from .models import Report
 
 CustomUser = get_user_model()
 class AppleLoginSerializer(serializers.Serializer):
