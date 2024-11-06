@@ -36,36 +36,33 @@ class EventSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Event
-        fields = [
-            'id', 'additional_comments', 'name', 'cost', 'location', 'date', 'start_time',
-            'end_time', 'is_overnight', 'spots_left', 'created_by', 'created_by_id',
-            'created_by_nickname', 'pending_registrations', 'approved_registrations',
-            'is_creator', 'pending_registration_count', 'net_type', 'status',
-            'cancellation_message'
-        ]
-
-    def get_created_by_nickname(self, obj):
-        return obj.created_by.nickname if hasattr(obj.created_by, 'nickname') else None
+        fields = ['id', 'additional_comments','name', 'cost', 'location', 'date', 'start_time', 'end_time', 'is_overnight', 'spots_left', 'created_by', 'created_by_id', 'created_by_nickname', 'pending_registrations', 'approved_registrations', 'is_creator', 'pending_registration_count', 'net_type', 'status', 'cancellation_message']
 
     def get_pending_registrations(self, obj):
+        request = self.context.get('request')
+        user = request.user if request else None
+        
         pending_registrations = Registration.objects.filter(event=obj, is_approved=False)
-        user = self.context.get('request').user
-        if not user.is_authenticated:
-            return []  # Return empty if the user is not authenticated
         return self._serialize_registrations(pending_registrations, user)
 
     def get_approved_registrations(self, obj):
-        approved_registrations = Registration.objects.filter(event=obj, is_approved=True)
-        user = self.context.get('request').user
-        if not user.is_authenticated:
-            return []  # Return empty if the user is not authenticated
-        return self._serialize_registrations(approved_registrations, user)
+        request = self.context.get('request')
+        user = request.user if request else None
 
+        approved_registrations = Registration.objects.filter(event=obj, is_approved=True)
+        return self._serialize_registrations(approved_registrations, user)
+    
     def get_is_creator(self, obj):
         request = self.context.get('request', None)
-        if request is None or not request.user.is_authenticated:
+        if request is None:
             return False
         return obj.created_by == request.user
+    
+    def get_pending_registration_count(self, obj):
+        return obj.get_pending_registration_count()
+    
+    def get_created_by_nickname(self, obj):
+        return obj.created_by.nickname if hasattr(obj.created_by, 'nickname') else None
 
     def _serialize_registrations(self, registrations, viewer):
         serialized_data = []
@@ -73,8 +70,8 @@ class EventSerializer(serializers.ModelSerializer):
             # Check if the viewer has blocked the user
             if viewer.is_authenticated and Block.objects.filter(blocker=viewer, blocked=registration.user).exists():
                 registration_data = {
-                    'user_nickname': 'Blocked',
-                    'additional_comments': 'Blocked'
+                    'user_nickname': '用戶已被封鎖',
+                    'additional_comments': '用戶已被封鎖'
                 }
             else:
                 registration_data = RegistrationSerializer(registration).data
