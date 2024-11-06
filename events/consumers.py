@@ -97,25 +97,35 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def get_old_messages(self):
-        from .models import ChatMessage  # Import model inside the method
-        # Serialize messages using ChatMessageSerializer
-        queryset = ChatMessage.objects.filter(event_id=self.event_id).order_by('timestamp')
-        messages = []
+        from .models import ChatMessage
+        from users.models import Block  # Import Block model to check blocked users
+
+        # Get the list of users blocked by the current user
+        blocked_users = Block.objects.filter(blocker=self.scope['user']).values_list('blocked', flat=True)
         
+        # Fetch all messages for this event
+        queryset = ChatMessage.objects.filter(event_id=self.event_id).order_by('timestamp')
+
+        # Modify messages where the sender is in the blocked list
+        messages = []
         for message in queryset:
-            if self.is_blocked_by_user(message.user_id):
-                # Mask details if the sender is blocked
+            if message.user_id in blocked_users:
+                # Replace content for blocked users
                 messages.append({
-                    'message': "This message is blocked",
                     'user_id': message.user_id,
-                    'user_nickname': "Blocked User",
-                    'user_first_name': "",
-                    'user_last_name': "",
-                    'timestamp': message.timestamp.isoformat()
+                    'user_nickname': "Blocked user",
+                    'message': "blocked",
+                    'timestamp': message.timestamp.isoformat(),
                 })
             else:
-                # Otherwise, serialize normally
-                messages.append(ChatMessageSerializer(message).data)
+                # Otherwise, display the actual message content
+                messages.append({
+                    'user_id': message.user_id,
+                    'user_nickname': message.user.nickname,  # Assuming nickname field
+                    'message': message.message,
+                    'timestamp': message.timestamp.isoformat(),
+                })
+
         return messages
 
     @sync_to_async
