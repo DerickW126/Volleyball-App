@@ -76,8 +76,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         
         # Check if the message sender is blocked by the receiver
         if await self.is_blocked_by_user(user_id):
-            user_nickname = "Blocked User"
-            message = "This message is blocked"
+            user_nickname = "用戶已被封鎖"
+            message = "用戶已被封鎖"
 
         # Send message to WebSocket
         await self.send(text_data=json.dumps({
@@ -113,8 +113,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 # Replace content for blocked users
                 messages.append({
                     'user_id': message.user_id,
-                    'user_nickname': "Blocked user",
-                    'message': "blocked",
+                    'user_nickname': "用戶已被封鎖",
+                    'message': "用戶已被封鎖",
                     'timestamp': message.timestamp.isoformat(),
                 })
             else:

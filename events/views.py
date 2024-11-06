@@ -265,10 +265,13 @@ class EventListAPIView(generics.ListAPIView):
     serializer_class = EventSerializer
 
     def get_queryset(self):
-        blocked_users = Block.objects.filter(blocker=self.request.user).values_list('blocked', flat=True)
-        queryset = Event.objects.exclude(created_by__in=blocked_users)
+        if self.request.user.is_authenticated:
+            blocked_users = Block.objects.filter(blocker=self.request.user).values_list('blocked', flat=True)
+            queryset = Event.objects.exclude(created_by__in=blocked_users)
+        else:
+            queryset = Event.objects.all()  # Return all events or apply a different filter for unauthenticated users
         return queryset
-
+        
 class EditRegistrationAPIView(generics.UpdateAPIView):
     serializer_class = RegistrationSerializer
     permission_classes = [IsAuthenticated]

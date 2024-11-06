@@ -163,7 +163,6 @@ class UnblockUserView(APIView):
     def post(self, request, user_id):
         try:
             blocked_user = CustomUser.objects.get(id=user_id)
-            # Remove the Block record if it exists
             block = Block.objects.filter(blocker=request.user, blocked=blocked_user).first()
             if block:
                 block.delete()
@@ -189,7 +188,7 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
                 if Block.objects.filter(blocker=request_user, blocked=user).exists():
                     # Return a modified user object with name set as "Blocked"
                     user.nickname = "用戶已被封鎖"
-                    user.intro = ""
+                    user.intro = "用戶已被封鎖"
                     return user
 
             return user
