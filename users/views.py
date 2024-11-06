@@ -12,6 +12,7 @@ from django.contrib.auth import logout, login
 from django.contrib.auth.models import User
 from django.contrib.auth import get_user_model
 from .models import Block
+from django.shortcuts import get_object_or_404
 from rest_framework.permissions import AllowAny, IsAuthenticated
 CustomUser = get_user_model()
 
@@ -175,7 +176,7 @@ class UnblockUserView(APIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_object(self):
         user_id = self.kwargs.get('user_id')
