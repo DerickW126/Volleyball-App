@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from rest_framework import generics
 from .models import Event, Registration, ChatMessage
+from users.models import Block
 from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
