@@ -92,7 +92,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @sync_to_async
     def is_blocked_by_user(self, sender_id):
         """Check if the connected user has blocked the sender."""
-        from .models import Block
+        from users.models import Block
         return Block.objects.filter(blocker=self.scope['user'], blocked_id=sender_id).exists()
 
     @sync_to_async
