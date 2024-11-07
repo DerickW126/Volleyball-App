@@ -54,9 +54,9 @@ class EventSerializer(serializers.ModelSerializer):
     
     def get_is_creator(self, obj):
         request = self.context.get('request', None)
-        if request is None:
-            return False
-        return obj.created_by == request.user
+        if request and request.user.is_authenticated:
+            return obj.created_by == request.user
+        return False
     
     def get_pending_registration_count(self, obj):
         return obj.get_pending_registration_count()
