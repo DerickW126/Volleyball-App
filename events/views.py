@@ -17,7 +17,9 @@ from notifications.tasks import cancel_old_notifications, schedule_reminders, sc
 from django.utils import timezone
 import datetime
 from datetime import timedelta
+import logging
 
+logger = logging.getLogger(__name__)
 def notify_user_about_event(user, event_id, title, message):
     # Create the notification
     notification = Notification.objects.create(
