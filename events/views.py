@@ -239,11 +239,12 @@ class EventDetailAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [AllowAny]  # 允许任何人查看，但只有认证用户才能进行其他操作
-
+    '''
     def get_serializer_context(self):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
+    '''
         
 class AddEventAPIView(APIView):
     permission_classes = [IsAuthenticated]  # 确保用户登录
