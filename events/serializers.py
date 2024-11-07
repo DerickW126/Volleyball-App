@@ -56,6 +56,8 @@ class EventSerializer(serializers.ModelSerializer):
     
     def get_is_creator(self, obj):
         request = self.context.get('request', None)
+        logging.error(f'Context request in view: {self.request}')
+        logging.error(f'User is authenticated: {request.user.is_authenticated}')
         if request and request.user.is_authenticated:
             logging.error(f'request user: {request.user.id}')
             logging.error(f'created: {obj.created_by.id}')
