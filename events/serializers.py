@@ -6,7 +6,9 @@ from users.models import Block
 from django.contrib.auth import get_user_model
 
 CustomUser = get_user_model()
+import logging
 
+logger = logging.getLogger(__name__)
 class RegistrationSerializer(serializers.ModelSerializer):
     user_id = serializers.SerializerMethodField()  # Add this field
     user = serializers.StringRelatedField(read_only=True)  # Shows username instead of ID
@@ -55,6 +57,8 @@ class EventSerializer(serializers.ModelSerializer):
     def get_is_creator(self, obj):
         request = self.context.get('request', None)
         if request and request.user.is_authenticated:
+            logging.debug(f'request user: {request.user}')
+            logging.debug(f'created: {obj.created_by}')
             return obj.created_by == request.user
         return False
     

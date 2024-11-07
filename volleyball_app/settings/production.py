@@ -35,7 +35,22 @@ DEBUG = os.environ.get('DEBUG', 'False') == 'True'
 ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '').split(',')
 #ALLOWED_HOSTS = ['ec2-18-183-213-23.ap-northeast-1.compute.amazonaws.com','localhost', '18.183.213.23', '43.207.235.105', '172.31.35.113']
 
-
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+        },
+    },
+}
 # Application definition
 
 INSTALLED_APPS = [
