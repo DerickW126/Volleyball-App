@@ -59,7 +59,7 @@ class EventSerializer(serializers.ModelSerializer):
         if request and request.user.is_authenticated:
             logging.error(f'request user: {request.user}')
             logging.error(f'created: {obj.created_by}')
-            return obj.created_by == request.user
+            return obj.created_by.id == request.use.id
         return False
     
     def get_pending_registration_count(self, obj):
