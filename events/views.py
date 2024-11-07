@@ -244,11 +244,6 @@ class EventDetailAPIView(generics.RetrieveAPIView):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
-    
-    def retrieve(self, request, *args, **kwargs):
-        event = self.get_object()
-        serializer = EventSerializer(event, context={'request': request})  # Ensure the context is passed here
-        return Response(serializer.data)
         
 class AddEventAPIView(APIView):
     permission_classes = [IsAuthenticated]  # 确保用户登录
