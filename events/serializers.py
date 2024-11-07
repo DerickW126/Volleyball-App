@@ -55,9 +55,6 @@ class EventSerializer(serializers.ModelSerializer):
     def get_is_creator(self, obj):
         request = self.context.get('request', None)
         if request and request.user.is_authenticated:
-            print("User authenticated:", request.user.is_authenticated)
-            print("User:", request.user)
-            print("Creator:", obj.created_by)
             return obj.created_by == request.user
         return False
     
@@ -66,7 +63,7 @@ class EventSerializer(serializers.ModelSerializer):
     
     def get_created_by_nickname(self, obj):
         return obj.created_by.nickname if hasattr(obj.created_by, 'nickname') else None
-
+    '''
     def _serialize_registrations(self, registrations, viewer):
         serialized_data = []
         for registration in registrations:
@@ -80,7 +77,7 @@ class EventSerializer(serializers.ModelSerializer):
                 registration_data = RegistrationSerializer(registration).data
             serialized_data.append(registration_data)
         return serialized_data
-
+    '''
 class ChatMessageSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     user_id = serializers.IntegerField(source='user.id', read_only=True)
