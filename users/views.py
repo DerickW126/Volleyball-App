@@ -176,18 +176,17 @@ class UnblockUserView(APIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]  # Allows read-only access without login
 
     def get_object(self):
         user_id = self.kwargs.get('user_id')
         try:
             user = CustomUser.objects.get(id=user_id)
             request_user = self.request.user
-            
-            # Check if the requested user is blocked by the current user
+
+            # Check if the request user is authenticated and if the target user is blocked
             if request_user.is_authenticated:
                 if Block.objects.filter(blocker=request_user, blocked=user).exists():
-                    # Return a modified user object with name set as "Blocked"
                     user.nickname = "用戶已被封鎖"
                     user.intro = "用戶已被封鎖"
                     return user
@@ -198,17 +197,17 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
 
     def retrieve(self, request, *args, **kwargs):
         user = self.get_object()
-        
+
         if user is None:
             # User does not exist
             return Response(
                 {"detail": "User not found."},
                 status=status.HTTP_404_NOT_FOUND
             )
-        
+
         serializer = self.get_serializer(user)
         return Response(serializer.data)
-
+        
 class BlockedUsersListView(generics.ListAPIView):
     serializer_class = UserSerializer
     permission_classes = [permissions.IsAuthenticated]

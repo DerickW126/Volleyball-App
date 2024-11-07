@@ -17,9 +17,7 @@ from notifications.tasks import cancel_old_notifications, schedule_reminders, sc
 from django.utils import timezone
 import datetime
 from datetime import timedelta
-import logging
 
-logger = logging.getLogger(__name__)
 def notify_user_about_event(user, event_id, title, message):
     # Create the notification
     notification = Notification.objects.create(
@@ -241,14 +239,6 @@ class EventDetailAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
     permission_classes = [AllowAny]
-
-    def get(self, request, *args, **kwargs):
-        response = super().get(request, *args, **kwargs)
-        serializer_content = response.data  # The serialized content
-        logging.info("Serialized content: %s", serializer_content)
-        logging.info(f'User authenticated: {request.user.is_authenticated}')
-        logging.info(f'User ID: {request.user.id if request.user.is_authenticated else "Anonymous"}')
-        return response
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
