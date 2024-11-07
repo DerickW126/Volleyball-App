@@ -234,7 +234,7 @@ class ApproveRegistrationAPIView(APIView):
         notify_user_about_event(registration.user, event.id, '報名審核通過', message)
 
         return Response({"success": "Registration approved successfully."}, status=status.HTTP_200_OK)
-
+'''
 class EventDetailAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
@@ -244,7 +244,16 @@ class EventDetailAPIView(generics.RetrieveAPIView):
         context = super().get_serializer_context()
         context.update({"request": self.request})
         return context
-    
+'''
+class EventDetailAPIView(generics.RetrieveAPIView):
+    queryset = Event.objects.all()
+    serializer_class = EventSerializer
+    permission_classes = [IsAuthenticatedOrReadOnly]  # 允许任何人查看，但只有认证用户才能进行其他操作
+
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context.update({"request": self.request})
+        return context
         
 class AddEventAPIView(APIView):
     permission_classes = [IsAuthenticated]  # 确保用户登录
