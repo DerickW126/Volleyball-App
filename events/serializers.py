@@ -55,6 +55,9 @@ class EventSerializer(serializers.ModelSerializer):
     def get_is_creator(self, obj):
         request = self.context.get('request', None)
         if request and request.user.is_authenticated:
+            print("User authenticated:", request.user.is_authenticated)
+            print("User:", request.user)
+            print("Creator:", obj.created_by)
             return obj.created_by == request.user
         return False
     
