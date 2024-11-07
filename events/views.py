@@ -238,7 +238,13 @@ class ApproveRegistrationAPIView(APIView):
 class EventDetailAPIView(generics.RetrieveAPIView):
     queryset = Event.objects.all()
     serializer_class = EventSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # 允许任何人查看，但只有认证用户才能进行其他操作
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get(self, request, *args, **kwargs):
+        response = super().get(request, *args, **kwargs)
+        serializer_content = response.data  # The serialized content
+        logging.info("Serialized content: %s", serializer_content)
+        return response
 
     def get_serializer_context(self):
         context = super().get_serializer_context()
