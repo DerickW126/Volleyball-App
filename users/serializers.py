@@ -101,7 +101,6 @@ class AppleLoginSerializer(serializers.Serializer):
         }
 
     def _get_or_create_user(self, user_data, first_name='', last_name=''):
-    """Get or create a user based on Apple user data."""
         email = user_data['email']
         apple_id = user_data['apple_id']
 
