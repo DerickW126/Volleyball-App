@@ -15,11 +15,11 @@ from .models import Report
 CustomUser = get_user_model()
 class AppleLoginSerializer(serializers.Serializer):
     authorization_code = serializers.CharField()
-    useAppleUsername = serializers.BooleanField(required=False, default=False)  # Updated field name
+    useAppleUsername = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
         authorization_code = attrs.get('authorization_code')
-        use_apple_name = attrs.get('useAppleUsername', False)  # Updated field name reference
+        use_apple_name = attrs.get('useAppleUsername', False)
 
         # Step 1: Generate JWT token to authenticate with Apple
         jwt_token = self._generate_apple_jwt()
@@ -34,15 +34,14 @@ class AppleLoginSerializer(serializers.Serializer):
 
         user_data = self._get_user_data_from_apple(id_token)
 
-        # Extract the first and last names if available
-        decoded_token = jwt.decode(id_token, options={"verify_signature": False})
-        first_name = decoded_token.get('given_name', '')
-        last_name = decoded_token.get('family_name', '')
+        # Step 4: Retrieve the first and last name from the user data if available
+        first_name = self.initial_data.get('given_name', '')
+        last_name = self.initial_data.get('family_name', '')
 
-        # Step 4: Get or create the user in your system
+        # Step 5: Get or create the user in your system
         user = self._get_or_create_user(user_data)
 
-        # If `useAppleUsername` is true and names are available, set the nickname
+        # Set the nickname if the useAppleUsername flag is true and names are provided
         if use_apple_name and (first_name or last_name):
             user.nickname = f"{first_name} {last_name}".strip()
             user.save()
