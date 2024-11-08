@@ -34,17 +34,19 @@ class AppleLoginSerializer(serializers.Serializer):
 
         user_data = self._get_user_data_from_apple(id_token)
 
-        # Step 4: Retrieve the first and last name from the user data if available
-        first_name = self.initial_data.get('given_name', '')
-        last_name = self.initial_data.get('family_name', '')
+        # Extract first and last names if available
+        decoded_token = jwt.decode(id_token, options={"verify_signature": False})
+        first_name = decoded_token.get('given_name', '')
+        last_name = decoded_token.get('family_name', '')
 
-        # Step 5: Get or create the user in your system
+        # Step 4: Get or create the user in your system
         user = self._get_or_create_user(user_data)
 
-        # Set the nickname if the useAppleUsername flag is true and names are provided
+        # If `useAppleUsername` is true and names are available, set the nickname
         if use_apple_name and (first_name or last_name):
-            user.nickname = f"{first_name} {last_name}".strip()
-            user.save()
+            if not user.nickname:  # Set the nickname only if it hasn't been set
+                user.nickname = f"{first_name} {last_name}".strip()
+                user.save()
 
         attrs['user'] = user
         return attrs
