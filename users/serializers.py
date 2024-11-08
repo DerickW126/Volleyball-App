@@ -13,6 +13,10 @@ from django.contrib.auth import get_user_model
 from .models import Report
 
 CustomUser = get_user_model()
+import logging
+
+logger = logging.getLogger(__name__)
+
 class AppleLoginSerializer(serializers.Serializer):
     authorization_code = serializers.CharField()
 
@@ -36,7 +40,8 @@ class AppleLoginSerializer(serializers.Serializer):
         decoded_token = jwt.decode(id_token, options={"verify_signature": False})
         first_name = decoded_token.get('given_name', '')
         last_name = decoded_token.get('family_name', '')
-
+        logger.info(f"First name from Apple: {first_name}")
+        logger.info(f"Last name from Apple: {last_name}")
         # Step 4: Get or create the user in your system and set the nickname
         user = self._get_or_create_user(user_data, first_name, last_name)
 

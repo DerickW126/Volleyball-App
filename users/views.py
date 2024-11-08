@@ -90,8 +90,6 @@ class UpdateUserProfileView(generics.UpdateAPIView):
         return Response({'detail': 'Profile updated successfully'}, status=status.HTTP_200_OK)
 
     def perform_update(self, serializer):
-        print('perform update called!!!!!!!!')
-
         # Ensure nickname is not overridden if it is an empty string
         if 'nickname' in serializer.validated_data and not serializer.validated_data['nickname']:
             print("Empty nickname detected, removing from update.")
