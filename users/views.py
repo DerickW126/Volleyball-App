@@ -176,7 +176,7 @@ class UnblockUserView(APIView):
 
 class UserProfileView(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]  # Allows read-only access without login
+    permission_classes = [AllowAny]  # Allows read-only access without login
 
     def get_object(self):
         user_id = self.kwargs.get('user_id')
