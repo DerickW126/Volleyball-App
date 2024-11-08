@@ -15,11 +15,9 @@ from .models import Report
 CustomUser = get_user_model()
 class AppleLoginSerializer(serializers.Serializer):
     authorization_code = serializers.CharField()
-    useAppleUsername = serializers.BooleanField(required=False, default=False)
 
     def validate(self, attrs):
         authorization_code = attrs.get('authorization_code')
-        use_apple_name = attrs.get('useAppleUsername', False)
 
         # Step 1: Generate JWT token to authenticate with Apple
         jwt_token = self._generate_apple_jwt()
@@ -34,13 +32,13 @@ class AppleLoginSerializer(serializers.Serializer):
 
         user_data = self._get_user_data_from_apple(id_token)
 
-        # Extract the first and last names if available
+        # Extract the first and last names from the decoded token if available
         decoded_token = jwt.decode(id_token, options={"verify_signature": False})
         first_name = decoded_token.get('given_name', '')
         last_name = decoded_token.get('family_name', '')
 
-        # Step 4: Get or create the user in your system, passing the useAppleUsername flag and name
-        user = self._get_or_create_user(user_data, first_name, last_name, use_apple_name)
+        # Step 4: Get or create the user in your system and set the nickname
+        user = self._get_or_create_user(user_data, first_name, last_name)
 
         attrs['user'] = user
         return attrs
@@ -102,8 +100,8 @@ class AppleLoginSerializer(serializers.Serializer):
             'apple_id': apple_id,
         }
 
-    def _get_or_create_user(self, user_data, first_name='', last_name='', use_apple_name=False):
-        """Get or create a user based on Apple user data."""
+    def _get_or_create_user(self, user_data, first_name='', last_name=''):
+    """Get or create a user based on Apple user data."""
         email = user_data['email']
         apple_id = user_data['apple_id']
 
@@ -119,10 +117,9 @@ class AppleLoginSerializer(serializers.Serializer):
             defaults={'email': email}
         )
 
-        # Set the nickname if the user is newly created and `useAppleUsername` is true
+        # If the user is newly created or `nickname` is empty, set the nickname
         if created:
-            if use_apple_name and (first_name or last_name):
-                user.nickname = f"{first_name} {last_name}".strip()
+            user.nickname = f"{first_name} {last_name}".strip() if first_name or last_name else user.nickname
             user.save()
 
         return user
