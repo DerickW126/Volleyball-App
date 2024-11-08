@@ -91,12 +91,13 @@ class UpdateUserProfileView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         print('perform update called!!!!!!!!')
-        # Check if the data is valid before saving
-        if not serializer.is_valid():
-            print(f"Validation failed: {serializer.errors}")  # Print any validation errors
-            return Response({'detail': 'Invalid data', 'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
-        # If valid, save and return success response
+        # Ensure nickname is not overridden if it is an empty string
+        if 'nickname' in serializer.validated_data and not serializer.validated_data['nickname']:
+            print("Empty nickname detected, removing from update.")
+            serializer.validated_data.pop('nickname')
+
+        # Save the instance if data is valid and nickname is not empty
         try:
             instance = serializer.save()
             return Response({'detail': 'Profile updated successfully'}, status=status.HTTP_200_OK)

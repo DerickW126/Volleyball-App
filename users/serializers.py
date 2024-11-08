@@ -34,19 +34,13 @@ class AppleLoginSerializer(serializers.Serializer):
 
         user_data = self._get_user_data_from_apple(id_token)
 
-        # Extract first and last names if available
+        # Extract the first and last names if available
         decoded_token = jwt.decode(id_token, options={"verify_signature": False})
         first_name = decoded_token.get('given_name', '')
         last_name = decoded_token.get('family_name', '')
 
-        # Step 4: Get or create the user in your system
-        user = self._get_or_create_user(user_data)
-
-        # If `useAppleUsername` is true and names are available, set the nickname
-        if use_apple_name and (first_name or last_name):
-            if not user.nickname:  # Set the nickname only if it hasn't been set
-                user.nickname = f"{first_name} {last_name}".strip()
-                user.save()
+        # Step 4: Get or create the user in your system, passing the useAppleUsername flag and name
+        user = self._get_or_create_user(user_data, first_name, last_name, use_apple_name)
 
         attrs['user'] = user
         return attrs
@@ -108,7 +102,7 @@ class AppleLoginSerializer(serializers.Serializer):
             'apple_id': apple_id,
         }
 
-    def _get_or_create_user(self, user_data):
+    def _get_or_create_user(self, user_data, first_name='', last_name='', use_apple_name=False):
         """Get or create a user based on Apple user data."""
         email = user_data['email']
         apple_id = user_data['apple_id']
@@ -125,11 +119,14 @@ class AppleLoginSerializer(serializers.Serializer):
             defaults={'email': email}
         )
 
-        # If the user is newly created, ensure it's saved properly
-        if created and not user.id:
+        # Set the nickname if the user is newly created and `useAppleUsername` is true
+        if created:
+            if use_apple_name and (first_name or last_name):
+                user.nickname = f"{first_name} {last_name}".strip()
             user.save()
 
         return user
+
 class GoogleLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
 
