@@ -13,10 +13,6 @@ from django.contrib.auth import get_user_model
 from .models import Report
 
 CustomUser = get_user_model()
-import logging
-
-logger = logging.getLogger(__name__)
-
 class AppleLoginSerializer(serializers.Serializer):
     authorization_code = serializers.CharField()
 
@@ -30,21 +26,22 @@ class AppleLoginSerializer(serializers.Serializer):
         tokens = self._exchange_apple_code(authorization_code, jwt_token)
 
         # Step 3: Extract user data from the id_token
-        id_token = tokens.get('id_token')
+        id_token = tokens.get('id_token', None)
         if not id_token:
             raise serializers.ValidationError('Unable to retrieve id_token')
 
         user_data = self._get_user_data_from_apple(id_token)
 
-        # Extract the first and last names from the decoded token if available
-        decoded_token = jwt.decode(id_token, options={"verify_signature": False})
-        first_name = decoded_token.get('given_name', '')
-        last_name = decoded_token.get('family_name', '')
-        logger.info(f"First name from Apple: {first_name}")
-        logger.info(f"Last name from Apple: {last_name}")
-        # Step 4: Get or create the user in your system and set the nickname
-        user = self._get_or_create_user(user_data, first_name, last_name)
+        # Step 4: Get or create the user in your system
+        user = self._get_or_create_user(user_data)
 
+        # Ensure the user has an id
+        if not user.id:
+            raise serializers.ValidationError("Failed to create user with Apple ID")
+
+        # Step 5: Generate your own JWT tokens for the user (implement your token generation here)
+
+        # Step 6: Return the validated user
         attrs['user'] = user
         return attrs
 
@@ -105,7 +102,8 @@ class AppleLoginSerializer(serializers.Serializer):
             'apple_id': apple_id,
         }
 
-    def _get_or_create_user(self, user_data, first_name='', last_name=''):
+    def _get_or_create_user(self, user_data):
+        """Get or create a user based on Apple user data."""
         email = user_data['email']
         apple_id = user_data['apple_id']
 
@@ -121,13 +119,11 @@ class AppleLoginSerializer(serializers.Serializer):
             defaults={'email': email}
         )
 
-        # If the user is newly created or `nickname` is empty, set the nickname
-        if created:
-            user.nickname = f"{first_name} {last_name}".strip() if first_name or last_name else user.nickname
+        # If the user is newly created, ensure it's saved properly
+        if created and not user.id:
             user.save()
 
         return user
-
 class GoogleLoginSerializer(serializers.Serializer):
     access_token = serializers.CharField()
 
