@@ -4,6 +4,7 @@ from rest_framework import generics
 from .models import Event, Registration, ChatMessage
 from users.models import Block
 from django.contrib.auth import get_user_model
+from datetime import datetime
 
 CustomUser = get_user_model()
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -12,7 +13,7 @@ class RegistrationSerializer(serializers.ModelSerializer):
     user_nickname = serializers.SerializerMethodField()  # Add this line
     user_gender = serializers.SerializerMethodField() 
     notes = serializers.SerializerMethodField()
-    
+
     class Meta:
         model = Registration
         fields = ['id', 'user', 'notes', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved']
@@ -82,14 +83,6 @@ class EventSerializer(serializers.ModelSerializer):
                     'user_nickname': '用戶已被封鎖',
                     'notes': f'用戶已被封鎖\n報名時間: {registration_time}'
                 }
-            else:
-                registration_data = RegistrationSerializer(registration).data
-                # Check if there's already a comment and add an empty line before appending the time
-                if registration_data['notes']:
-                    registration_data['notes'] += f'\n\n報名時間: {registration_time}'
-                else:
-                    registration_data['notes'] = f'報名時間: {registration_time}'
-            
             serialized_data.append(registration_data)
         return serialized_data
 
