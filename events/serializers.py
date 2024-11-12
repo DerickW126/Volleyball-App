@@ -12,10 +12,11 @@ class RegistrationSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)  # Shows username instead of ID
     user_nickname = serializers.SerializerMethodField()  # Add this line
     user_gender = serializers.SerializerMethodField() 
+    created_at = serializers.DateTimeField(format="%m/%d %H:%M", read_only=True) 
 
     class Meta:
         model = Registration
-        fields = ['id', 'user', 'notes', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved']
+        fields = ['id', 'user', 'notes', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved', 'created_at']
 
     def get_user_id(self, obj):
         return obj.user.id
@@ -81,7 +82,6 @@ class EventSerializer(serializers.ModelSerializer):
                 masked_data = {
                     "user": "已封鎖的用戶",
                     "number_of_people": registration.number_of_people,
-                    "notes": "已封鎖的用戶"
                 }
                 serialized_data.append(masked_data)
             else:
