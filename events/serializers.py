@@ -12,7 +12,6 @@ class RegistrationSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)  # Shows username instead of ID
     user_nickname = serializers.SerializerMethodField()  # Add this line
     user_gender = serializers.SerializerMethodField() 
-    notes = serializers.SerializerMethodField()
 
     class Meta:
         model = Registration
