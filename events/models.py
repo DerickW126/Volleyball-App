@@ -60,6 +60,7 @@ class Registration(models.Model):
     is_approved = models.BooleanField(default=False)
     previously_approved = models.BooleanField(default=False)  # 新增字段
     notes = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     
     def save(self, *args, **kwargs):
         if not self.previously_approved and self.is_approved:
