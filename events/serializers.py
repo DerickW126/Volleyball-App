@@ -66,14 +66,21 @@ class EventSerializer(serializers.ModelSerializer):
     def _serialize_registrations(self, registrations, viewer):
         serialized_data = []
         for registration in registrations:
-            # Check if the viewer has blocked the user
+            registration_time = registration.created_at.strftime('%Y/%m/%d %H:%M')
+
             if viewer.is_authenticated and Block.objects.filter(blocker=viewer, blocked=registration.user).exists():
                 registration_data = {
                     'user_nickname': '用戶已被封鎖',
-                    'additional_comments': '用戶已被封鎖'
+                    'additional_comments': f'用戶已被封鎖\n報名時間: {registration_time}'
                 }
             else:
                 registration_data = RegistrationSerializer(registration).data
+                # Check if there's already a comment and add an empty line before appending the time
+                if registration_data['additional_comments']:
+                    registration_data['additional_comments'] += f'\n\n報名時間: {registration_time}'
+                else:
+                    registration_data['additional_comments'] = f'報名時間: {registration_time}'
+            
             serialized_data.append(registration_data)
         return serialized_data
 
