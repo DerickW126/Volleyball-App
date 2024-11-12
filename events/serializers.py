@@ -72,20 +72,24 @@ class EventSerializer(serializers.ModelSerializer):
     
     def get_created_by_nickname(self, obj):
         return obj.created_by.nickname if hasattr(obj.created_by, 'nickname') else None
-    
+
     def _serialize_registrations(self, registrations, viewer):
         serialized_data = []
         for registration in registrations:
-            registration_time = registration.created_at.strftime('%Y/%m/%d %H:%M')
-
+            # Check if the registrant is blocked by the viewer
             if viewer.is_authenticated and Block.objects.filter(blocker=viewer, blocked=registration.user).exists():
-                registration_data = {
-                    'user_nickname': '用戶已被封鎖',
-                    'notes': f'用戶已被封鎖\n報名時間: {registration_time}'
+                # If the registrant is blocked, mask their details
+                masked_data = {
+                    "user": "已封鎖的用戶",
+                    "number_of_people": registration.number_of_people,
+                    "notes": "已封鎖的用戶"
                 }
-            serialized_data.append(registration_data)
+                serialized_data.append(masked_data)
+            else:
+                # Serialize normally if not blocked
+                serialized_data.append(RegistrationSerializer(registration).data)
         return serialized_data
-
+    
 class ChatMessageSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     user_id = serializers.IntegerField(source='user.id', read_only=True)
