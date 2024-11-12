@@ -11,6 +11,8 @@ class RegistrationSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField(read_only=True)  # Shows username instead of ID
     user_nickname = serializers.SerializerMethodField()  # Add this line
     user_gender = serializers.SerializerMethodField() 
+    notes = serializers.SerializerMethodField()
+    
     class Meta:
         model = Registration
         fields = ['id', 'user', 'notes', 'user_id', 'user_nickname', 'user_gender', 'number_of_people', 'is_approved', 'previously_approved']
@@ -23,6 +25,13 @@ class RegistrationSerializer(serializers.ModelSerializer):
     
     def get_user_gender(self, obj):
         return obj.user.gender
+    
+    def get_notes(self, obj):
+        current_time = datetime.now().strftime("%Y/%m/%d %H:%M")
+        if obj.notes:
+            return f"{obj.notes}\n\n{current_time}"  # Append time to existing notes
+        else:
+            return current_time  # Show only the current time if there are no notes
 
 class EventSerializer(serializers.ModelSerializer):
     created_by = serializers.StringRelatedField(read_only=True)
