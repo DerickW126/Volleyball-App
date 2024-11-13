@@ -350,8 +350,10 @@ class RegisterEventAPIView(APIView):
         serializer = RegistrationSerializer(data=request.data, instance=registration)
         if serializer.is_valid():
             registration = serializer.save()  
+            '''
             if event.spots_left - registration.number_of_people < 0:
                 return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
+            '''
             registration.save()
             event.save()
 
