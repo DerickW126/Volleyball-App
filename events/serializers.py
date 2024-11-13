@@ -81,6 +81,7 @@ class EventSerializer(serializers.ModelSerializer):
                 # If the registrant is blocked, mask their details
                 masked_data = {
                     "user": "已封鎖的用戶",
+                    "user_nickname": "已封鎖的用戶",
                     "number_of_people": registration.number_of_people,
                 }
                 serialized_data.append(masked_data)
