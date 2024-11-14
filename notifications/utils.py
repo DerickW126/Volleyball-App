@@ -17,16 +17,17 @@ def send_notification(user, title_msg, body_msg):
                 Message(notification=Notification(title=title_msg, body=body_msg))
             )
             print(result)
+            return {'status': 'success', 'result': result}
         except _messaging_utils.UnregisteredError:
-            # Handle unregistered token (e.g., remove from database)
+            # Handle unregistered token
             device.delete()
             logger.error(f"Unregistered FCM token for user {user.id}, removed from database.")
-            return None
+            return {'status': 'error', 'message': 'Unregistered token, notification not sent'}
         except Exception as e:
             logger.error(f"Failed to send notification: {str(e)}")
-            raise
+            return {'status': 'error', 'message': str(e)}
     else:
-        print(f"No device found for user {user.username}")
+        return {'status': 'error', 'message': 'No device found for user'}
         
 def send_bulk_notification(registrations, event):
     devices = FCMDevice.objects.filter(user__in=[reg.user for reg in registrations])
