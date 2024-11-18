@@ -290,7 +290,7 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
 
         if instance.user != request.user:
             raise PermissionDenied("You do not have permission to edit this registration.")
-        
+
         data = request.data.copy()
         event = instance.event
 
@@ -300,34 +300,26 @@ class EditRegistrationAPIView(generics.UpdateAPIView):
         # Case 1: User is trying to lower the number of people
         if new_number_of_people < instance.number_of_people:
             if instance.is_approved:
-                # Adjust spots_left only if the registration is approved
                 event.spots_left += (instance.number_of_people - new_number_of_people)
                 event.save()
             data['is_approved'] = instance.is_approved  # Keep current approval status
 
         # Case 2: User is trying to increase the number of people
         elif new_number_of_people > instance.number_of_people:
-            # Check if the new number exceeds the available spots
+            # No restriction on the number of spots left
             if instance.is_approved:
-                if new_number_of_people - instance.number_of_people > event.spots_left:
-                    # Not enough spots available, reject the update
-                    return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
-                else:
-                    # There are enough spots, mark the user as unapproved but previously approved
-                    # We also return the spots the user had previously taken since they are now unapproved
-                    if instance.is_approved:
-                        event.spots_left += instance.number_of_people  # Return the previously taken spots
-
-                    data['is_approved'] = False  # Set to unapproved
-                    data['previously_approved'] = True  # Mark as previously approved
-                    event.save()
-            else:
-                if new_number_of_people > event.spots_left:
-                    return Response({"error": "Not enough spots left for this number of people."}, status=status.HTTP_400_BAD_REQUEST)
+                event.spots_left += instance.number_of_people  # Return the previously taken spots
+                data['is_approved'] = False  # Set to unapproved
+                data['previously_approved'] = True  # Mark as previously approved
                 event.save()
+            else:
+                event.save()
+
+        # Check if the event status should be updated from 'waitlist' to 'open'
         if event.spots_left > 0 and event.status == 'waitlist':
             event.status = 'open'
             event.save()
+
         # Apply the new data to the serializer and perform the update
         serializer = self.get_serializer(instance, data=data, partial=partial)
         serializer.is_valid(raise_exception=True)
