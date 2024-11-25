@@ -16,6 +16,9 @@ def schedule_event_status_updates(event, is_overnight=False):
         datetime.datetime.combine(event.date, event.start_time)
     )
 
+    if event.status == 'canceled':
+        return
+        
     # Adjust the end date for overnight events
     end_date = event.date + timedelta(days=1) if is_overnight else event.date
 
