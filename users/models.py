@@ -22,6 +22,7 @@ class CustomUser(AbstractUser):
     intro = models.TextField(null=True, blank=True)
     gender = models.CharField(max_length=3, choices=GENDER_CHOICES, null=True, blank=True)
     is_first_login = models.BooleanField(default=True)
+    skill_level = models.CharField(max_length=100, blank=True, null=True)
 
 class Block(models.Model):
     blocker = models.ForeignKey(settings.AUTH_USER_MODEL, related_name="blocked_users", on_delete=models.CASCADE)

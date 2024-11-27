@@ -13,6 +13,7 @@ def convert_to_utc(local_time, local_tz):
     local_tz = pytz.timezone(local_tz)
     local_time = local_tz.localize(local_time, is_dst=None)
     return local_time.astimezone(pytz.utc)
+    
 class Event(models.Model):
     NET_TYPE_CHOICES = [
         ('beach_volleyball', '沙灘排球'),
@@ -29,7 +30,30 @@ class Event(models.Model):
         ('past', '已結束'),
         ('canceled', '取消')
     ]
-
+    CITY_CHOICES = [
+        ('taipei', '台北市'),
+        ('new_taipei', '新北市'),
+        ('taoyuan', '桃園市'),
+        ('taichung', '臺中市'),
+        ('tainan', '臺南市'),
+        ('kaohsiung', '高雄市'),
+        ('keelung', '基隆市'),
+        ('hsinchu_city', '新竹市'),
+        ('hsinchu_county', '新竹縣'),
+        ('miaoli', '苗栗縣'),
+        ('changhua', '彰化縣'),
+        ('nantou', '南投縣'),
+        ('yunlin', '雲林縣'),
+        ('chiayi_city', '嘉義市'),
+        ('chiayi_county', '嘉義縣'),
+        ('pingtung', '屏東縣'),
+        ('yilan', '宜蘭縣'),
+        ('hualien', '花蓮縣'),
+        ('taitung', '臺東縣'),
+        ('penghu', '澎湖縣'),
+        ('kinmen', '金門縣'),
+        ('lienchiang', '連江縣')
+    ]
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
     date = models.DateField()
@@ -44,7 +68,7 @@ class Event(models.Model):
     net_type = models.CharField(max_length=50, choices=NET_TYPE_CHOICES, default=NET_TYPE_CHOICES[0])
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default=STATUS_CHOICES[0])
     cancellation_message = models.TextField(blank=True, null=True)  # Add this field
-
+    city = models.CharField(max_length=50, choices=CITY_CHOICES, default='tainan')
 
     def __str__(self):
         return self.name
