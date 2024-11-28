@@ -52,7 +52,8 @@ class Event(models.Model):
         ('taitung', '臺東縣'),
         ('penghu', '澎湖縣'),
         ('kinmen', '金門縣'),
-        ('lienchiang', '連江縣')
+        ('lienchiang', '連江縣'),
+        ('unspecified', '未填寫縣市')
     ]
     name = models.CharField(max_length=100)
     location = models.CharField(max_length=100)
@@ -68,7 +69,7 @@ class Event(models.Model):
     net_type = models.CharField(max_length=50, choices=NET_TYPE_CHOICES, default=NET_TYPE_CHOICES[0])
     status = models.CharField(max_length=20,choices=STATUS_CHOICES,default=STATUS_CHOICES[0])
     cancellation_message = models.TextField(blank=True, null=True)  # Add this field
-    city = models.CharField(max_length=50, choices=CITY_CHOICES, default='tainan')
+    city = models.CharField(max_length=50, choices=CITY_CHOICES, default='unspecified')
 
     def __str__(self):
         return self.name
