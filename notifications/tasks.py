@@ -97,6 +97,8 @@ def set_event_status(event_id, status):
     Event = apps.get_model('events', 'Event')
     try:
         event = Event.objects.get(pk=event_id)
+        if event.status == 'canceled':
+            return
         event.status = status
         event.save()
     except Event.DoesNotExist:
