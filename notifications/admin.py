@@ -1,5 +1,6 @@
 from django.contrib import admin
 from fcm_django.models import FCMDevice
+from firebase_admin.messaging import Message, Notification
 from django.contrib import messages
 
 def send_update_notification(modeladmin, request, queryset):
