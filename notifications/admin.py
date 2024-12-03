@@ -12,8 +12,7 @@ def send_update_notification(modeladmin, request, queryset):
         # Send the notification
         result = devices.send_message(
             title=title,
-            body=message,
-            sound=True,  # Optional, enables notification sound
+            body=message, # Optional, enables notification sound
         )
         # Show a success message in the admin panel
         modeladmin.message_user(request, f"Notification sent successfully to {len(devices)} devices.", messages.SUCCESS)
