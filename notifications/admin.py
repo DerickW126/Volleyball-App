@@ -21,3 +21,6 @@ def send_update_notification(modeladmin, request, queryset):
         modeladmin.message_user(request, f"Error sending notifications: {e}", messages.ERROR)
 
 send_update_notification.short_description = "Send update notification to all users"
+
+existing_admin = admin.site._registry[FCMDevice]
+existing_admin.actions = list(existing_admin.actions or []) + [send_update_notification]
