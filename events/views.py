@@ -151,7 +151,7 @@ class UpdateEventView(generics.UpdateAPIView):
         old_event_end_datetime = timezone.make_aware(
             datetime.datetime.combine(event.date, event.end_time)
         )
-
+        old_spots_left = event.spots_left
         # Perform the update (including is_overnight)
         updated_event = serializer.save()
 
@@ -162,7 +162,12 @@ class UpdateEventView(generics.UpdateAPIView):
         new_event_end_datetime = timezone.make_aware(
             datetime.datetime.combine(updated_event.date, updated_event.end_time)
         )
-
+        if old_spots_left == 0 and updated_event.spots_left > 0:
+            updated_event.status = "open"  # Change to 'open' if spots are available
+            updated_event.save()
+        elif old_spots_left > 0 and updated_event.spots_left == 0:
+            updated_event.status = "waitlist"  # Change to 'waitlist' if no spots are left
+            updated_event.save()
         # Check if the times or is_overnight have changed
         if (
             old_event_start_datetime != new_event_start_datetime 
