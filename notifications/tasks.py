@@ -99,8 +99,35 @@ def set_event_status(event_id, status):
         event = Event.objects.get(pk=event_id)
         if event.status == 'canceled':
             return
+        event = Event.objects.get(pk=event_id)
+        if event.status == 'canceled':
+            return
+
+        now = timezone.now()
+
+        # Calculate event's start and end datetime
+        event_start_datetime = timezone.make_aware(
+            datetime.datetime.combine(event.date, event.start_time)
+        )
+        event_end_datetime = timezone.make_aware(
+            datetime.datetime.combine(event.date, event.end_time)
+        )
+
+        # Add leeway (±10 seconds)
+        leeway = timedelta(seconds=10)
+
+        # Check if the current time is within the leeway range
+        if status == 'playing' and not (event_start_datetime - leeway <= now <= event_start_datetime + leeway):
+            print(f"Skipping status update to 'playing' for Event ID {event_id} due to time mismatch.")
+            return
+        if status == 'past' and not (event_end_datetime - leeway <= now <= event_end_datetime + leeway):
+            print(f"Skipping status update to 'past' for Event ID {event_id} due to time mismatch.")
+            return
+
+        # Update status if the timing is valid
         event.status = status
         event.save()
+
     except Event.DoesNotExist:
         print(f'Event with id {event_id} does not exist.')
 
