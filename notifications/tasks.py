@@ -109,8 +109,9 @@ def set_event_status(event_id, status):
         event_start_datetime = timezone.make_aware(
             datetime.datetime.combine(event.date, event.start_time)
         )
+        end_date = event.date + timedelta(days=1) if event.is_overnight else event.date
         event_end_datetime = timezone.make_aware(
-            datetime.datetime.combine(event.date, event.end_time)
+            datetime.datetime.combine(end_date, event.end_time)
         )
 
         # Add leeway (±10 seconds)
