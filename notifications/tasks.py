@@ -99,9 +99,6 @@ def set_event_status(event_id, status):
         event = Event.objects.get(pk=event_id)
         if event.status == 'canceled':
             return
-        event = Event.objects.get(pk=event_id)
-        if event.status == 'canceled':
-            return
 
         now = timezone.now()
 
@@ -144,7 +141,10 @@ def remind_users_before_event(event_id, timedelta_before_event):
     try:
         # Fetch the event
         event = Event.objects.get(id=event_id)
-        
+
+        if event.status == 'canceled':
+            print(f'Event {event_id} is canceled. No notifications will be sent.')
+            return
         # Fetch the registrations
         registrations = Registration.objects.filter(event=event, is_approved=True)
         # Notify the event creator
