@@ -177,6 +177,7 @@ class UpdateEventView(generics.UpdateAPIView):
             # Cancel old reminders and schedule new ones
             cancel_old_notifications(event)
             schedule_reminders(updated_event, updated_event.is_overnight)
+            schedule_event_status_updates(updated_event, updated_event.is_overnight)
 
         self.notify_users(updated_event)
 
@@ -268,7 +269,7 @@ class AddEventAPIView(APIView):
 class EventListAPIView(generics.ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = EventSerializer
-
+    '''
     def get_queryset(self):
         # Check if the request user is authenticated
         if self.request.user.is_authenticated:
@@ -281,6 +282,7 @@ class EventListAPIView(generics.ListAPIView):
             queryset = Event.objects.all()
 
         return queryset
+    '''
 
 class EditRegistrationAPIView(generics.UpdateAPIView):
     serializer_class = RegistrationSerializer   
