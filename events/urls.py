@@ -1,6 +1,6 @@
 # events/urls.py
 from django.urls import path
-from .views import EventListAPIView, EventDetailAPIView, AddEventAPIView, RegisterEventAPIView, UnregisterEventAPIView, EditRegistrationAPIView, CheckRegistrationAPIView, PendingRegistrationsAPIView, ApproveRegistrationAPIView, UserRegistrationsAPIView, VerifyUserRegistrationAPIView, UpdateEventView, CancelEventView, RemoveUserFromApprovedListView, ChatMessageListView, SendMessageView
+from .views import EventListAPIView, EventDetailAPIView, AddEventAPIView, RegisterEventAPIView, UnregisterEventAPIView, EditRegistrationAPIView, CheckRegistrationAPIView, PendingRegistrationsAPIView, ApproveRegistrationAPIView, UserRegistrationsAPIView, VerifyUserRegistrationAPIView, UpdateEventView, CancelEventView, RemoveUserFromApprovedListView, ChatMessageListView, SendMessageView, ActiveEventsListAPIView, InactiveEventsListAPIView
 
 urlpatterns = [
     #path('', views.index, name='index'),  # 根 URL 對應 index 視圖
@@ -24,6 +24,8 @@ urlpatterns = [
     path('events/<int:event_id>/remove_user/<int:user_id>/', RemoveUserFromApprovedListView.as_view(), name='remove_user_from_approved_list'),
     path('events/<int:event_id>/messages/', ChatMessageListView.as_view(), name='chat-message-list'),
     path('events/<int:event_id>/messages/send/', SendMessageView.as_view(), name='send-message'),
+    path('events/active/', ActiveEventsListAPIView.as_view(), name='active-events'),
+    path('events/inactive/', InactiveEventsListAPIView.as_view(), name='inactive-events'),
 ]
 
 

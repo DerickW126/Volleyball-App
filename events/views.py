@@ -266,6 +266,7 @@ class AddEventAPIView(APIView):
             return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+
 class EventListAPIView(generics.ListAPIView):
     permission_classes = [AllowAny]
     serializer_class = EventSerializer
@@ -419,3 +420,44 @@ class CheckRegistrationAPIView(APIView):
         else:
             data = {'registered': False}
         return Response(data, status=status.HTTP_200_OK)
+
+class ActiveEventsListAPIView(generics.ListAPIView):
+    """
+    Returns events whose status is one of: 'open', 'waitlist', 'playing'
+    """
+    permission_classes = [AllowAny]
+    serializer_class = EventSerializer
+
+    def get_queryset(self):
+        # Filter for open, waitlist, or playing
+        statuses = ['open', 'waitlist', 'playing']
+        queryset = Event.objects.filter(status__in=statuses)
+
+        # Optional: Exclude events from blocked users.
+        """
+        if self.request.user.is_authenticated:
+            blocked_users = Block.objects.filter(blocker=self.request.user).values_list('blocked', flat=True)
+            queryset = queryset.exclude(created_by__in=blocked_users)
+        """
+        return queryset
+
+
+class InactiveEventsListAPIView(generics.ListAPIView):
+    """
+    Returns events whose status is one of: 'past', 'canceled'
+    """
+    permission_classes = [AllowAny]
+    serializer_class = EventSerializer
+
+    def get_queryset(self):
+        # Filter for past or canceled
+        statuses = ['past', 'canceled']
+        queryset = Event.objects.filter(status__in=statuses)
+
+        # Optional: Exclude events from blocked users.
+        """
+        if self.request.user.is_authenticated:
+            blocked_users = Block.objects.filter(blocker=self.request.user).values_list('blocked', flat=True)
+            queryset = queryset.exclude(created_by__in=blocked_users)
+        """
+        return queryset
