@@ -173,3 +173,25 @@ def remind_users_before_event(event_id, timedelta_before_event):
 def notify_user_about_event(user, event_id, message):
     # Create the notification
     send_notification(user, "活動提醒", message) 
+
+@shared_task
+def broadcast_update_notification(chunk_size=150):
+    from fcm_django.models import FCMDevice
+    from firebase_admin.messaging import Message, Notification
+    from django.contrib import messages
+    title_msg = "程式更新通知"
+    body_msg = "我們已推出新版本的「打排球吧」。請更新您的應用程式，以獲取最新功能與改進！"
+
+    devices_qs = FCMDevice.objects.all()
+    total = devices_qs.count()
+    offset = 0
+
+    while offset < total:
+        chunk = devices_qs[offset : offset + chunk_size]
+        for device in chunk:
+            device.send_message(
+                Message(notification=Notification(title=title_msg, body=body_msg))
+            )
+        offset += chunk_size
+
+    print(f"Done sending messages to {total} devices.")
