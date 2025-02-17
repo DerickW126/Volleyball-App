@@ -13,7 +13,7 @@ from rest_framework.response import Response
 from notifications.models import Notification
 from .serializers import RegistrationSerializer, ChatMessageSerializer
 from notifications.utils import send_notification, send_bulk_notification
-from notifications.tasks import cancel_old_notifications, schedule_reminders, schedule_event_status_updates, set_event_status
+from notifications.tasks import cancel_old_notifications, schedule_reminders, schedule_event_status_updates, set_event_status, broadcast_new_event_notification_in_chunks
 from django.utils import timezone
 import datetime
 from datetime import timedelta
@@ -263,6 +263,7 @@ class AddEventAPIView(APIView):
             notify_user_about_event(event.created_by, event.id, f'活動 {event.name} 創建成功', message)
             schedule_event_status_updates(event, event.is_overnight)
             schedule_reminders(event, event.is_overnight)
+            broadcast_new_event_notification_in_chunks.delay(event.id, 230)
             return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -427,7 +428,7 @@ class ActiveEventsListAPIView(generics.ListAPIView):
     """
     permission_classes = [AllowAny]
     serializer_class = EventSerializer
-
+    #broadcast_new_event_notification_in_chunks.delay(2)
     def get_queryset(self):
         # Filter for open, waitlist, or playing
         statuses = ['open', 'waitlist', 'playing']

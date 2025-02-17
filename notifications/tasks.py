@@ -7,6 +7,7 @@ from volleyball_app.celery import app as celery_app
 from django.apps import apps
 from django.utils import timezone
 from django.db import models
+from django.contrib.auth import get_user_model
 
 def schedule_event_status_updates(event, is_overnight=False):
     ScheduledReminder = apps.get_model('notifications', 'ScheduledReminder')
@@ -174,3 +175,47 @@ def notify_user_about_event(user, event_id, message):
     # Create the notification
     send_notification(user, "活動提醒", message) 
 
+CustomUser = get_user_model()
+
+@shared_task
+def broadcast_new_event_notification_in_chunks(event_id, chunk_size=250):
+    """
+    Sends a notification about a newly created event to ALL users
+    in CHUNKS to avoid performance issues with very large queries.
+    """
+    # Dynamically load the models to avoid circular imports
+    Event = apps.get_model('events', 'Event')
+    Notification = apps.get_model('notifications', 'Notification')
+
+    # 1. Fetch the event
+    try:
+        event = Event.objects.get(pk=event_id)
+    except Event.DoesNotExist:
+        print(f"Event with id {event_id} does not exist.")
+        return
+
+    # 2. Prepare the notification content
+    title_msg = "新活動創立通知"
+    body_msg = f"活動 '{event.name}' 已創建，快來看看吧！"
+
+    # 3. Get all users (or filter if you only want a subset)
+    all_users = CustomUser.objects.exclude(pk=event.created_by_id)
+    total_users = all_users.count()
+
+    offset = 0
+    notified_count = 0
+
+    # 4. Iterate over users in slices of 'chunk_size'
+    while offset < total_users:
+        chunk = all_users[offset : offset + chunk_size]
+        for user in chunk:
+            send_notification(user, title_msg, body_msg)
+            notified_count += 1
+            print(user.nickname)
+
+        offset += chunk_size
+
+    print(
+        f"Broadcasted event '{event.name}' notification "
+        f"to {notified_count} users out of {total_users} total."
+    )
