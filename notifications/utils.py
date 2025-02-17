@@ -21,11 +21,9 @@ def send_notification(user, title_msg, body_msg):
         except _messaging_utils.UnregisteredError:
             # Handle unregistered token
             device.delete()
-            logger.error(f"Unregistered FCM token for user {user.id}, removed from database.")
-            return {'status': 'error', 'message': 'Unregistered token, notification not sent'}
+            print(f"[ERROR] Unregistered FCM token for user {user.id}, removed from database.")
         except Exception as e:
-            logger.error(f"Failed to send notification: {str(e)}")
-            return {'status': 'error', 'message': str(e)}
+            print(f"[ERROR] Could not send notification to user {user.id}: {e}")
     else:
         return {'status': 'error', 'message': 'No device found for user'}
         
