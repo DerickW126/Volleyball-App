@@ -9,9 +9,9 @@ from firebase_admin import messaging, _messaging_utils
 
 def send_notification(user, title_msg, body_msg):
     # Retrieve the FCMDevice for the user
-    device = FCMDevice.objects.filter(user=user).first()
+    devices = FCMDevice.objects.filter(user=user)
 
-    if device:
+    for device in devices:
         try:
             result = device.send_message(
                 Message(notification=Notification(title=title_msg, body=body_msg))

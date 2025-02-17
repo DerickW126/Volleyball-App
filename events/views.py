@@ -263,7 +263,7 @@ class AddEventAPIView(APIView):
             notify_user_about_event(event.created_by, event.id, f'活動 {event.name} 創建成功', message)
             schedule_event_status_updates(event, event.is_overnight)
             schedule_reminders(event, event.is_overnight)
-            broadcast_new_event_notification_in_chunks.delay(event.id, 230)
+            broadcast_new_event_notification_in_chunks.delay(event.id, 300)
             return Response(EventSerializer(event).data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

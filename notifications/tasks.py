@@ -178,7 +178,7 @@ def notify_user_about_event(user, event_id, message):
 CustomUser = get_user_model()
 
 @shared_task
-def broadcast_new_event_notification_in_chunks(event_id, chunk_size=250):
+def broadcast_new_event_notification_in_chunks(event_id, chunk_size=300):
     """
     Sends a notification about a newly created event to ALL users
     in CHUNKS to avoid performance issues with very large queries.
