@@ -168,16 +168,10 @@ class UpdateEventView(generics.UpdateAPIView):
         elif old_spots_left > 0 and updated_event.spots_left == 0:
             updated_event.status = "waitlist"  # Change to 'waitlist' if no spots are left
             updated_event.save()
-        # Check if the times or is_overnight have changed
-        if (
-            old_event_start_datetime != new_event_start_datetime 
-            or old_event_end_datetime != new_event_end_datetime 
-            or event.is_overnight != updated_event.is_overnight
-        ):
             # Cancel old reminders and schedule new ones
-            cancel_old_notifications(event)
-            schedule_reminders(updated_event, updated_event.is_overnight)
-            schedule_event_status_updates(updated_event, updated_event.is_overnight)
+        cancel_old_notifications(event)
+        schedule_reminders(updated_event, updated_event.is_overnight)
+        schedule_event_status_updates(updated_event, updated_event.is_overnight)
 
         self.notify_users(updated_event)
 
