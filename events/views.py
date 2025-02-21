@@ -143,33 +143,15 @@ class UpdateEventView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         event = self.get_object()
-
-        # Get old start and end datetime
-        old_event_start_datetime = timezone.make_aware(
-            datetime.datetime.combine(event.date, event.start_time)
-        )
-        old_event_end_datetime = timezone.make_aware(
-            datetime.datetime.combine(event.date, event.end_time)
-        )
-        old_spots_left = event.spots_left
-        # Perform the update (including is_overnight)
         updated_event = serializer.save()
+        if updated_event.spots_left > 0:
+            updated_event.status = "open"
+        else:
+            updated_event.status = "waitlist"
 
-        # Get new start and end datetime after the update
-        new_event_start_datetime = timezone.make_aware(
-            datetime.datetime.combine(updated_event.date, updated_event.start_time)
-        )
-        new_event_end_datetime = timezone.make_aware(
-            datetime.datetime.combine(updated_event.date, updated_event.end_time)
-        )
-        if old_spots_left == 0 and updated_event.spots_left > 0:
-            updated_event.status = "open"  # Change to 'open' if spots are available
-            updated_event.save()
-        elif old_spots_left > 0 and updated_event.spots_left == 0:
-            updated_event.status = "waitlist"  # Change to 'waitlist' if no spots are left
-            updated_event.save()
+        updated_event.save()
             # Cancel old reminders and schedule new ones
-        cancel_old_notifications(event)
+        cancel_old_notifications(updated_event)
         schedule_reminders(updated_event, updated_event.is_overnight)
         schedule_event_status_updates(updated_event, updated_event.is_overnight)
 
