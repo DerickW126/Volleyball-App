@@ -205,8 +205,7 @@ class ApproveRegistrationAPIView(APIView):
         registration.is_approved = True
         event.spots_left -= registration.number_of_people
         if event.spots_left == 0:
-            now = timezone.now()
-            set_event_status.apply_async((event.id, 'waitlist'), eta=now + timedelta(seconds=5))
+            event.status = "waitlist"
             
         registration.save()
         event.save()
