@@ -136,6 +136,7 @@ def remind_users_before_event(event_id, timedelta_before_event):
     Event = apps.get_model('events', 'Event')
     Registration = apps.get_model('events', 'Registration')
     Notification = apps.get_model('notifications', 'Notification')
+    ScheduledReminder = apps.get_model('notifications', 'ScheduledReminder')
     
     print(f'Reminding users about event {event_id}')
     
@@ -167,6 +168,14 @@ def remind_users_before_event(event_id, timedelta_before_event):
             )
             notify_user_about_event(user, event_id, f'{event.name}{timedelta_before_event} 就要開始了!')
             print(f'Notifying user {user.id} about event {event_id}')
+        
+        try:
+            # Find the reminder by task_id (need to get the current task id)
+            task_id = remind_users_before_event.request.id
+            ScheduledReminder.objects.filter(task_id=task_id).delete()
+            print(f"Deleted completed reminder record for task {task_id}")
+        except Exception as e:
+            print(f"Failed to delete reminder record: {str(e)}")
     
     except Event.DoesNotExist:
         print(f'Event with id {event_id} does not exist.')
