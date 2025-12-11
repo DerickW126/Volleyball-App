@@ -20,23 +20,14 @@ Let's Play Volleyball is a mobile app designed to help Taiwanese volleyball love
 - **Match History**: View past games with details like dates (e.g., 2025/6/19 17:00-20:00) and attendance (e.g., 2 people).
 - **Customizable Settings**: Adjust settings such as court type (e.g., C-B) and fees (e.g., $200) as shown in the match details.
 
-## Installation
-1. Clone the repository: `git clone https://github.com/Aaron95629/volleyball-grouping-app.git`
-2. Navigate to the project directory: `cd volleyball-grouping-app`
-3. Install dependencies: `npm install`
-4. Start the app: `npm start`
-
 ## Usage
 - Launch the app and log in or sign up using the profile section.
 - Add or join teams and players via the management interface.
 - Check the schedule view to find and join games with available players.
 - Review match history and adjust settings like location and cost from the detailed match pages.
 
-## Contributing
-Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
-
 ## License
 [MIT](https://choosealicense.com/licenses/mit/) 
 
-## Repository
+## Frontend Repository
 - GitHub: [https://github.com/Aaron95629/volleyball-grouping-app/tree/main](https://github.com/Aaron95629/volleyball-grouping-app/tree/main)
